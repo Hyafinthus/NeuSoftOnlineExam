@@ -60,11 +60,13 @@
 			var uid = $("#teacher_id").val();
 			var pwd = $("#teacher_password").val();
 			var param = '{"id":'+uid+',"password":"'+pwd+'"}';
+			console.log(param);
 			$.ajax({
 				url: "/exam/login/teacher",
 				data: param,
 				type: "POST",
 				datatype: "TEXT",
+				contentType:"application/json;charset=UTF-8",
 				success: function(data) {
 					if (data == "success") {
 						window.location = "teachermenu.html";
