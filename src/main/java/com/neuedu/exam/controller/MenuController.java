@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/menu")
 public class MenuController {
 	
-	@RequestMapping(value="/personal", method=RequestMethod.POST)
+	@RequestMapping(value="/personal")
 	@ResponseBody
 	public List<String> getPersonal(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
