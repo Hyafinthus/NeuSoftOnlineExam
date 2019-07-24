@@ -17,4 +17,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 	</select>
 	
+	<select id="studentLogin" resultType="Student" parameterType="User">
+		<include refid="mainQuery"/>
+		<where>
+			user_group = "student" AND user_id = #{id} AND user_password = #{password}
+		</where>
+	</select>
+	
 </mapper>

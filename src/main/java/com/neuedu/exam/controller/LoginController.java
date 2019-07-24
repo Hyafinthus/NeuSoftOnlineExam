@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.neuedu.exam.domain.Student;
 import com.neuedu.exam.domain.Teacher;
 import com.neuedu.exam.domain.User;
 import com.neuedu.exam.service.LoginService;
@@ -18,10 +19,16 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
-	@RequestMapping("/student")
-	public String studentLogin() {
-		
-		return "";
+	@RequestMapping(value="/student",method=RequestMethod.POST)
+	public String studentLogin(@RequestBody User user) {
+		System.out.println("进入studentController");
+		System.out.println(user);
+		Student student = loginService.studentLogin(user);
+		if (student != null) {
+			return "success";
+		} else {
+			return "fail";
+		}
 	}
 	
 	@RequestMapping(value="/teacher", method=RequestMethod.POST)

@@ -2,6 +2,7 @@ package com.neuedu.exam.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.neuedu.exam.domain.Student;
 import com.neuedu.exam.domain.Teacher;
 import com.neuedu.exam.domain.User;
 
@@ -9,5 +10,7 @@ import com.neuedu.exam.domain.User;
 public interface LoginMapper {
 	
 	public Teacher teacherLogin(User user);
+	
+	public Student studentLogin(User user);
 	
 }
