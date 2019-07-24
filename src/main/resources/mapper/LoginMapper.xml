@@ -6,21 +6,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.neuedu.exam.dao.LoginMapper">
 
 	<sql id="mainQuery">
-		SELECT user_id, user_name, user_password
+		SELECT user_id id, user_name name, user_password password
 		FROM user_table
 	</sql>
 	
-	<select id="queryTeacher" resultType="Teacher" parameterType="String">
+	<select id="queryTeacher" resultType="Teacher" parameterType="User">
 		<include refid="mainQuery"/>
 		<where>
-			user_group = "teacher" AND user_id = #{teacher_id}
-		</where>
-	</select>
-	
-	<select id="queryStudent" resultType="Student" parameterType="String">
-		<include refid="mainQuery"/>
-		<where>
-			user_group = "student" AND user_id = #{student_id}
+			user_group = "teacher" AND user_id = #{id} AND user_password = #{password}
 		</where>
 	</select>
 	

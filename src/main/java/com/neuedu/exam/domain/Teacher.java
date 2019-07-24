@@ -2,28 +2,28 @@ package com.neuedu.exam.domain;
 
 public class Teacher extends User {
 
-	private String teacher_id;
+	private String name;
 
-	public Teacher(String name, String password, String teacher_id) {
-		super(name, password);
-		this.teacher_id = teacher_id;
+	public Teacher(String id, String password, String name) {
+		super(id, password);
+		this.name = name;
 	}
 
 	public Teacher() {
 		super();
 	}
 
-	public String getTeacher_id() {
-		return teacher_id;
+	public String getName() {
+		return name;
 	}
 
-	public void setTeacher_id(String teacher_id) {
-		this.teacher_id = teacher_id;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return "Teacher [teacher_id=" + teacher_id + ", name=" + name + ", password=" + password + "]";
+		return "Teacher [name=" + name + ", id=" + id + ", password=" + password + "]";
 	}
-	
+
 }
