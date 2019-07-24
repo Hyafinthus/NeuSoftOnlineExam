@@ -32,7 +32,7 @@
 				<div class="col-lg-7 vertical-center">
 					<div class="center-vertical">
 						<h1 style="font-size: 100px;">考试系统 <small style="font-size: 40px;">登录</small>
-							<h1>
+							</h1>
 					</div>
 				</div>
 
@@ -69,9 +69,9 @@
 				contentType:"application/json;charset=UTF-8",
 				success: function(data) {
 					if (data == "success") {
-						window.location = "teacherMenu.html";
+						window.location = "teachermenu.html";
 					} else {
-						alert(用户名或密码错误);
+						alert("用户名或密码错误");
 					}
 				},
 			});
