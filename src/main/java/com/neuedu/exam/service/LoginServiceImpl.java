@@ -21,7 +21,6 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public Student studentLogin(User user) {
-		
 		return loginMapper.studentLogin(user);
 	}
 

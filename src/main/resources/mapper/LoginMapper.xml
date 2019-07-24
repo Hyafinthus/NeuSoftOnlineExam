@@ -9,19 +9,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT user_id id, user_name name, user_password password
 		FROM user_table
 	</sql>
-	
+
 	<select id="teacherLogin" resultType="Teacher" parameterType="User">
-		<include refid="mainQuery"/>
+		<include refid="mainQuery" />
 		<where>
-			user_group = "teacher" AND user_id = #{id} AND user_password = #{password}
+			user_group = "teacher" AND user_id = #{id} AND user_password =
+			#{password}
 		</where>
 	</select>
-	
+
 	<select id="studentLogin" resultType="Student" parameterType="User">
-		<include refid="mainQuery"/>
+		<include refid="mainQuery" />
 		<where>
-			user_group = "student" AND user_id = #{id} AND user_password = #{password}
+			user_group = "student" AND user_id = #{id} AND user_password =
+			#{password}
 		</where>
 	</select>
-	
+
 </mapper>
