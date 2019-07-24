@@ -10,13 +10,29 @@
 		<script src="js/jquery-3.2.1.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
+			var now = new Date();
+
+			var hour = now.getHours();
+			var greethour = "";
+			if (hour < 11 && hour >= 5) {
+				greethour = "早上好"
+			} else if (hour < 13 && hour >= 11) {
+				greethour = "中午好"
+			} else if (hour < 18 && hour >= 13) {
+				greethour = "下午好"
+			} else if (hour < 24 && hour >= 18 || hour < 5 && hour >= 0) {
+				greethour = "晚上好"
+			}
+
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
-					datatype: "TEXT",
-					contentType:"application/json;charset=UTF-8",
+					datatype: "json",
+					contentType: "application/json;charset=UTF-8",
 					success: function(data) {
-						console.log(data);
+						$("#greeting").html(data[1] + "老师，" + greethour);
+						$("#tname").html(data[1]);
+						$("#tid").html(data[0]);
 					},
 				});
 				$("#greeting").html("123");
@@ -47,14 +63,23 @@
 					<thead>
 						<tr>
 							<th>#</th>
-							<th>Firstname</th>
+							<th>工号</th>
+							<th>姓名</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td>1</td>
-							<td>Anna</td>
 							<td><a href="infomod.html"><button type="button" class="btn btn-primary btn-xs">修改</button></a>
+							<td>
+								<div id="tid">
+
+								</div>
+							</td>
+							<td>
+								<div id="tname">
+
+								</div>
+							</td>
 						</tr>
 					</tbody>
 				</table>
