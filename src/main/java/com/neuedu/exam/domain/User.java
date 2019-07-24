@@ -1,6 +1,6 @@
 package com.neuedu.exam.domain;
 
-public abstract class User {
+public class User {
 	
 	protected String id;
 	protected String password;
