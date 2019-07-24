@@ -44,8 +44,9 @@ public class LoginController {
 		Teacher teacher = loginService.teacherLogin(user);
 		if (teacher != null) {
 			HttpSession session = request.getSession();
-			session.setAttribute("teacher_id", teacher.getId());
-			session.setAttribute("teacher_name", teacher.getName());
+			session.setAttribute("id", teacher.getId());
+			session.setAttribute("name", teacher.getName());
+			session.setAttribute("type", "teacher");
 			return "success";
 		} else {
 			return "fail";
