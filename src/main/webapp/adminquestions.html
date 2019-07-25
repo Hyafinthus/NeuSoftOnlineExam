@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-3.2.1.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<title>题目管理</title>
+	</head>
+	<body>
+		<div class="container-fluid" style="height: 90px;">
+			<h1 style="font-size: 45px;">管理员主页</h1>
+		</div>
+		<div class="container" style="height: 100%;">
+			<ul class="nav nav-pills">
+				<li role="presentation"><a href="adminmembers.html">信息管理</a></li>
+				<li role="presentation" class="active"><a href="#">题目管理</a></li>
+				<li role="presentation" class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						成绩管理 <span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li role="presentation"><a href="adminsubjectresult.html">课程成绩</a></li>
+						<li role="presentation"><a href="adminstudentresult.html">学生成绩</a></li>
+					</ul>
+				</li>
+				<li role="presentation"><a href="adminsendmessage.html">消息通知</a></li>
+			</ul>
+			
+			<div class="container" style="width: 700px;float: left;clear: left;margin: 5px;">
+				<table class="table table-hover table-striped">
+					<thead>
+						<tr>
+							<th><button type="button" class="btn btn-default btn-sm" style="border: none;height: 40px;"><h5><strong>题目编号</strong></h5></button></th>
+							<th><button type="button" class="btn btn-default btn-sm" style="border: none;height: 40px;"><h5><strong>上传教师</strong></h5></button></th>
+							<th><button type="button" class="btn btn-default btn-sm" style="border: none;height: 40px;"><h5><strong>课程名称</strong></h5></button></th>
+							<th><h5><strong>题目内容</strong></h5></th>
+							<th><h5><strong>删除题目</strong></h5></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>刘伟</td>
+							<td>软件构造</td>
+							<td><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#content">查看</button></td>
+							<td><button type="button" class="btn btn-danger btn-xs">删除</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="modal fade" id="content" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+							<h4 class="modal-title" id="myModalLabel">题目内容</h4>
+						</div>
+						<div class="modal-body">
+							我是题干我是题干我是题干我是题干我是题干我是题干我是题干我是题干我是题干我是题干
+							我是题干我是题干我是题干我是题干我是题干我是题干我是题干我是题干我是题干我是题干
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+
+<script type="text/javascript">
+	function test(){
+		alert("haha!");
+	}
+</script>
+
+	</body>
+</html>

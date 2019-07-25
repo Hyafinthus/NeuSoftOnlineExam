@@ -1,7 +1,6 @@
 package com.neuedu.exam.domain;
 
 public class Student extends User{
-	
 	private String name;
 
 	public Student(String id, String password, String name) {
@@ -26,4 +25,7 @@ public class Student extends User{
 		return "Student [name=" + name + ", id=" + id + ", password=" + password + "]";
 	}
 
+	
+	
+	
 }

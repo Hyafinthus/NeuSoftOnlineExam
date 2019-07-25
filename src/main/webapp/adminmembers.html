@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>成员信息</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-3.2.1.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+	</head>
+	<body class="bg-mybackground">
+		<div class="container-fluid" style="height: 90px;">
+			<h1 style="font-size: 45px;">管理员主页</h1>
+		</div>
+		<div class="container" style="height: 100%;">
+			<ul class="nav nav-pills">
+				<li role="presentation" class="active"><a href="#">信息管理</a></li>
+				<li role="presentation"><a href="adminquestions.html">题目管理</a></li>
+				<li role="presentation" class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						成绩管理 <span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li role="presentation"><a href="adminsubjectresult.html">课程成绩</a></li>
+						<li role="presentation"><a href="adminstudentresult.html">学生成绩</a></li>
+					</ul>
+				</li>
+				<li role="presentation"><a href="adminsendmessage.html">消息通知</a></li>
+			</ul>
+
+
+			<!-- 下拉按钮选择学生或老师信息 -->
+			<div class="btn-group" style="float: left;clear: left;margin-top: 40px;">
+				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+				 aria-expanded="false">
+					身份选择 <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="#">学生</a></li>
+					<li><a href="#">教师</a></li>
+				</ul>
+			</div>
+
+
+
+			<div class="container" style="width: 700px;float: left;clear: left;margin: 5px;">
+				<table class="table table-hover table-striped">
+					<thead>
+						<tr>
+							<th>编号</th>
+							<th>姓名</th>
+							<th>重置密码</th>
+							<th>删除学生</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>S0001</td>
+							<td>Anna</td>
+							<td><button type="button" class="btn btn-primary btn-xs">重置</button></td>
+							<td><button type="button" class="btn btn-danger btn-xs">删除</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div>
+				<button class="btn btn-primary" type="button" style="float: left;clear: left;margin: 15px;" data-toggle="modal"
+				 data-target="#adduser" ;>添加成员</button>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="adduser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">添加用户</h4>
+						</div>
+						<form>
+							<div class="modal-body">
+
+								<div class="form-group" style="margin-left: 60px">
+									<label for="id" style="float: left;">
+										<h4>账号：</h4>
+									</label>
+									<input type="text" class="form-control" name="id" id="id" placeholder="请输入账号" style="width: 250px;" />
+								</div>
+
+								<div class="form-group" style="margin-left: 60px">
+									<label for="uname" style="float: left; ">
+										<h4>姓名：</h4>
+									</label>
+									<input type="text" class="form-control" name="uname" id="uname" placeholder="请输入姓名" style="width: 250px;float: left;"
+									 onblur="namehint()" />
+									<label id="nullname" style="display: none;color: red;margin-left: 10px">
+										<h4>名字不能为空！</h4>
+									</label>
+								</div>
+
+								<label class="radio-inline" style="margin-left: 60px;clear: left;float: left;">
+									<input type="radio" name="inlineRadioOptions" id="student" value="student" /> 学生
+								</label>
+
+								<label class="radio-inline" style="float: left">
+									<input type="radio" name="inlineRadioOptions" id="teacher" value="teacher"> 教师
+								</label>
+
+
+							</div>
+							<div class="modal-footer" style="margin-top: 60px">
+								
+								<button id="btn" type="button" class="btn btn-primary" >添加</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			function namehint() {
+				var username = document.getElementById("uname").value;
+				if (username == '') {
+					document.getElementById("nullname").style.display = "";
+				} else {
+					document.getElementById("nullname").style.display = "none";
+				}
+			}
+		</script>
+
+	</body>
+</html>
