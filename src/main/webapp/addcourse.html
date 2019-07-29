@@ -14,13 +14,32 @@
 			}
 		</style>
 		<script type="text/javascript">
+			
+			var now = new Date();
+			
+			var hour = now.getHours();
+			var greethour = "";
+			if (hour < 8 && hour >= 5) {
+				greethour = "早上好"
+			} else if (hour < 11 && hour >= 8) {
+				greethour = "上午好"
+			} else if (hour < 13 && hour >= 11) {
+				greethour = "中午好"
+			} else if (hour < 18 && hour >= 13) {
+				greethour = "下午好"
+			} else if (hour < 21 && hour >= 18) {
+				greethour = "晚上好"
+			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
+				greethour = "夜深了"
+			}
+			
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
 					datatype: "json",
 					contentType: "application/json;charset=UTF-8",
 					success: function(data) {
-						$("#greeting").html(data + "老师，" + greethour);
+						$("#greeting").html(data[1] + "老师，" + greethour);
 						console.log(data);
 					},
 					error: function(status) {
@@ -39,12 +58,12 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>教师名：<div id="greeting">
+							<th><div id="greeting">
 
 								</div>
 							</th>
 							<th>
-								<button type="submit" class="btn btn-primary btn-xs">提交</button>
+								
 							</th>
 						</tr>
 					</thead>
@@ -77,7 +96,7 @@
 					<div class="col-lg-9">
 					</div>
 					<div class="col-lg-1">
-						<button id="btn" type="btn" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
+						<button id="btn" type="button" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
 					</div>
 				</div>
 			</div>
@@ -88,7 +107,6 @@
 			var coursename = $("#coursename").val();
 			var courseintro = $("#courseintro").val();
 			var courseid = $("#courseid").val();
-			var issuccess = "false";
 			// var param = '{"oldpwd":"'+uid+'","password":"'+pwd+'"}';
 			if (coursename == null || coursename == '') {
 				alert("课程名不能为空");
@@ -99,7 +117,7 @@
 			} else {
 				$.ajax({
 					url: "/exam/course/add",
-					datatype: "json",
+					datatype: "text",
 					type: "post",
 					data: {
 						course_id: courseid,
@@ -110,16 +128,14 @@
 					success: function(data) {
 						if (data == "success") {
 							alert("添加成功");
-							issuccess = "true"
+							window.location.href = "/exam/coursemanagement.html";
 						} else {
 							alert("课程编号重复");
 						}
 					},
 				});
 			}
-			if (issuccess == "true") {
-				window.location.href = "/exam/coursemanagement.html";
-			}
+				
 		});
 	</script>
 </html>
