@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neuedu.exam.dao.MenuMapper">
+
+	<select id="getTeacherCourse" parameterType="User" resultMap="courselist">
+		SELECT c.course_id, c.course_name, c.course_intro
+		FROM course_teacher_table t, course_table c
+		WHERE t.teacher_id = #{id} AND t.course_id = c.course_id
+	</select>
+	<resultMap type="Course" id="courselist">
+		<id column="course_id" property="course_id"/>
+		<result column="course_name" property="course_name"/>
+		<result column="course_intro" property="course_intro"/>
+	</resultMap>
+	
+</mapper>

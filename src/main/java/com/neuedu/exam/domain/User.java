@@ -7,6 +7,12 @@ public class User {
 	protected String password;
 	protected String type;
 	
+	// 查询老师课程
+	public User(String id) {
+		super();
+		this.id = id;
+	}
+
 	// 登陆
 	public User(String id, String password) {
 		super();
@@ -14,14 +20,14 @@ public class User {
 		this.password = password;
 	}
 
-	// 修改
+	// 修改密码
 	public User(String id, String password, String type) {
 		super();
 		this.id = id;
 		this.password = password;
 		this.type = type;
 	}
-	
+
 	// 全部
 	public User(String id, String name, String password, String type) {
 		super();

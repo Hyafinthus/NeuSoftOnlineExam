@@ -18,6 +18,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 		if (id != null) {
 			return true;
 		} else {
+			System.out.println("拦截");
 			response.sendRedirect("/exam/index.html");
 			return false;
 		}
