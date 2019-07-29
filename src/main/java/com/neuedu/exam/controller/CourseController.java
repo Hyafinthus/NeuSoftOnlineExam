@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.neuedu.exam.domain.Course;
 import com.neuedu.exam.domain.TeacherCourse;
 import com.neuedu.exam.service.CourseService;
 
@@ -20,19 +19,25 @@ public class CourseController {
 	@Autowired
 	private CourseService courseService;
 	
-	@RequestMapping(value="/add", method=RequestMethod.POST)
+	@RequestMapping(value="/join", method=RequestMethod.POST)
 	@ResponseBody
-	public String addCourse(String course_id, String course_name, String course_intro, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(course_id + course_name + course_intro);
-		
-		Course course = new Course(course_id, course_name, course_intro);
+	public String joinCourse(String course_id, HttpServletRequest request, HttpServletResponse response) {
 		String id = (String) request.getSession().getAttribute("id");
-		TeacherCourse tc = new TeacherCourse(course_id, id);
+		TeacherCourse tc = new TeacherCourse(id, course_id);
+		System.out.println(tc);
 		
-		System.out.println(course + " " + tc);
-		
-		courseService.addCourse(course, tc);
+		courseService.joinCourse(tc);
 		return "success";
 	}
 	
+	@RequestMapping(value="/quit", method=RequestMethod.POST)
+	@ResponseBody
+	public String quitCourse(String course_id, HttpServletRequest request, HttpServletResponse response) {
+		String id = (String) request.getSession().getAttribute("id");
+		TeacherCourse tc = new TeacherCourse(id, course_id);
+		System.out.println(tc);
+		
+		courseService.quitCourse(tc);
+		return "success";
+	}
 }

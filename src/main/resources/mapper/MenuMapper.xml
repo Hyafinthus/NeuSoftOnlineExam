@@ -10,10 +10,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM course_teacher_table t, course_table c
 		WHERE t.teacher_id = #{id} AND t.course_id = c.course_id
 	</select>
+	
 	<resultMap type="Course" id="courselist">
 		<id column="course_id" property="course_id"/>
 		<result column="course_name" property="course_name"/>
 		<result column="course_intro" property="course_intro"/>
 	</resultMap>
+	
+	<select id="getCourses" parameterType="User" resultMap="courselist">
+		SELECT * FROM course_table
+		WHERE course_id NOT IN
+		(SELECT course_id FROM course_teacher_table WHERE teacher_id = #{id})
+	</select>
 	
 </mapper>

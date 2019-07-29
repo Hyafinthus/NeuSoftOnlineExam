@@ -20,4 +20,9 @@ public class MenuServiceImpl implements MenuService {
 		return menuMapper.getTeacherCourse(user);
 	}
 
+	@Override
+	public List<Course> getCourses(User user) {
+		return menuMapper.getCourses(user);
+	}
+
 }

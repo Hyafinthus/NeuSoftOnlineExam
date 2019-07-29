@@ -15,7 +15,7 @@
 		</style>
 		<script type="text/javascript">
 			var now = new Date();
-		
+
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -31,7 +31,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-		
+
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -41,10 +41,10 @@
 						$("#greeting").html(data[1] + "老师，" + greethour);
 						$("#tname").html(data[1]);
 						$("#tid").html(data[0]);
-						
+
 					},
 					error: function(status) {
-		
+
 					}
 				});
 			}
@@ -61,9 +61,11 @@
 
 								</select>
 							</th>
-							<th><div id="greeting">
-								
-							</div></th>
+							<th>
+								<div id="greeting">
+
+								</div>
+							</th>
 							<th>
 								<button type="submit" class="btn btn-primary btn-xs">提交</button>
 							</th>
@@ -77,51 +79,30 @@
 				<table class="table table-responsive tableconfig">
 					<thead>
 						<tr>
-							<th><textarea class="form-group" rows="3" cols="100" placeholder="输入题干"></textarea></th>
+							<th>
+								简单
+							</th>
+							<th>
+								中等
+							</th>
+							<th>
+								困难
+							</th>
 						</tr>
 					</thead>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-							</label>
-							A.<input type="text" id="" placeholder="输入A选项" />
-
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio"></label>
-							B.<input type="text" id="" placeholder="输入B选项" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio"></label>
-							C.<input type="text" id="" placeholder="输入C选项" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio"></label>
-							D.<input type="text" id="" placeholder="输入D选项" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio"></label>
-							主观题
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<textarea class="form-control" rows="5" placeholder="输入题目答案解析"></textarea>
-						</td>
-					</tr>
+					<tbody>
+						<tr>
+							<th>
+								<input type="number" name="" id="" placeholder="输入简单题目的数量" />
+							</th>
+							<th>
+								<input type="number" name="" id="" placeholder="输入简单题目的数量" />
+							</th>
+							<th>
+								<input type="number" name="" id="" placeholder="输入简单题目的数量" />
+							</th>
+						</tr>
+					</tbody>
 				</table>
 				<br>
 

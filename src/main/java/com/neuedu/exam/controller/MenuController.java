@@ -33,10 +33,26 @@ public class MenuController {
 	}
 
 	@RequestMapping(value="/teacher_course")
-	@ResponseBody List<Course> getTeacherCourse(HttpServletRequest request, HttpServletResponse response) {
+	@ResponseBody
+	public List<Course> getTeacherCourse(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		User user = new User(id);
-		return menuService.getTeacherCourse(user);		
+		
+		List<Course> list = menuService.getTeacherCourse(user);
+		System.out.println(list);
+		return list;
+	}
+	
+	@RequestMapping(value="/courses")
+	@ResponseBody
+	public List<Course> getCourses(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("id");
+		User user = new User(id);
+		
+		List<Course> list = menuService.getCourses(user);
+		System.out.println(list);
+		return list;
 	}
 }

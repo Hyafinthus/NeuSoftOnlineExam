@@ -2,13 +2,13 @@ package com.neuedu.exam.domain;
 
 public class TeacherCourse {
 
-	private String course_id;
 	private String teacher_id;
+	private String course_id;
 	
-	public TeacherCourse(String course_id, String teacher_id) {
+	public TeacherCourse(String teacher_id, String course_id) {
 		super();
-		this.course_id = course_id;
 		this.teacher_id = teacher_id;
+		this.course_id = course_id;
 	}
 	
 	public TeacherCourse() {

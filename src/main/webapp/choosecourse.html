@@ -2,14 +2,14 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>课程管理</title>
+		<title>加入课程</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			var now = new Date();
-		
+
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -25,7 +25,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-		
+
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -38,7 +38,7 @@
 						
 					},
 					error: function(status) {
-		
+
 					}
 				});
 			}
@@ -55,8 +55,8 @@
 		<div class="container">
 			<ul class="nav nav-pills">
 				<li role="presentation"><a href="teachermenu.html">个人信息</a></li>
-				<li role="presentation" class="active"><a href="coursemanagement.html">科目管理</a></li>
-				<li role="presentation"><a href="choosecourse.html">开课管理</a></li>
+				<li role="presentation"><a href="coursemanagement.html">科目管理</a></li>
+				<li role="presentation" class="active"><a href="choosecourse.html">开课管理</a></li>
 				<li role="presentation"><a href="questionsmanagement.html">题目管理</a></li>
 				<li role="presentation"><a href="exammanagement.html">考试安排</a></li>
 				<li role="presentation"><a href="#">学生信息</a></li>
@@ -66,7 +66,7 @@
 					<thead>
 						<tr id="firstcourse">
 							<th>#</th>
-							<th>删除</th>
+							<th>加入</th>
 							<th>课程名</th>
 						</tr>
 					</thead>
@@ -79,7 +79,7 @@
 
 		function messages() {
 			$.ajax({
-				url: "/exam/menu/teacher_course",
+				url: "/exam/menu/courses",
 				datatype: "json",
 				contentType: "application/json;charset=UTF-8",
 				success: function(data) {
@@ -90,7 +90,7 @@
 					console.log(data);
 					$(data).each(function(index, e) {
 						res = res + "<tr><td>" + e.course_id + "</td><td>" +
-							'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
+							'<button type="button" class="btn btn-primary btn-xs" onclick="getcontent(this)">加入</button></td><td>' +
 							e.course_name.slice(0, 20) + "</td><td>";
 					});
 					$("#firstcourse").siblings().remove();
@@ -106,16 +106,16 @@
 			var courseid = td.prev().html().trim();
 			console.log(courseid);
 			$.ajax({
-				url: "/exam/course/quit",
+				url: "/exam/course/join",
 				type: "post",
 				data: {
 					course_id: courseid
 				},
 				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 				success: function(data) {
-					alert("退课成功");
+					alert("加入成功");
 					$.ajax({
-						url: "/exam/menu/teacher_course",
+						url: "/exam/menu/courses",
 						datatype: "json",
 						contentType: "application/json;charset=UTF-8",
 						success: function(data) {
@@ -126,7 +126,7 @@
 							console.log(data);
 							$(data).each(function(index, e) {
 								res = res + "<tr><td>" + e.course_id + "</td><td>" +
-									'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
+									'<button type="button" class="btn btn-primary btn-xs" onclick="getcontent(this)">加入</button></td><td>' +
 									e.course_name.slice(0, 20) + "</td><td>";
 							});
 							$("#firstcourse").siblings().remove();

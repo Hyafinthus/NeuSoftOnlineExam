@@ -12,4 +12,6 @@ public interface MenuMapper {
 
 	public List<Course> getTeacherCourse(User user);
 	
+	public List<Course> getCourses(User user);
+	
 }
