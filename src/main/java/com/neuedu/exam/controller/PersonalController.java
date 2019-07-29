@@ -28,12 +28,13 @@ public class PersonalController {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		String password = (String) session.getAttribute("password");
+		String type = (String) session.getAttribute("type");
 		
 		if(oldpwd.equals(password)) {
 			if(newpwd.equals(password)) {
 				return "same";
 			}
-			User newUser = new User(id, newpwd);
+			User newUser = new User(id, newpwd, type);
 			
 			System.out.println(newUser);
 			

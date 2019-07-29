@@ -7,12 +7,22 @@ public class User {
 	protected String password;
 	protected String type;
 	
+	// 登陆
 	public User(String id, String password) {
 		super();
 		this.id = id;
 		this.password = password;
 	}
 
+	// 修改
+	public User(String id, String password, String type) {
+		super();
+		this.id = id;
+		this.password = password;
+		this.type = type;
+	}
+	
+	// 全部
 	public User(String id, String name, String password, String type) {
 		super();
 		this.id = id;

@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="modifyPassword" parameterType="User">
 		UPDATE user_table
 		SET user_password = #{password}
-		WHERE user_id = #{id} AND user_group = 'teacher'
+		WHERE user_id = #{id} AND user_group = #{type}
 	</update>
 
 </mapper>
