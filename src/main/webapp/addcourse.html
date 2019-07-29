@@ -88,6 +88,7 @@
 			var coursename = $("#coursename").val();
 			var courseintro = $("#courseintro").val();
 			var courseid = $("#courseid").val();
+			var issuccess = "false";
 			// var param = '{"oldpwd":"'+uid+'","password":"'+pwd+'"}';
 			if (coursename == null || coursename == '') {
 				alert("课程名不能为空");
@@ -109,9 +110,15 @@
 					success: function(data) {
 						if (data == "success") {
 							alert("添加成功");
+							issuccess = "true"
+						} else {
+							alert("课程编号重复");
 						}
 					},
 				});
+			}
+			if (issuccess == "true") {
+				window.location.href = "/exam/coursemanagement.html";
 			}
 		});
 	</script>
