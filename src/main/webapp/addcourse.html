@@ -20,7 +20,7 @@
 					datatype: "json",
 					contentType: "application/json;charset=UTF-8",
 					success: function(data) {
-						$("#greeting").html(data[1] + "老师，" + greethour);
+						$("#greeting").html(data + "老师，" + greethour);
 						console.log(data);
 					},
 					error: function(status) {
@@ -65,6 +65,11 @@
 							<textarea id="courseintro" class="form-control" rows="5" placeholder="输入课程简介"></textarea>
 						</td>
 					</tr>
+					<tr>
+						<td>
+							<input id="courseid" class="form-control" placeholder="输入课程编号">
+						</td>
+					</tr>
 				</table>
 				<br>
 
@@ -82,17 +87,22 @@
 		$("#btn").click(function() {
 			var coursename = $("#coursename").val();
 			var courseintro = $("#courseintro").val();
+			var courseid = $("#courseid").val();
+			var issuccess = "false";
 			// var param = '{"oldpwd":"'+uid+'","password":"'+pwd+'"}';
 			if (coursename == null || coursename == '') {
 				alert("课程名不能为空");
 			} else if (courseintro == null || courseintro == '') {
 				alert("课程介绍不能为空");
+			} else if (courseid == null || courseid == '') {
+				alert("课程编号不能为空");
 			} else {
 				$.ajax({
 					url: "/exam/course/add",
 					datatype: "json",
 					type: "post",
 					data: {
+						course_id: courseid,
 						course_name: coursename,
 						course_intro: courseintro
 					},
@@ -100,11 +110,16 @@
 					success: function(data) {
 						if (data == "success") {
 							alert("添加成功");
-						} 
+							issuccess = "true"
+						} else {
+							alert("课程编号重复");
+						}
 					},
 				});
 			}
-			window.location.href = "/exam/teachermenu.html"
+			if (issuccess == "true") {
+				window.location.href = "/exam/coursemanagement.html";
+			}
 		});
 	</script>
 </html>
