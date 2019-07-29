@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>添加课程</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-3.2.1.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<style type="text/css">
+			.tableconfig {
+				width: 750px;
+				margin: 0 auto
+			}
+		</style>
+		<script type="text/javascript">
+			function greet() {
+				$.ajax({
+					url: "/exam/menu/personal",
+					datatype: "json",
+					contentType: "application/json;charset=UTF-8",
+					success: function(data) {
+						$("#greeting").html(data[1] + "老师，" + greethour);
+						console.log(data);
+					},
+					error: function(status) {
+
+					}
+				});
+			}
+			window.onload = function() {
+				greet();
+			}
+		</script>
+	</head>
+	<body>
+		<form action="" method="post">
+			<div class="container">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>教师名：<div id="greeting">
+
+								</div>
+							</th>
+							<th>
+								<button type="submit" class="btn btn-primary btn-xs">提交</button>
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+
+			<div class="container">
+
+				<table class="table table-responsive tableconfig">
+					<thead>
+						<tr>
+							<th><textarea id="coursename" class="form-group" rows="2" cols="100" placeholder="输入课程名"></textarea></th>
+						</tr>
+					</thead>
+
+					<tr>
+						<td>
+							<textarea id="courseintro" class="form-control" rows="5" placeholder="输入课程简介"></textarea>
+						</td>
+					</tr>
+				</table>
+				<br>
+
+				<div class="row">
+					<div class="col-lg-9">
+					</div>
+					<div class="col-lg-1">
+						<button id="btn" type="btn" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</body>
+	<script type="text/javascript">
+		$("#btn").click(function() {
+			var coursename = $("#coursename").val();
+			var courseintro = $("#courseintro").val();
+			// var param = '{"oldpwd":"'+uid+'","password":"'+pwd+'"}';
+			if (coursename == null || coursename == '') {
+				alert("课程名不能为空");
+			} else if (courseintro == null || courseintro == '') {
+				alert("课程介绍不能为空");
+			} else {
+				$.ajax({
+					url: "/exam/course/add",
+					datatype: "json",
+					type: "post",
+					data: {
+						course_name: coursename,
+						course_intro: courseintro
+					},
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+					success: function(data) {
+						if (data == "success") {
+							alert("添加成功");
+						} 
+					},
+				});
+			}
+			window.location.href = "/exam/teachermenu.html"
+		});
+	</script>
+</html>

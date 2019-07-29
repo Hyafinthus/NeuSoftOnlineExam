@@ -54,6 +54,7 @@
 			var oldpwd = $("#oldpwd").val();
 			var pwd1 = $("#pwd1").val();
 			var pwd2 = $("#pwd2").val();
+			var issuccess = "false";
 			// var param = '{"oldpwd":"'+uid+'","password":"'+pwd+'"}';
 			if (oldpwd == null || oldpwd == '') {
 				alert("原密码不能为空");
@@ -74,6 +75,7 @@
 					success: function(data) {
 						if(data == "success"){
 							alert("修改成功");
+							issuccess = "true";
 						} else if (data == "same"){
 							alert("新密码与原密码不能相同");
 						} else {
@@ -81,6 +83,9 @@
 						}
 					},
 				});
+			}
+			if(issuccess == "true"){
+				window.location.href = "/exam/teacher.html"
 			}
 		});
 	</script>

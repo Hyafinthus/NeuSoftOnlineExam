@@ -2,9 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>
-			教师主页
-		</title>
+		<title>教师主页</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -39,8 +37,8 @@
 						$("#tid").html(data[0]);
 						console.log(data);
 					},
-					error:function(status){
-						
+					error: function(status) {
+
 					}
 				});
 			}
@@ -51,48 +49,75 @@
 	</head>
 	<body>
 		<div class="container-fluid" style="height: 90px;">
-			<h1 style="font-size: 45px;">
-				<div id="greeting">
-
-				</div>
-			</h1>
+			<h1 style="font-size: 45px;">教师主页</h1>
 		</div>
 		<div class="container">
 			<ul class="nav nav-pills">
-				<li role="presentation" class="active"><a href="teachermenu.html">个人信息</a></li>
+				<li role="presentation"><a href="teachermenu.html">个人信息</a></li>
 				<li role="presentation"><a href="questionsmanagement.html">题目管理</a></li>
-				<li role="presentation"><a href="coursemanagement.html">科目管理</a></li>
+				<li role="presentation" class="active"><a href="coursemanagement.html">科目管理</a></li>
 				<li role="presentation"><a href="#">考试安排</a></li>
 				<li role="presentation"><a href="#">学生信息</a></li>
 				<li role="presentation"><a href="#">考试安排</a></li>
 			</ul>
-
 			<div class="container" style="width: 700px;float: left;">
-				<table class="table table-hover">
+				<table id="coursetable" class="table table-hover">
 					<thead>
-						<tr>
-							<th>#</th>
-							<th>工号</th>
-							<th>姓名</th>
+						<tr id="firstcourse">
+							<th><a href="addcourse.html">
+									<button type="button" class="btn btn-primary btn-xs">添加</button></a></th>
+							<th>删除</th>
+							<th>课程名</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td><a href="infomod.html"><button type="button" class="btn btn-primary btn-xs">修改</button></a></td>
-							<td>
-								<div id="tid">
-
-								</div>
-							</td>
-							<td>
-								<div id="tname">
-
-								</div>
-							</td>
-						</tr>
-					</tbody>
 				</table>
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		var dataarray = new Array();
+
+		function messages() {
+			$.ajax({
+				url: "/exam/menu/teacher_course",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					console.log(data);
+					var res = "";
+					number = data.length;
+					dataarray = data;
+					console.log(data);
+					$(data).each(function(index, e) {
+						res = res + "<tr><td>" + e.course_id +
+							'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
+							e.course_name.slice(0, 20) + "</td><td>";
+					});
+					$("#firstmessage").after(res);
+				},
+			});
+
+
+		}
+
+		function getcontent(obj) {
+			var td = $(obj).parent();
+			var courseid = td.prev().html().trim();
+			console.log(courseid);
+			$.ajax({
+				url: "/exam/menu/course",
+				type: "post",
+				data: {
+					course_id: courseid
+				},
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function(data) {
+				},
+			});
+		}
+
+		window.onload = function() {
+			messages();
+		}
+	</script>
 </html>
