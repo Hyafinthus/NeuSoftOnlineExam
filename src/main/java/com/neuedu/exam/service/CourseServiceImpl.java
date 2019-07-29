@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.neuedu.exam.dao.CourseMapper;
 import com.neuedu.exam.domain.Course;
+import com.neuedu.exam.domain.TeacherCourse;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -13,8 +14,9 @@ public class CourseServiceImpl implements CourseService {
 	private CourseMapper courseMapper;
 	
 	@Override
-	public void addCourse(Course course) {
+	public void addCourse(Course course, TeacherCourse tc) {
 		courseMapper.addCourse(course);
+		courseMapper.addTchCrs(tc);
 	}
 
 }

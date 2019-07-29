@@ -6,12 +6,6 @@ public class Course {
 	private String course_name;
 	private String course_intro;
 	
-	public Course(String course_name, String course_intro) {
-		super();
-		this.course_name = course_name;
-		this.course_intro = course_intro;
-	}
-	
 	public Course(String course_id, String course_name, String course_intro) {
 		super();
 		this.course_id = course_id;
