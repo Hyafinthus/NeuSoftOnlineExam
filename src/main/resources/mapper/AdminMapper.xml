@@ -5,6 +5,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.neuedu.exam.dao.AdminMapper">
 
+	<select id="adminLogin" resultType="User" parameterType="User">
+		SELECT user_id id, user_name name, user_password password
+		FROM user_table
+		<where>
+			user_group = 'admin' AND user_id = #{id} AND user_password =
+			#{password}
+		</where>
+	</select>
+
 	<select id="queryUsers" resultMap="myuser">
 		SELECT user_id, user_name
 		FROM user_table
@@ -51,30 +60,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 	</insert>
 	
-	<select id="queryQuestionIds" resultType="int">
-		SELECT question_id FROM question_table
-	</select>
-	
-	<select id="queryCourseIdByQuestionId" parameterType="String" resultType="String">
-		SELECT course_id FROM question_table
-		WHERE question_id=#{questionId}
-	</select>
-	
-	<select id="queryCourseNameByCourseId" parameterType="String" resultType="String">
-		SELECT course_name FROM course_table
-		WHERE course_id=#{courseId}
-	</select>
-	
-	<select id="queryTeacherIdByQuestionId" parameterType="String" resultType="String">
-		SELECT teacher_id FROM question_table
-		WHERE question_id=#{questionId}
-	</select>
-	
-	<select id="queryTeacherNameByTeacherId" parameterType="String" resultType="String">
-		SELECT user_name FROM user_table
-		WHERE user_id=#{teacherId}
-	</select>
-
 	<resultMap type="User" id="myuser">
 		<id column="user_id" property="id"/>
 		<result column="user_name" property="name"/>

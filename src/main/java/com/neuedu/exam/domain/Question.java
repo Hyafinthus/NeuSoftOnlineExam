@@ -1,6 +1,5 @@
 package com.neuedu.exam.domain;
 
-import java.util.Arrays;
 
 public class Question {
 	
@@ -16,12 +15,19 @@ public class Question {
 	private String question_type;
 	
 	private String question_body;
-	private String[] question_choise; 
+	private String question_a;
+	private String question_b;
+	private String question_c;
+	private String question_d;
 	private String question_answer;
 	
+	public Question() {
+		super();
+	}
+
 	public Question(int question_id, String course_id, String course_name, String teacher_id, String teacher_name,
-			String question_rate, int question_mark, String question_type, String question_body,
-			String[] question_choise, String question_answer) {
+			String question_rate, int question_mark, String question_type, String question_body, String question_a,
+			String question_b, String question_c, String question_d, String question_answer) {
 		super();
 		this.question_id = question_id;
 		this.course_id = course_id;
@@ -32,14 +38,13 @@ public class Question {
 		this.question_mark = question_mark;
 		this.question_type = question_type;
 		this.question_body = question_body;
-		this.question_choise = question_choise;
+		this.question_a = question_a;
+		this.question_b = question_b;
+		this.question_c = question_c;
+		this.question_d = question_d;
 		this.question_answer = question_answer;
 	}
-	
-	public Question() {
-		super();
-	}
-	
+
 	public int getQuestion_id() {
 		return question_id;
 	}
@@ -83,7 +88,7 @@ public class Question {
 	public String getQuestion_rate() {
 		return question_rate;
 	}
-	
+
 	public void setQuestion_rate(String question_rate) {
 		this.question_rate = question_rate;
 	}
@@ -112,12 +117,36 @@ public class Question {
 		this.question_body = question_body;
 	}
 	
-	public String[] getQuestion_choise() {
-		return question_choise;
+	public String getQuestion_a() {
+		return question_a;
 	}
 	
-	public void setQuestion_choise(String[] question_choise) {
-		this.question_choise = question_choise;
+	public void setQuestion_a(String question_a) {
+		this.question_a = question_a;
+	}
+	
+	public String getQuestion_b() {
+		return question_b;
+	}
+	
+	public void setQuestion_b(String question_b) {
+		this.question_b = question_b;
+	}
+	
+	public String getQuestion_c() {
+		return question_c;
+	}
+	
+	public void setQuestion_c(String question_c) {
+		this.question_c = question_c;
+	}
+	
+	public String getQuestion_d() {
+		return question_d;
+	}
+	
+	public void setQuestion_d(String question_d) {
+		this.question_d = question_d;
 	}
 	
 	public String getQuestion_answer() {
@@ -127,13 +156,15 @@ public class Question {
 	public void setQuestion_answer(String question_answer) {
 		this.question_answer = question_answer;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Question [question_id=" + question_id + ", course_id=" + course_id + ", course_name=" + course_name
 				+ ", teacher_id=" + teacher_id + ", teacher_name=" + teacher_name + ", question_rate=" + question_rate
 				+ ", question_mark=" + question_mark + ", question_type=" + question_type + ", question_body="
-				+ question_body + ", question_choise=" + Arrays.toString(question_choise) + ", question_answer="
-				+ question_answer + "]";
+				+ question_body + ", question_a=" + question_a + ", question_b=" + question_b + ", question_c="
+				+ question_c + ", question_d=" + question_d + ", question_answer=" + question_answer + "]";
 	}
+	
+	
 }

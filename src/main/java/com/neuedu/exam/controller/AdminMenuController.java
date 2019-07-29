@@ -1,6 +1,10 @@
 package com.neuedu.exam.controller;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +21,22 @@ import com.neuedu.exam.service.AdminService;
 public class AdminMenuController {
 	@Autowired
 	private AdminService adminService;
+	
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String login(String user_id, String user_password, HttpServletRequest request){
+		User admin = adminService.adminLogin(new User(user_id, user_password));
+		System.out.println(admin);
+		if (admin != null) {
+			System.out.println("控制器");
+			HttpSession session = request.getSession();
+			session.setAttribute("id", admin.getId());
+			session.setAttribute("name", admin.getName());
+			session.setAttribute("type", "admin");
+			return "redirect:/adminmembers.html";
+		} else {
+			return "redirect:/adminlogin.html";
+		}
+	}
 	
 	@RequestMapping(value="/members", method=RequestMethod.GET)
 	@ResponseBody
@@ -68,22 +88,5 @@ public class AdminMenuController {
 			return "false";
 	}
 	
-	@RequestMapping(value="/queryQuestionIds", method=RequestMethod.GET)
-	@ResponseBody
-	public int[] queryQuestionIds(){
-		int[] test = adminService.queryQuestionIds();
-		return test;
-	}
 	
-	@RequestMapping(value="/queryCourseName/{questionid}", method=RequestMethod.GET)
-	@ResponseBody
-	public String queryCourseNameByQuestionId(@PathVariable String questionid){
-		return adminService.queryCourseNameByQuestionId(questionid);
-	}
-	
-	@RequestMapping(value="/queryTeacherName/{questionid}", method=RequestMethod.GET)
-	@ResponseBody
-	public String queryTeacherNameByQuestionId(@PathVariable String questionid){
-		return adminService.queryTeacherNameByQuestionId(questionid);
-	}
 }

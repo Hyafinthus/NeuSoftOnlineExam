@@ -29,6 +29,7 @@
 			<ul class="nav nav-pills">
 				<li role="presentation" class="active"><a href="#">信息管理</a></li>
 				<li role="presentation"><a href="adminquestions.html">题目管理</a></li>
+				<li role="presentation"><a href="admincourse.html">课程管理</a></li>
 				<li role="presentation" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 					 aria-haspopup="true" aria-expanded="false"> 成绩管理 <span class="caret"></span>
 					</a>
@@ -62,8 +63,7 @@
 							<th>编号</th>
 							<th>姓名</th>
 							<th>重置密码</th>
-							<th>删除学生</th>
-							<th></th>
+							<th>删除用户</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -231,20 +231,18 @@
 					type: "DELETE",
 					dataType: "text",
 					success: function(str) {
-
+						if (userid[0] == 'S') {
+							alert("删除成功！");
+							querystudents();
+						} else if (userid[0] == 'T') {
+							alert("删除成功！");
+							queryteachers();
+						}
 					},
 					error: function() {
 						alert("获取参数失败！");
 					}
-				})
-
-				if (userid[0] == 'S') {
-					alert("删除成功！");
-					querystudents();
-				} else if (userid[0] == 'T') {
-					alert("删除成功！");
-					queryteachers();
-				}
+				})	
 			}
 		</script>
 

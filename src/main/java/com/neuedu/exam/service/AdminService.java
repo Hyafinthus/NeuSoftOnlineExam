@@ -19,9 +19,5 @@ public interface AdminService {
 
 	public User queryUserById(String userId);
 
-	public int[] queryQuestionIds();
-
-	public String queryCourseNameByQuestionId(String questionId);
-
-	public String queryTeacherNameByQuestionId(String questionId);
+	public User adminLogin(User user);
 }

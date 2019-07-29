@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neuedu.exam.dao.AdminQuestionMapper">
+
+	<select id="queryQuestionIds" resultType="int">
+		SELECT question_id FROM question_table
+	</select>
+	
+	<select id="queryCourseIdByQuestionId" parameterType="String" resultType="String">
+		SELECT course_id FROM question_table
+		WHERE question_id=#{questionId}
+	</select>
+	
+	<select id="queryCourseNameByCourseId" parameterType="String" resultType="String">
+		SELECT course_name FROM course_table
+		WHERE course_id=#{courseId}
+	</select>
+	
+	<select id="queryTeacherIdByQuestionId" parameterType="String" resultType="String">
+		SELECT teacher_id FROM question_table
+		WHERE question_id=#{questionId}
+	</select>
+	
+	<select id="queryTeacherNameByTeacherId" parameterType="String" resultType="String">
+		SELECT user_name FROM user_table
+		WHERE user_id=#{teacherId}
+	</select>
+	
+	<delete id="deleteQuestion" parameterType="String">
+		DELETE FROM question_table
+		WHERE question_id = #{questionId}
+	</delete>
+	
+	<select id="questionDetails" parameterType="Integer" resultType="Question">
+		SELECT *
+		FROM question_table
+		WHERE question_id=#{questionId}
+	</select>
+
+	
+</mapper>

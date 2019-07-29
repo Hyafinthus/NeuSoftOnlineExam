@@ -14,6 +14,11 @@ public class AdminServiceImpl implements AdminService {
 	private AdminMapper adminMapper;
 	
 	@Override
+	public User adminLogin(User user) {
+		return adminMapper.adminLogin(user);
+	}
+	
+	@Override
 	public List<User> queryUsers() {
 		return adminMapper.queryUsers();
 	}
@@ -46,23 +51,6 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public User queryUserById(String userId) {
 		return adminMapper.queryUserById(userId);
-	}
-
-	@Override
-	public int[] queryQuestionIds() {
-		return adminMapper.queryQuestionIds();
-	}
-
-	@Override
-	public String queryCourseNameByQuestionId(String questionId) {
-		String courseId=adminMapper.queryCourseIdByQuestionId(questionId);
-		return adminMapper.queryCourseNameByCourseId(courseId);
-	}
-
-	@Override
-	public String queryTeacherNameByQuestionId(String questionId) {
-		String teacherId=adminMapper.queryTeacherIdByQuestionId(questionId);
-		return adminMapper.queryTeacherNameByTeacherId(teacherId);
 	}
 
 }
