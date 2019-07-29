@@ -5,6 +5,8 @@ import com.neuedu.exam.domain.TeacherCourse;
 
 public interface CourseService {
 	
+	public Course existCourse(Course course);
+	
 	public void addCourse(Course course, TeacherCourse tc);
 	
 }

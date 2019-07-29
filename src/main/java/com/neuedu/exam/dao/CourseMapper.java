@@ -12,4 +12,6 @@ public interface CourseMapper {
 	
 	public void addTchCrs(TeacherCourse tc);
 	
+	public Course existCourse(Course course);
+	
 }

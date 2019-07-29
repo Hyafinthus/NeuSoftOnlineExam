@@ -19,4 +19,9 @@ public class CourseServiceImpl implements CourseService {
 		courseMapper.addTchCrs(tc);
 	}
 
+	@Override
+	public Course existCourse(Course course) {
+		return courseMapper.existCourse(course);
+	}
+
 }

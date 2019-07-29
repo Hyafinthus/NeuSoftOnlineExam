@@ -11,7 +11,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("进入PreHandle");
+		System.out.println("进入PreHandle: " + request.getRequestURL());
 		
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
