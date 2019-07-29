@@ -7,6 +7,19 @@
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			function check() {
+				var form = document.getElementById('adduserform');
+				var userid = document.getElementById('uid').value;
+				var username = document.getElementById('uname').value;
+				var button = document.getElementById('addbtn');
+				var val = $('input:radio[name="inlineRadioOptions"]:checked').val();
+				if (val && userid && userid.length >= 4 && username) {
+					button.removeAttribute("disabled");
+				} else
+					button.setAttribute("disabled", "disabled");
+			}
+		</script>
 	</head>
 	<body class="bg-mybackground">
 		<div class="container-fluid" style="height: 90px;">
@@ -16,9 +29,8 @@
 			<ul class="nav nav-pills">
 				<li role="presentation" class="active"><a href="#">信息管理</a></li>
 				<li role="presentation"><a href="adminquestions.html">题目管理</a></li>
-				<li role="presentation" class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						成绩管理 <span class="caret"></span>
+				<li role="presentation" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+					 aria-haspopup="true" aria-expanded="false"> 成绩管理 <span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
 						<li role="presentation"><a href="adminsubjectresult.html">课程成绩</a></li>
@@ -30,23 +42,23 @@
 
 
 			<!-- 下拉按钮选择学生或老师信息 -->
-			<div class="btn-group" style="float: left;clear: left;margin-top: 40px;">
+			<div class="btn-group" style="float: left; clear: left; margin-top: 40px;">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
 				 aria-expanded="false">
 					身份选择 <span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a href="#">学生</a></li>
-					<li><a href="#">教师</a></li>
+					<li><a id="querystudents" onclick="querystudents()">学生</a></li>
+					<li><a id="queryteachers" onclick="queryteachers()">教师</a></li>
 				</ul>
 			</div>
 
 
 
-			<div class="container" style="width: 700px;float: left;clear: left;margin: 5px;">
-				<table class="table table-hover table-striped">
+			<div class="container" style="width: 700px; float: left; clear: left; margin: 5px;">
+				<table id="usertable" class="table table-hover table-striped">
 					<thead>
-						<tr>
+						<tr id="firstuser">
 							<th>编号</th>
 							<th>姓名</th>
 							<th>重置密码</th>
@@ -55,63 +67,55 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>S0001</td>
-							<td>Anna</td>
-							<td><button type="button" class="btn btn-primary btn-xs">重置</button></td>
-							<td><button type="button" class="btn btn-danger btn-xs">删除</button></td>
-						</tr>
+
 					</tbody>
 				</table>
+				<div>
+					<button class="btn btn-primary" type="button" style="float: left; clear: left; margin: 15px;" data-toggle="modal"
+					 data-target="#adduser">添加成员</button>
+				</div>
 			</div>
 
-			<div>
-				<button class="btn btn-primary" type="button" style="float: left;clear: left;margin: 15px;" data-toggle="modal"
-				 data-target="#adduser" ;>添加成员</button>
-			</div>
+
 
 			<!-- Modal -->
 			<div class="modal fade" id="adduser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="myModalLabel">添加用户</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><strong>添加用户</strong><small style="margin-left: 40px">学生与教师编号将在添加时自动增加前缀S,T</small></h4>
 						</div>
-						<form>
+						<form id="adduserform">
 							<div class="modal-body">
 
 								<div class="form-group" style="margin-left: 60px">
 									<label for="id" style="float: left;">
 										<h4>账号：</h4>
-									</label>
-									<input type="text" class="form-control" name="id" id="id" placeholder="请输入账号" style="width: 250px;" />
+									</label> <input type="text" class="form-control" name="uid" id="uid" placeholder="请输入账号" style="width: 50%;"
+									 oninput="check()" />
 								</div>
 
 								<div class="form-group" style="margin-left: 60px">
-									<label for="uname" style="float: left; ">
+									<label for="uname" style="float: left;">
 										<h4>姓名：</h4>
-									</label>
-									<input type="text" class="form-control" name="uname" id="uname" placeholder="请输入姓名" style="width: 250px;float: left;"
-									 onblur="namehint()" />
-									<label id="nullname" style="display: none;color: red;margin-left: 10px">
-										<h4>名字不能为空！</h4>
-									</label>
+									</label> <input type="text" class="form-control" name="uname" id="uname" placeholder="请输入姓名" style="width: 50%; float: left;"
+									 oninput="check()" />
 								</div>
 
-								<label class="radio-inline" style="margin-left: 60px;clear: left;float: left;">
-									<input type="radio" name="inlineRadioOptions" id="student" value="student" /> 学生
-								</label>
-
-								<label class="radio-inline" style="float: left">
-									<input type="radio" name="inlineRadioOptions" id="teacher" value="teacher"> 教师
+								<label class="radio-inline" style="margin-left: 60px; clear: left; float: left;"> <input type="radio" name="inlineRadioOptions"
+									 id="student" value="S" oninput="check()" /> 学生
+								</label> <label class="radio-inline" style="float: left"> <input type="radio" name="inlineRadioOptions" id="teacher"
+									 value="T" oninput="check()"> 教师
 								</label>
 
 
 							</div>
 							<div class="modal-footer" style="margin-top: 60px">
-								
-								<button id="btn" type="button" class="btn btn-primary" >添加</button>
+
+								<button id="addbtn" type="button" class="btn btn-primary" disabled="disabled" onclick="adduser()">添加</button>
 								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 							</div>
 						</form>
@@ -121,15 +125,155 @@
 		</div>
 
 		<script type="text/javascript">
-			function namehint() {
-				var username = document.getElementById("uname").value;
-				if (username == '') {
-					document.getElementById("nullname").style.display = "";
-				} else {
-					document.getElementById("nullname").style.display = "none";
+			function adduser() {
+				var userprefix=$('input:radio[name="inlineRadioOptions"]:checked').val();
+				var id = userprefix+$("#uid").val();
+				var name = $("#uname").val();
+				var param = '{"id":"' + id + '","name":"' + name + '","password":"123456"}';
+				var addurl = "/exam/admin/addUser";
+				$.ajax({
+					url: addurl,
+					type: "POST",
+					data : param,
+					contentType : "application/json;charset=UTF-8",
+					dataType : "text",
+					success: function(str) {
+						if(str=="success"){
+							alert("添加成功！");
+							$('#adduser').modal('hide');
+							$(".modal-backdrop.fade").hide();
+							if(id.charAt(0)=='T'){
+								queryteachers();
+							}else if(id.charAt(0)=='S'){
+								querystudents();
+							}
+						}else{
+							alert("编号已存在！请检查修改后重试");
+						}
+					},
+					error: function() {
+						alert("获取参数失败！");
+					}
+				})
+			}
+		</script>
+
+		<script type="text/javascript">
+			function queryteachers() {
+				/* var bjid=$("#banjiid").val(); */
+				var queryurl = "/exam/admin/queryTeachers";
+				$.ajax({
+					url: queryurl,
+					type: "GET",
+					dataType: "json",
+					success: function(str) {
+						//str--json--User
+						$("#firstuser").siblings().remove();
+						var res = "";
+						$(str).each(function(index, e) {
+							res = res +
+								"<tr><td>" +
+								e.id +
+								"</td><td>" +
+								e.name +
+								'</td><td><button type="button" class="btn btn-primary btn-xs" onclick="updatepassword(this)">重置</button>' +
+								'</td><td><button type="button" class="btn btn-danger btn-xs" onclick="deleteuser(this)">删除</button></td></tr>';
+						})
+						var app = $(res);
+						$("#firstuser").after(app);
+					},
+					error: function() {
+						alert("获取参数失败！");
+					}
+				})
+			}
+		</script>
+
+		<script type="text/javascript">
+			function querystudents() {
+				/* var bjid=$("#banjiid").val(); */
+				var queryurl = "/exam/admin/queryStudents";
+				$.ajax({
+					url: queryurl,
+					type: "GET",
+					dataType: "json",
+					success: function(str) {
+						//str--json--User
+						$("#firstuser").siblings().remove();
+						var res = "";
+						$(str).each(function(index, e) {
+							res = res +
+								"<tr><td>" +
+								e.id +
+								"</td><td>" +
+								e.name +
+								'</td><td><button type="button" class="btn btn-primary btn-xs" onclick="updatepassword(this)">重置</button>' +
+								'</td><td><button type="button" class="btn btn-danger btn-xs" onclick="deleteuser(this)">删除</button></td></tr>';
+						})
+						var app = $(res);
+						$("#firstuser").after(app);
+					},
+					error: function() {
+						alert("获取参数失败！");
+					}
+				})
+			}
+		</script>
+
+		<script type="text/javascript">
+			function deleteuser(obj) {
+				var td = $(obj).parent();
+				var userid = td.prev().prev().prev().html().trim();
+				var deleteurl = "/exam/admin/deleteUser/" + userid;
+
+				$.ajax({
+					url: deleteurl,
+					type: "DELETE",
+					dataType: "text",
+					success: function(str) {
+
+					},
+					error: function() {
+						alert("获取参数失败！");
+					}
+				})
+
+				if (userid[0] == 'S') {
+					alert("删除成功！");
+					querystudents();
+				} else if (userid[0] == 'T') {
+					alert("删除成功！");
+					queryteachers();
 				}
 			}
 		</script>
 
+		<script type="text/javascript">
+			function updatepassword(obj) {
+				var td = $(obj).parent();
+				var userid = td.prev().prev().html().trim();
+				var updateurl = "/exam/admin/updatePassword/" + userid;
+
+				$.ajax({
+					url: updateurl,
+					type: "PUT",
+					dataType: "text",
+					success: function(str) {
+
+					},
+					error: function() {
+						alert("获取参数失败！");
+					}
+				})
+
+				if (userid[0] == 'S') {
+					alert("重置密码成功！");
+					querystudents();
+				} else if (userid[0] == 'T') {
+					alert("重置密码成功！");
+					queryteachers();
+				}
+			}
+		</script>
 	</body>
 </html>

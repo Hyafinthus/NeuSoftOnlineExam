@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -25,5 +24,18 @@ public class MenuController {
 		return Arrays.asList(id, name);
 	}
 	
+	@RequestMapping(value="/perinfo")
+	public String getPerInfo(HttpServletRequest request, HttpServletResponse response) {
+		return "/teachermenu.html";
+	}
+	
+	@RequestMapping(value="/teacher_course")
+	@ResponseBody
+	public List<String> getTeacherCourse(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("id");
+		
+		return null;
+	}
 	
 }

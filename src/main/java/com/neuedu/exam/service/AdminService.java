@@ -1,0 +1,27 @@
+package com.neuedu.exam.service;
+
+import java.util.List;
+
+import com.neuedu.exam.domain.User;
+
+public interface AdminService {
+	public List<User> queryUsers();
+	
+	public List<User> queryTeachers();
+	
+	public List<User> queryStudents();
+	
+	public void deleteStudent(String userId);
+	
+	public void updatePassword(String userId);
+	
+	public void addUser(User user);
+
+	public User queryUserById(String userId);
+
+	public int[] queryQuestionIds();
+
+	public String queryCourseNameByQuestionId(String questionId);
+
+	public String queryTeacherNameByQuestionId(String questionId);
+}

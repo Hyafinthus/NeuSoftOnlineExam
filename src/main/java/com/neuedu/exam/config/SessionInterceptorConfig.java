@@ -13,7 +13,7 @@ import com.neuedu.exam.interceptor.SessionInterceptor;
 public class SessionInterceptorConfig implements WebMvcConfigurer {
 
 	List<String> include = Arrays.asList("/**");
-	List<String> exclude = Arrays.asList("/js/**", "/css/**", "/fonts/**", "/img/**", "/*.html", "/login/**");
+	List<String> exclude = Arrays.asList("/js/**", "/css/**", "/fonts/**", "/img/**", "/index.html","/teacherlogin.html","/studentlogin.html","/getmessage.html","/login/**", "/admin/**");
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {

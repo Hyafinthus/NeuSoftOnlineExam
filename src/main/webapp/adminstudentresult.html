@@ -16,10 +16,10 @@
 		</div>
 		<div class="container" style="height: 100%;">
 			<ul class="nav nav-pills">
-				<li role="presentation" class=""><a href="adminmembers.html">信息管理</a></li>
-				<li role="presentation" class=""><a href="adminquestions.html">题目管理</a></li>
+				<li role="presentation"><a href="adminmembers.html">信息管理</a></li>
+				<li role="presentation"><a href="adminquestions.html">题目管理</a></li>
 				<li role="presentation" class="dropdown active">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 						成绩管理 <span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
@@ -29,11 +29,11 @@
 				</li>
 				<li role="presentation"><a href="adminsendmessage.html">消息通知</a></li>
 			</ul>
-			
+
 			<div class="container" style="width: 700px;float: left;clear: left;margin: 5px;">
 				<table class="table table-hover table-striped">
 					<thead>
-						<tr>
+						<tr id="firststudent">
 							<th><button type="button" class="btn btn-default btn-sm" style="border: none;height: 40px;">
 									<h5><strong>学生编号</strong></h5>
 								</button></th>
@@ -47,16 +47,75 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>A0001</td>
-							<td>皮皮虾</td>
-							<td><button type="button" class="btn btn-primary btn-xs">查询</button></td>
-						</tr>
+
 					</tbody>
 				</table>
 			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="studentresult" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><strong>学生成绩</strong></h4>
+						</div>
+						<div class="modal-body">
+							<table id="usertable" class="table table-hover table-striped">
+								<thead>
+									<tr id="firstrecord">
+										<th>课程名称</th>
+										<th>授课教师</th>
+										<th>考试成绩</th>
+									</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+
+						</div>
+						<div class="modal-footer" style="margin-top: 60px">
+
+							<button id="exportbtn" type="button" class="btn btn-success" onclick="">导出</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		
+		<script type="text/javascript">
+			function querystudents() {
+				var queryurl = "/exam/admin/queryStudents";
+				$.ajax({
+					url: queryurl,
+					type: "GET",
+					dataType: "json",
+					success: function(str) {
+						$("#firststudent").siblings().remove();
+						var res = "";
+						$(str).each(function(index, e) {
+							res = res +
+								"<tr><td>" +
+								e.id +
+								"</td><td>" +
+								e.name +
+								'</td><td><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#studentresult">查询</button></td></tr>';
+						})
+						var app = $(res);
+						$("#firststudent").after(app);
+					},
+					error: function() {
+						alert("获取参数失败！");
+					}
+				})
+			}
+			window.onload = function() {
+				querystudents();
+			}
+		</script>
 	</body>
 </html>

@@ -14,14 +14,18 @@
 
 			var hour = now.getHours();
 			var greethour = "";
-			if (hour < 11 && hour >= 5) {
+			if (hour < 8 && hour >= 5) {
 				greethour = "早上好"
+			} else if (hour < 11 && hour >= 8) {
+				greethour = "上午好"
 			} else if (hour < 13 && hour >= 11) {
 				greethour = "中午好"
 			} else if (hour < 18 && hour >= 13) {
 				greethour = "下午好"
-			} else if (hour < 24 && hour >= 18 || hour < 5 && hour >= 0) {
+			} else if (hour < 21 && hour >= 18) {
 				greethour = "晚上好"
+			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
+				greethour = "夜深了"
 			}
 
 			function greet() {
@@ -33,16 +37,19 @@
 						$("#greeting").html(data[1] + "老师，" + greethour);
 						$("#tname").html(data[1]);
 						$("#tid").html(data[0]);
+						console.log(data);
 					},
+					error:function(status){
+						
+					}
 				});
-				$("#greeting").html("123");
 			}
 			window.onload = function() {
 				greet();
 			}
 		</script>
 	</head>
-	<body>
+	<body background="img/b2.jpg">
 		<div class="container-fluid" style="height: 90px;">
 			<h1 style="font-size: 45px;">
 				<div id="greeting">
@@ -58,6 +65,7 @@
 				<li role="presentation"><a href="#">学生信息</a></li>
 				<li role="presentation"><a href="#">考试安排</a></li>
 			</ul>
+
 			<div class="container" style="width: 700px;float: left;">
 				<table class="table table-hover">
 					<thead>
@@ -69,7 +77,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><a href="infomod.html"><button type="button" class="btn btn-primary btn-xs">修改</button></a>
+							<td><a href="infomod.html"><button type="button" class="btn btn-primary btn-xs">修改</button></a></td>
 							<td>
 								<div id="tid">
 
@@ -85,20 +93,5 @@
 				</table>
 			</div>
 		</div>
-
 	</body>
-	// <script type="text/javascript">
-		// 	window.onload = function() {
-		// 		console.log("123");
-		// 		var teachername = "<%=session.getAttribute("
-		// 		name ")%>";
-		// 		if (teachername == null) {
-		// 			alert("请先登录");
-		// 			window.navigate("teacherlogin.htm");
-		// 		}
-		// 		$("#greeting").html("123");
-		// 		console.log($("#greeting").val());
-		// 	}
-		//
-	</script>
 </html>

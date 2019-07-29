@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neuedu.exam.dao.AdminMapper">
+
+	<select id="queryUsers" resultMap="myuser">
+		SELECT user_id, user_name
+		FROM user_table
+		WHERE user_group = 'teacher' OR user_group = 'student'
+	</select>
+	
+	<select id="queryUserById" parameterType="String" resultMap="myuser">
+		SELECT user_id, user_name
+		FROM user_table
+		WHERE user_id = #{userId}
+	</select>
+	
+	<select id="queryTeachers" resultMap="myuser">
+		SELECT user_id, user_name
+		FROM user_table
+		WHERE user_group = 'teacher'
+	</select>
+	
+	<select id="queryStudents" resultMap="myuser">
+		SELECT user_id, user_name
+		FROM user_table
+		WHERE user_group = 'student'
+	</select>
+	
+	<delete id="deleteStudent" parameterType="String">
+		DELETE FROM user_table
+		WHERE user_id = #{userId}
+	</delete>
+	
+	<update id="updatePassword" parameterType="String">
+		UPDATE user_table
+		SET user_password='123456'
+		WHERE user_id=#{userId}
+	</update>
+	
+	<insert id="addUser" parameterType="User">
+		INSERT INTO user_table VALUES(#{id},#{name},#{password},
+		<if test="id.charAt(0)=='S'">
+			"student"
+		</if>
+		<if test="id.charAt(0)=='T'">
+			"teacher"
+		</if>
+		)
+	</insert>
+	
+	<select id="queryQuestionIds" resultType="int">
+		SELECT question_id FROM question_table
+	</select>
+	
+	<select id="queryCourseIdByQuestionId" parameterType="String" resultType="String">
+		SELECT course_id FROM question_table
+		WHERE question_id=#{questionId}
+	</select>
+	
+	<select id="queryCourseNameByCourseId" parameterType="String" resultType="String">
+		SELECT course_name FROM course_table
+		WHERE course_id=#{courseId}
+	</select>
+	
+	<select id="queryTeacherIdByQuestionId" parameterType="String" resultType="String">
+		SELECT teacher_id FROM question_table
+		WHERE question_id=#{questionId}
+	</select>
+	
+	<select id="queryTeacherNameByTeacherId" parameterType="String" resultType="String">
+		SELECT user_name FROM user_table
+		WHERE user_id=#{teacherId}
+	</select>
+
+	<resultMap type="User" id="myuser">
+		<id column="user_id" property="id"/>
+		<result column="user_name" property="name"/>
+	</resultMap>
+	
+
+</mapper>

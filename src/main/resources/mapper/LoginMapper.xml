@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM user_table
 	</sql>
 
-	<select id="teacherLogin" resultType="Teacher" parameterType="User">
+	<select id="teacherLogin" resultType="User" parameterType="User">
 		<include refid="mainQuery" />
 		<where>
 			user_group = "teacher" AND user_id = #{id} AND user_password =
@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 	</select>
 
-	<select id="studentLogin" resultType="Student" parameterType="User">
+	<select id="studentLogin" resultType="User" parameterType="User">
 		<include refid="mainQuery" />
 		<where>
 			user_group = "student" AND user_id = #{id} AND user_password =

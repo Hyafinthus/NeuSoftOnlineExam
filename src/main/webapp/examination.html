@@ -12,26 +12,33 @@
 				width: 750px;
 				margin: 0 auto
 			}
+
+			<style type="text/css">.fixed {
+				position: fixed;
+			}
+		</style>
 		</style>
 	</head>
 	<body>
 		<form action="" method="post">
 			<div class="container">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>考试科目：</th>
-							<th>时间：</th>
-							<th>
-								<button type="submit" class="btn btn-primary btn-xs">提交</button>
-							</th>
-						</tr>
-					</thead>
-				</table>
+				<div class="fixed">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>考试科目：</th>
+								<th>时间：</th>
+								<th>
+									<button type="submit" class="btn btn-primary btn-xs">提交</button>
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
-		
+
 			<div class="container">
-		
+
 				<table class="table table-hover table-responsive tableconfig">
 					<thead>
 						<tr>
@@ -51,7 +58,6 @@
 							<label>
 								<input name="1" type="radio">
 								B.B选项
-								</input>
 							</label>
 						</td>
 					</tr>
@@ -60,7 +66,6 @@
 							<label>
 								<input name="1" type="radio">
 								C.C选项
-								</input>
 							</label>
 						</td>
 					</tr>
@@ -69,13 +74,53 @@
 							<label>
 								<input name="1" type="radio">
 								D.D选项
-								</input>
 							</label>
 						</td>
 					</tr>
 				</table>
 				<br>
-		
+				
+				<table class="table table-hover table-responsive tableconfig">
+					<thead>
+						<tr>
+							<th>1.我是题干我是题干我是题干我是题干</th>
+						</tr>
+					</thead>
+					<tr>
+						<td>
+							<label>
+								<input name="1" type="radio">
+								A.A选项
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>
+								<input name="1" type="radio">
+								B.B选项
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>
+								<input name="1" type="radio">
+								C.C选项
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>
+								<input name="1" type="radio">
+								D.D选项
+							</label>
+						</td>
+					</tr>
+				</table>
+				<br>
+
 				<table class="table table-hover tableconfig">
 					<thead>
 						<tr>
@@ -87,7 +132,6 @@
 							<label>
 								<input name="sex" type="radio">
 								A.A选项
-								</input>
 							</label>
 						</td>
 					</tr>
@@ -96,7 +140,6 @@
 							<label>
 								<input name="sex" type="radio">
 								B.B选项
-								</input>
 							</label>
 						</td>
 					</tr>
@@ -105,7 +148,6 @@
 							<label>
 								<input name="sex" type="radio">
 								C.C选项
-								</input>
 							</label>
 						</td>
 					</tr>
@@ -114,13 +156,12 @@
 							<label>
 								<input name="sex" type="radio">
 								D.D选项
-								</input>
 							</label>
 						</td>
 					</tr>
 				</table>
 				<br>
-		
+
 				<table class="table table-hover tableconfig">
 					<thead>
 						<tr>
@@ -134,7 +175,7 @@
 					</tr>
 				</table>
 				<br />
-		
+
 				<div class="row">
 					<div class="col-lg-9">
 					</div>
@@ -142,6 +183,7 @@
 						<button type="submit" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
 					</div>
 				</div>
+			</div>
 		</form>
 	</body>
 	<script type="text/javascript">
