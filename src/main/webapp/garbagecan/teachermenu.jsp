@@ -1,15 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>教师主页</title>
+		<title>
+			教师主页
+		</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-		<script src="js/jquery-3.2.1.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="../js/jquery-3.2.1.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			var now = new Date();
-		
+
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -25,7 +29,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-		
+			//http://localhost:8080/exam/menu/personal
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -35,10 +39,10 @@
 						$("#greeting").html(data[1] + "老师，" + greethour);
 						$("#tname").html(data[1]);
 						$("#tid").html(data[0]);
-						console.log(data);
+						console.log(data[1]);
 					},
-					error:function(status){
-						
+					error: function(status) {
+
 					}
 				});
 			}
@@ -49,57 +53,43 @@
 	</head>
 	<body>
 		<div class="container-fluid" style="height: 90px;">
-			<h1 style="font-size: 45px;">教师主页</h1>
+			<h1 style="font-size: 45px;">
+				<div id="greeting">
+
+				</div>
+			</h1>
 		</div>
 		<div class="container">
 			<ul class="nav nav-pills">
-				<li role="presentation"><a href="teachermenu.html">个人信息</a></li>
-				<li role="presentation" class="active"><a href="#">题目管理</a></li>
+				<li role="presentation" class="active"><a href="teachermenu.html">个人信息</a></li>
+				<li role="presentation"><a href="questionsmanagement.html">题目管理</a></li>
 				<li role="presentation"><a href="#">考试安排</a></li>
 				<li role="presentation"><a href="#">学生信息</a></li>
 				<li role="presentation"><a href="#">考试安排</a></li>
 			</ul>
+
 			<div class="container" style="width: 700px;float: left;">
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th><a href="addquestion.html">
-									<button type="button" class="btn btn-primary btn-xs">添加</button></a></th>
-							<th>修改</th>
-							<th>删除</th>
-							<th>题目名</th>
+							<th>#</th>
+							<th>工号</th>
+							<th>姓名</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td>1</td>
+							<td><a href="href"><button type="button" class="btn btn-primary btn-xs">修改</button></a></td>
 							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>
+								<div id="tid">
+
+								</div>
 							</td>
 							<td>
-								<button type="button" class="btn btn-primary btn-xs">删除</button>
+								<div id="tname">
+
+								</div>
 							</td>
-							<td>第一个题目</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>
-							</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">删除</button>
-							</td>
-							<td>第二个题目</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>
-							</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">删除</button>
-							</td>
-							<td>第三个题目</td>
 						</tr>
 					</tbody>
 				</table>
