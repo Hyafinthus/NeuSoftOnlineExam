@@ -18,7 +18,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 		if (id != null) {
 			return true;
 		} else {
-			// response.sendRedirect("/exam/index.html");
+			response.sendRedirect("/exam/index.html");
 			return false;
 		}
 	}
