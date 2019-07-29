@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neuedu.exam.dao.PersonalMapper">
+
+	<update id="modifyPassword" parameterType="User">
+		UPDATE user_table
+		SET user_password = #{password}
+		WHERE user_id = #{id} AND user_group = 'teacher'
+	</update>
+
+</mapper>

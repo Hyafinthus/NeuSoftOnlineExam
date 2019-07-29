@@ -49,6 +49,7 @@ public class LoginController {
 			HttpSession session = request.getSession();
 			session.setAttribute("id", teacher.getId());
 			session.setAttribute("name", teacher.getName());
+			session.setAttribute("password", teacher.getPassword());
 			session.setAttribute("type", "teacher");
 			return "redirect:/teachermenu.html";
 		} else {

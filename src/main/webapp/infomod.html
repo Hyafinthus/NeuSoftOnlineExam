@@ -70,12 +70,11 @@
 						oldpwd: oldpwd,
 						newpwd: pwd1
 					},
-					contentType: "application/json;charset=UTF-8",
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 					success: function(data) {
-						if(data == 'success'){
+						if(data == "success"){
 							alert("修改成功");
-							window.location.href = "/exam/teacherlogin.html";
-						} else if (data == 'same'){
+						} else if (data == "same"){
 							alert("新密码与原密码不能相同");
 						} else {
 							alert("原密码不正确");
