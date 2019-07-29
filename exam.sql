@@ -63,7 +63,7 @@ CREATE TABLE `course_student_table` (
 DROP TABLE IF EXISTS `course_table`;
 
 CREATE TABLE `course_table` (
-  `course_id` int(8) NOT NULL AUTO_INCREMENT,
+  `course_id` varchar(20) NOT NULL,
   `course_name` varchar(20) NOT NULL,
   `course_intro` varchar(100) NOT NULL,
   PRIMARY KEY (`course_id`)
@@ -80,7 +80,7 @@ CREATE TABLE `course_teacher_table` (
   `course_id` varchar(20) NOT NULL,
   `teacher_id` varchar(20) NOT NULL,
   PRIMARY KEY (`pri_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `course_teacher_table` */
 
@@ -191,7 +191,7 @@ CREATE TABLE `user_table` (
 
 /*Data for the table `user_table` */
 
-insert  into `user_table`(`user_id`,`user_name`,`user_password`,`user_group`) values ('A0001','于乃夫','yunaifu','admin'),('A0002','汪清瀛','wangqingying','admin'),('S0001','何一夫','heyifu','student'),('S0002','万一鸣','wanyiming','student'),('S0003','高祖琛','gaozuchen','student'),('S0004','任永鹏','renyongpeng','student'),('S0005','曾钰城','zengyucheng','student'),('S0006','黄项宇轩','huangxiangyuxuan','student'),('S0007','张锦航','zhangjinhang','student'),('S0008','杜子健','duzijian','student'),('S0009','王腾','wangteng','student'),('T0001','刘伟','123','teacher'),('T0002','王忠杰','wangzhongjie','teacher'),('T0003','徐汉川','xuhanchuan','teacher'),('T0004','吴锐','wurui','teacher'),('T0005','刘宏伟','liuhongwei','teacher'),('T0006','史先俊','shixianjun','teacher');
+insert  into `user_table`(`user_id`,`user_name`,`user_password`,`user_group`) values ('A0001','于乃夫','yunaifu','admin'),('A0002','汪清瀛','wangqingying','admin'),('S0001','何一夫','heyifu','student'),('S0002','万一鸣','wanyiming','student'),('S0003','高祖琛','gaozuchen','student'),('S0004','任永鹏','renyongpeng','student'),('S0005','曾钰城','zengyucheng','student'),('S0006','黄项宇轩','huangxiangyuxuan','student'),('S0007','张锦航','zhangjinhang','student'),('S0008','杜子健','duzijian','student'),('S0009','王腾','wangteng','student'),('T0001','刘伟','234','teacher'),('T0002','王忠杰','wangzhongjie','teacher'),('T0003','徐汉川','xuhanchuan','teacher'),('T0004','吴锐','wurui','teacher'),('T0005','刘宏伟','liuhongwei','teacher'),('T0006','史先俊','shixianjun','teacher');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
