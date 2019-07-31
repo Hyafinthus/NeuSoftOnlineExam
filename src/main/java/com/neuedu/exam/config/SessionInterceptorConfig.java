@@ -14,8 +14,7 @@ public class SessionInterceptorConfig implements WebMvcConfigurer {
 
 	List<String> include = Arrays.asList("/**");
 	List<String> exclude = Arrays.asList("/js/**", "/css/**", "/fonts/**", "/img/**",
-										"/index.html", "/*login.html",
-										"/login/**", "/admin/**", "/personal/**", "/course/**");
+										"/index.html", "/*login.html", "/login/**", "/admin/login");
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {

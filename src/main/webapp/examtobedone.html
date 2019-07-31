@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>题目管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-3.2.1.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			var now = new Date();
+
+			var hour = now.getHours();
+			var greethour = "";
+			if (hour < 8 && hour >= 5) {
+				greethour = "早上好"
+			} else if (hour < 11 && hour >= 8) {
+				greethour = "上午好"
+			} else if (hour < 13 && hour >= 11) {
+				greethour = "中午好"
+			} else if (hour < 18 && hour >= 13) {
+				greethour = "下午好"
+			} else if (hour < 21 && hour >= 18) {
+				greethour = "晚上好"
+			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
+				greethour = "夜深了"
+			}
+
+			function greet() {
+				$.ajax({
+					url: "/exam/menu/personal",
+					datatype: "json",
+					contentType: "application/json;charset=UTF-8",
+					success: function(data) {
+						$("#greeting").html(data[1] + "，" + greethour);
+						$("#tname").html(data[1]);
+						$("#tid").html(data[0]);
+						console.log(data);
+					},
+					error: function(status) {
+
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container-fluid" style="height: 90px;">
+			<h1 style="font-size: 45px;">
+				<div id="greeting">
+
+				</div>
+			</h1>
+		</div>
+		<div class="container">
+			<ul class="nav nav-pills">
+				<li role="presentation"><a href="studentmenu.html">个人信息</a></li>
+				<li role="presentation" class="active"><a href="examtobedone.html">在线考试</a></li>
+				<li role="presentation"><a href="#">成绩管理</a></li>
+				<li role="presentation"><a href="stuquitcourse.html">退选</a></li>
+				<li role="presentation"><a href="elective.html">学生选课</a></li>
+				<li role="presentation"><a href="getmessage.html">消息通知</a></li>
+			</ul>
+			<div class="container" style="width: 700px;float: left;">
+				<table class="table table-hover">
+					<thead>
+						<tr id="firstexam">
+							<th>#</th>
+							<th>考试科目</th>
+							<th>开始时间</th>
+							<th>结束时间</th>
+							<th>时长</th>
+						</tr>
+					</thead>
+
+				</table>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		window.onload = function() {
+			greet();
+			exams();
+		}
+
+		function exams() {
+			$.ajax({
+				url: "/exam/menu/student/exam",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					var res = "";
+					dataarray = data;
+					console.log(data);
+					$(data).each(function(index, e) {
+						res = res + "<tr><td>" + e.exam_id + "</td><td>" + e.course_name + "</td><td>" + e.exam_time_start +
+							"</td><td>" +
+							e.exam_time_end + "</td><td>" + e.exam_length + "</td><td>" +
+							'<button type="button" class="btn btn-primary btn-xs" onclick="examstart(this)">开始答题</button></td>';
+					});
+					$("#firstexam").siblings().remove();
+					$("#firstexam").after(res);
+				},
+			});
+		}
+
+		function examstart(obj) {
+			var td = $(obj).parent();
+			var examid = td.prev().prev().prev().prev().prev().html().trim();
+			window.location.href = "examination.html?examid=" + examid;
+		}
+	</script>
+</html>

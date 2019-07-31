@@ -20,4 +20,9 @@ public interface AdminService {
 	public User queryUserById(String userId);
 
 	public User adminLogin(User user);
+
+	public List<User> getRecipients(String identity);
+
+	public void addMessage(String addresserName, String addresserId, List<User> recipients, String content,
+			String messagedate);
 }

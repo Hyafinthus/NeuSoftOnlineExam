@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neuedu.exam.dao.ExamMapper">
+
+	<insert id="addExam" parameterType="Exam">
+		INSERT INTO exam_table(exam_id, course_id, teacher_id, exam_classroom,
+		easy, midd, hard, exam_time_start, exam_time_end, exam_length)
+		VALUES(#{exam_id}, #{course_id}, #{teacher_id}, #{exam_classroom},
+		#{easy}, #{midd}, #{hard}, #{exam_time_start}, #{exam_time_end}, #{exam_length})
+	</insert>
+	
+	<select id="countStudent" parameterType="String" resultType="Integer">
+		SELECT COUNT(*) FROM course_student_table s, course_teacher_table t
+		WHERE s.crs_tch_id = t.pri_id AND t.course_id = #{course_id}
+	</select>
+	
+	<select id="chooseClassroom" parameterType="Integer" resultType="String">
+		SELECT exam_classroom FROM classroom_table
+		WHERE is_used IS NULL AND classroom_size >= #{count}
+		ORDER BY classroom_size ASC LIMIT 1
+	</select>
+	
+	<insert id="addQuestion" parameterType="Exam">
+		INSERT INTO exam_question_table(exam_id, course_id, question_id)
+		SELECT #{exam_id}, #{course_id}, question_id FROM question_table
+		WHERE course_id = #{course_id} AND question_rate = #{rate} ORDER BY RAND() LIMIT #{num}
+	</insert>
+	
+	<select id="getExamQuestion" parameterType="String" resultMap="questionlist">
+		SELECT e.question_id, course_name, question_mark, question_type,
+		question_a, question_b, question_c, question_d, question_body
+		FROM exam_question_table e, question_table q, course_table c
+		WHERE e.exam_id = #{exam_id} AND e.question_id = q.question_id AND q.course_id = c.course_id
+	</select>
+	
+	<resultMap type="Question" id="questionlist">
+		<id column="question_id" property="question_id"/>
+		<result column="question_mark" property="question_mark"/>
+		<result column="question_type" property="question_type"/>
+		<result column="question_a" property="question_a"/>
+		<result column="question_b" property="question_b"/>
+		<result column="question_c" property="question_c"/>
+		<result column="question_d" property="question_d"/>
+		<result column="question_body" property="question_body"/>
+	</resultMap>
+	
+</mapper>

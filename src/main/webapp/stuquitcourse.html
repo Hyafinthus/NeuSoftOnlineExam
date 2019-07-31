@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>加入课程</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-3.2.1.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			var now = new Date();
+
+			var hour = now.getHours();
+			var greethour = "";
+			if (hour < 8 && hour >= 5) {
+				greethour = "早上好"
+			} else if (hour < 11 && hour >= 8) {
+				greethour = "上午好"
+			} else if (hour < 13 && hour >= 11) {
+				greethour = "中午好"
+			} else if (hour < 18 && hour >= 13) {
+				greethour = "下午好"
+			} else if (hour < 21 && hour >= 18) {
+				greethour = "晚上好"
+			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
+				greethour = "夜深了"
+			}
+
+			function greet() {
+				$.ajax({
+					url: "/exam/menu/personal",
+					datatype: "json",
+					contentType: "application/json;charset=UTF-8",
+					success: function(data) {
+						$("#greeting").html(data[1] + "，" + greethour);
+						$("#tname").html(data[1]);
+						$("#tid").html(data[0]);
+					},
+					error: function(status) {
+
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container-fluid" style="height: 90px;">
+			<h1 style="font-size: 45px;">
+				<div id="greeting">
+
+				</div>
+			</h1>
+		</div>
+		<div class="container">
+			<ul class="nav nav-pills">
+				<li role="presentation"><a href="studentmenu.html">个人信息</a></li>
+				<li role="presentation"><a href="examtobedone.html">在线考试</a></li>
+				<li role="presentation"><a href="#">成绩管理</a></li>
+				<li role="presentation" class="active"><a href="stuquitcourse.html">退选</a></li>
+				<li role="presentation"><a href="elective.html">学生选课</a></li>
+				<li role="presentation"><a href="getmessage.html">消息通知</a></li>
+			</ul>
+			<div class="container" style="width: 700px;float: left;">
+				<table id="coursetable" class="table table-hover">
+					<thead>
+						<tr id="firstcourse">
+							<th>#</th>
+							<th>退选</th>
+							<th>课程名</th>
+							<th>教师工号</th>
+							<th>教师名</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var dataarray = new Array();
+
+		function courses() {
+			$.ajax({
+				url: "/exam/menu/student_course",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					console.log(data);
+					var res = "";
+					number = data.length;
+					dataarray = data;
+					console.log(data);
+					$(data).each(function(index, e) {
+						res = res + "<tr><td>" + e.course_id + "</td><td>" +
+							'<button type="button" class="btn btn-danger btn-xs" onclick="quitcourse(this)">退选</button></td><td>' +
+							e.course_name + "</td><td>" + e.teacher_id + "</td><td>" + e.teacher_name + "</td>";
+					});
+					$("#firstcourse").siblings().remove();
+					$("#firstcourse").after(res);
+				},
+			});
+
+
+		}
+
+		function quitcourse(obj) {
+			var td = $(obj).parent();
+			var courseid = td.prev().html().trim();
+			var teacherid = td.next().next().html().trim();
+			console.log(courseid);
+			if (window.confirm('你确定要退出课程吗？')) {
+				$.ajax({
+					url: "/exam/course/withdraw",
+					type: "post",
+					data: {
+						course_id: courseid,
+						teacher_id: teacherid
+					},
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+					success: function(data) {
+						alert("退选成功");
+						courses();
+					},
+				});
+			}
+
+		}
+
+		window.onload = function() {
+			greet();
+			courses();
+		}
+	</script>
+</html>

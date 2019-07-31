@@ -32,13 +32,13 @@
 				<div class="col-lg-7 vertical-center">
 					<div class="center-vertical">
 						<h1 style="font-size: 100px;">考试系统 <small style="font-size: 40px;">登录</small>
-							</h1>
+						</h1>
 					</div>
 				</div>
 
 				<div class="col-lg-4 vertical-center">
 					<div class="jumbotron">
-						<form action="admin/login" name="myform"  id="form" method="post">
+						<form action="admin/login" name="myform" id="form" method="post">
 							<div class="form-group">
 								<label for="user_id">账号</label>
 								<input type="text" class="form-control" name="user_id" id="user_id" placeholder="请输入账号">
@@ -59,15 +59,13 @@
 			var uid = $("#user_id").val();
 			var pwd = $("#user_password").val();
 			// var param = '{"id":"'+uid+'","password":"'+pwd+'"}';
-			if(uid==null || uid==''){
+			if (uid == null || uid == '') {
 				//alert("邮箱不能为空");
 				alert("账号不能为空");
-			}
-			else if(pwd==null ||pwd==''){
+			} else if (pwd == null || pwd == '') {
 				//rt("密码不能为空");
 				alert("密码不能为空");
-			}
-			else{
+			} else {
 				//提交
 				var form = document.getElementById("form");
 				form.submit();

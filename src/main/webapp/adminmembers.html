@@ -126,28 +126,28 @@
 
 		<script type="text/javascript">
 			function adduser() {
-				var userprefix=$('input:radio[name="inlineRadioOptions"]:checked').val();
-				var id = userprefix+$("#uid").val();
+				var userprefix = $('input:radio[name="inlineRadioOptions"]:checked').val();
+				var id = userprefix + $("#uid").val();
 				var name = $("#uname").val();
 				var param = '{"id":"' + id + '","name":"' + name + '","password":"123456"}';
 				var addurl = "/exam/admin/addUser";
 				$.ajax({
 					url: addurl,
 					type: "POST",
-					data : param,
-					contentType : "application/json;charset=UTF-8",
-					dataType : "text",
+					data: param,
+					contentType: "application/json;charset=UTF-8",
+					dataType: "text",
 					success: function(str) {
-						if(str=="success"){
+						if (str == "success") {
 							alert("添加成功！");
 							$('#adduser').modal('hide');
 							$(".modal-backdrop.fade").hide();
-							if(id.charAt(0)=='T'){
+							if (id.charAt(0) == 'T') {
 								queryteachers();
-							}else if(id.charAt(0)=='S'){
+							} else if (id.charAt(0) == 'S') {
 								querystudents();
 							}
-						}else{
+						} else {
 							alert("编号已存在！请检查修改后重试");
 						}
 					},
@@ -242,7 +242,7 @@
 					error: function() {
 						alert("获取参数失败！");
 					}
-				})	
+				})
 			}
 		</script>
 

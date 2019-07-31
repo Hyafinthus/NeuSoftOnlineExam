@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.neuedu.exam.domain.TeacherCourse;
+import com.neuedu.exam.domain.Relation;
 import com.neuedu.exam.service.CourseService;
 
 @Controller
@@ -23,10 +23,10 @@ public class CourseController {
 	@ResponseBody
 	public String joinCourse(String course_id, HttpServletRequest request, HttpServletResponse response) {
 		String id = (String) request.getSession().getAttribute("id");
-		TeacherCourse tc = new TeacherCourse(id, course_id);
-		System.out.println(tc);
+		Relation relation = new Relation(id, course_id);
+		System.out.println(relation);
 		
-		courseService.joinCourse(tc);
+		courseService.joinCourse(relation);
 		return "success";
 	}
 	
@@ -34,10 +34,32 @@ public class CourseController {
 	@ResponseBody
 	public String quitCourse(String course_id, HttpServletRequest request, HttpServletResponse response) {
 		String id = (String) request.getSession().getAttribute("id");
-		TeacherCourse tc = new TeacherCourse(id, course_id);
-		System.out.println(tc);
+		Relation relation = new Relation(id, course_id);
+		System.out.println(relation);
 		
-		courseService.quitCourse(tc);
+		courseService.quitCourse(relation);
+		return "success";
+	}
+	
+	@RequestMapping(value="/elective", method=RequestMethod.POST)
+	@ResponseBody
+	public String electiveCourse(String teacher_id, String course_id, HttpServletRequest request, HttpServletResponse response) {
+		String id = (String) request.getSession().getAttribute("id");
+		Relation relation = new Relation(teacher_id, course_id, id, null);
+		System.out.println(relation);
+		
+		courseService.electiveCourse(relation);
+		return "success";
+	}
+	
+	@RequestMapping(value="/withdraw", method=RequestMethod.POST)
+	@ResponseBody
+	public String withdrawCourse(String teacher_id, String course_id, HttpServletRequest request, HttpServletResponse response) {
+		String id = (String) request.getSession().getAttribute("id");
+		Relation relation = new Relation(teacher_id, course_id, id, null);
+		System.out.println(relation);
+		
+		courseService.withdrawCourse(relation);
 		return "success";
 	}
 }

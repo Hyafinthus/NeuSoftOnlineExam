@@ -11,16 +11,77 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE t.teacher_id = #{id} AND t.course_id = c.course_id
 	</select>
 	
+	<select id="getTeacherCandidate" parameterType="User" resultMap="courselist">
+		SELECT * FROM course_table
+		WHERE course_id NOT IN
+		(SELECT course_id FROM course_teacher_table WHERE teacher_id = #{id})
+	</select>
+	
 	<resultMap type="Course" id="courselist">
 		<id column="course_id" property="course_id"/>
 		<result column="course_name" property="course_name"/>
 		<result column="course_intro" property="course_intro"/>
 	</resultMap>
 	
-	<select id="getCourses" parameterType="User" resultMap="courselist">
-		SELECT * FROM course_table
-		WHERE course_id NOT IN
-		(SELECT course_id FROM course_teacher_table WHERE teacher_id = #{id})
+	<select id="getQuestion" parameterType="User" resultMap="questionlist">
+		SELECT question_id, course_name, question_rate, question_mark, question_type, question_body
+		FROM question_table q, course_table c
+		WHERE teacher_id = #{id} AND q.course_id = c.course_id
+	</select>
+	
+	<resultMap type="Question" id="questionlist">
+		<id column="question_id" property="question_id"/>
+		<result column="course_name" property="course_name"/>
+		<result column="question_rate" property="question_rate"/>
+		<result column="question_mark" property="question_mark"/>
+		<result column="question_type" property="question_type"/>
+		<result column="question_body" property="question_body"/>
+	</resultMap>
+	
+	<select id="getExam" parameterType="User" resultMap="examlist">
+		SELECT c.course_name, e.exam_time_start, e.exam_time_end, e.exam_length
+		FROM exam_table e, course_table c, course_teacher_table t, user_table u
+		WHERE t.teacher_id = #{id} AND e.course_id = t.course_id = c.course_id AND t.teacher_id = u.user_id
+	</select>
+	
+	<resultMap type="Exam" id="examlist">
+		<id column="exam_id" property="exam_id"/>
+		<result column="course_name" property="course_name"/>
+		<result column="teacher_name" property="teacher_name"/>
+		<result column="exam_classroom" property="exam_classroom"/>
+		<result column="exam_time_start" property="exam_time_start"/>
+		<result column="exam_time_end" property="exam_time_end"/>
+		<result column="exam_length" property="exam_length"/>
+	</resultMap>
+	
+	<select id="getStudentCourse" parameterType="User" resultMap="relationlist">
+		SELECT t.teacher_id, u.user_name teacher_name, t.course_id, c.course_name, c.course_intro
+		FROM course_student_table s, course_teacher_table t, course_table c, user_table u
+		WHERE s.student_id = #{id} AND s.crs_tch_id = t.pri_id
+		AND t.teacher_id = u.user_id AND t.course_id = c.course_id
+	</select>
+	
+	<select id="getStudentCandidate" parameterType="User" resultMap="relationlist">
+		SELECT t.teacher_id, u.user_name teacher_name, t.course_id, c.course_name, c.course_intro
+		FROM course_teacher_table t, course_table c, user_table u
+		WHERE t.course_id NOT IN
+		(SELECT t.course_id FROM course_student_table s, course_teacher_table t
+		WHERE s.student_id = #{id} AND s.crs_tch_id = t.pri_id)
+		AND t.teacher_id = u.user_id AND t.course_id = c.course_id
+	</select>
+	
+	<resultMap type="Relation" id="relationlist">
+		<id column="teacher_id" property="teacher_id"/>
+		<result column="teacher_name" property="teacher_name"/>
+		<result column="course_id" property="course_id"/>
+		<result column="course_name" property="course_name"/>
+		<result column="course_intro" property="course_intro"/>
+	</resultMap>
+	
+	<select id="getStudentExam" parameterType="User" resultMap="examlist">
+		SELECT e.exam_id, c.course_name, e.exam_time_start, e.exam_time_end, e.exam_length
+		FROM course_student_table s, course_teacher_table t, exam_table e, course_table c
+		WHERE s.student_id = #{id} AND s.crs_tch_id = t.pri_id AND t.course_id = e.course_id = c.course_id
 	</select>
 	
 </mapper>

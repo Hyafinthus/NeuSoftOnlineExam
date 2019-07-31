@@ -8,59 +8,155 @@
 		<script src="js/jquery-3.2.1.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<style type="text/css">
-		
+
 		</style>
+		<script type="text/javascript">
+			var now = new Date();
+
+			var hour = now.getHours();
+			var greethour = "";
+			if (hour < 8 && hour >= 5) {
+				greethour = "早上好"
+			} else if (hour < 11 && hour >= 8) {
+				greethour = "上午好"
+			} else if (hour < 13 && hour >= 11) {
+				greethour = "中午好"
+			} else if (hour < 18 && hour >= 13) {
+				greethour = "下午好"
+			} else if (hour < 21 && hour >= 18) {
+				greethour = "晚上好"
+			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
+				greethour = "夜深了"
+			}
+
+			function greet() {
+				$.ajax({
+					url: "/exam/menu/personal",
+					datatype: "json",
+					contentType: "application/json;charset=UTF-8",
+					success: function(data) {
+						$("#greeting").html(data[1] + "，" + greethour);
+						$("#sname").html(data[1]);
+						$("#sid").html(data[0]);
+					},
+					error: function(status) {
+
+					}
+				});
+			}
+		</script>
 	</head>
 	<body>
 		<div class="container-fluid" style="height: 90px;">
-			<h1 style="font-size: 45px;">学生选课</h1>
+			<h1 style="font-size: 45px;">
+				<div id="greeting">
+
+				</div>
+			</h1>
 		</div>
 		<div class="container" style="height: 100%;">
 			<ul class="nav nav-pills">
 				<li role="presentation"><a href="studentmenu.html">个人信息</a></li>
-				<li role="presentation"><a href="#">在线考试</a></li>
+				<li role="presentation"><a href="examtobedone.html">在线考试</a></li>
 				<li role="presentation"><a href="#">成绩管理</a></li>
+				<li role="presentation"><a href="stuquitcourse.html">退选</a></li>
 				<li role="presentation" class="active"><a href="elective.html">学生选课</a></li>
 				<li role="presentation"><a href="getmessage.html">消息通知</a></li>
 			</ul>
 			<div class="container" style="width: 700px;float: left;">
 				<table class="table table-hover">
 					<thead>
-						<tr>
+						<tr id="firstcourse">
 							<th></th>
 							<th>选课</th>
 							<th>课程名</th>
 							<th>授课教师</th>
+							<th>教师工号</th>
+							<th>简介</th>
+							<th>详情</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">选课</button>
-							</td>
-							<td>软件构造</td>
-							<td>王忠杰</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">选课</button>
-							</td>
-							<td>大学计算机计算思维导论</td>
-							<td>战德臣</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">选课</button>
-							</td>
-							<td>独立学习</td>
-							<td>姚鸿勋</td>
-						</tr>
-					</tbody>
+
 				</table>
 			</div>
 		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel"></h4>
+					</div>
+					<div id="modal-body" class="modal-body">
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
+	<script type="text/javascript">
+		var dataarray = new Array();
+		window.onload = function() {
+			greet();
+			courses();
+		}
+
+		function courses() {
+			$.ajax({
+				url: "/exam/menu/student_candidate",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					var res = "";
+					dataarray = data;
+					console.log(data);
+					$(data).each(function(index, e) {
+						// sequence = index + 1;
+						res = res + "<tr><td>" + e.course_id + "</td><td>" +
+							'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" onclick="selectcourse(this)">选课</button></td><td>' +
+							e.course_name + "</td><td>" + e.teacher_name + "</td><td>"+ e.teacher_id + "</td><td>" + e.course_intro.slice(0, 8) + "</td><td>" +
+							'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="getcontent(this)">详情</button></td><td>';
+
+					});
+					$("#firstcourse").siblings().remove();
+					$("#firstcourse").after(res);
+				},
+			});
+		}
+
+		function getcontent(obj) {
+			var td = $(obj).parent();
+			var courseintro = td.prev().html().trim();
+			var teachername = td.prev().prev().html().trim();
+			console.log(courseintro);
+			$("#myModalLabel").html(teachername);
+			$("#modal-body").html(courseintro);
+
+		}
+
+		function selectcourse(obj) {
+			var td = $(obj).parent();
+			var courseid = td.prev().html().trim();
+			var teacherid = td.next().next().next().html().trim();
+			console.log(courseid+teacherid);
+			$.ajax({
+				url: "/exam/course/elective",
+				type: "post",
+				data: {
+					course_id: courseid,
+					teacher_id: teacherid
+				},
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function(data) {
+					alert("加入成功");
+					courses();
+				},
+			});
+
+		}
+	</script>
 </html>

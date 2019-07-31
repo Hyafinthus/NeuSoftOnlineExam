@@ -71,6 +71,8 @@ CREATE TABLE `course_table` (
 
 /*Data for the table `course_table` */
 
+insert  into `course_table`(`course_id`,`course_name`,`course_intro`) values ('1','test1','1111'),('2','test2','2222'),('3','test3','3333'),('4','test4','4444');
+
 /*Table structure for table `course_teacher_table` */
 
 DROP TABLE IF EXISTS `course_teacher_table`;
@@ -80,9 +82,11 @@ CREATE TABLE `course_teacher_table` (
   `course_id` varchar(20) NOT NULL,
   `teacher_id` varchar(20) NOT NULL,
   PRIMARY KEY (`pri_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `course_teacher_table` */
+
+insert  into `course_teacher_table`(`pri_id`,`course_id`,`teacher_id`) values (7,'1','T0001'),(8,'2','T0001');
 
 /*Table structure for table `error_question_table` */
 
@@ -132,10 +136,16 @@ CREATE TABLE `exam_question_table` (
 DROP TABLE IF EXISTS `exam_table`;
 
 CREATE TABLE `exam_table` (
-  `exam_id` varchar(20) NOT NULL,
+  `exam_id` int(8) NOT NULL AUTO_INCREMENT,
   `course_id` varchar(20) NOT NULL,
   `exam_classroom` varchar(20) NOT NULL,
   `teacher_id` varchar(20) NOT NULL,
+  `easy` int(8) unsigned zerofill NOT NULL,
+  `midd` int(8) unsigned zerofill NOT NULL,
+  `hard` int(8) unsigned zerofill NOT NULL,
+  `exam_time_start` datetime NOT NULL,
+  `exam_time_end` datetime NOT NULL,
+  `exam_length` time NOT NULL,
   PRIMARY KEY (`exam_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -161,8 +171,8 @@ DROP TABLE IF EXISTS `question_table`;
 
 CREATE TABLE `question_table` (
   `question_id` int(8) NOT NULL AUTO_INCREMENT,
-  `course_name` varchar(20) NOT NULL,
-  `teacher_name` varchar(20) NOT NULL,
+  `course_id` varchar(20) NOT NULL,
+  `teacher_id` varchar(20) NOT NULL,
   `question_rate` varchar(20) NOT NULL,
   `question_mark` int(8) NOT NULL,
   `question_type` varchar(20) NOT NULL,
@@ -173,9 +183,11 @@ CREATE TABLE `question_table` (
   `question_d` varchar(100) DEFAULT NULL,
   `question_answer` varchar(100) NOT NULL,
   PRIMARY KEY (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 /*Data for the table `question_table` */
+
+insert  into `question_table`(`question_id`,`course_id`,`teacher_id`,`question_rate`,`question_mark`,`question_type`,`question_body`,`question_a`,`question_b`,`question_c`,`question_d`,`question_answer`) values (1,'1','T0001','easy',3,'B','123123','321','432','345','456','123456'),(2,'1','T0001','easy',5,'subj','12341234','null','null','null','null','123412341'),(3,'1','T0001','easy',5,'subj','135','null','null','null','null','2345234523452'),(4,'1','T0001','easy',5,'A','123','234','345','4567','5647','ferg'),(5,'1','T0001','midd',4,'B','234','234','345','4567','5647','qwer'),(6,'1','T0001','midd',5,'C','345','456','23542','34234','234234','WERWRF'),(7,'1','T0001','midd',5,'D','23424','FGER','WRGW','ERG','ERG','ERG'),(8,'1','T0001','easy',10,'subj','123124','null','null','null','null','SGHET'),(9,'1','T0001','hard',12,'subj','UGIGJKH','null','null','null','null','FGTRGW'),(10,'1','T0001','hard',13,'subj','QWE3QWDQ','null','null','null','null','456345');
 
 /*Table structure for table `user_table` */
 

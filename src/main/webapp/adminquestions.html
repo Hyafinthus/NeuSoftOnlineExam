@@ -51,7 +51,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						
+
 					</tbody>
 				</table>
 			</div>
@@ -83,84 +83,84 @@
 		</div>
 
 		<script>
-			function queryquestions(){
+			function queryquestions() {
 				var queryquestionids = "/exam/admin/question/queryQuestionIds";
 				var ids;
 				var teachername;
 				var coursename;
 				/* var ids = new Array();  */
-				$.ajax({//获取所有课程id
-					url : queryquestionids,
+				$.ajax({ //获取所有课程id
+					url: queryquestionids,
 					async: false,
-					type : "GET",
-					dataType : "json",
-					success : function(str) {
-						ids=eval(str);
-						var res="";
+					type: "GET",
+					dataType: "json",
+					success: function(str) {
+						ids = eval(str);
+						var res = "";
 						$("#firstquestion").siblings().remove();
-						$.each(ids, function (index, item){
-							coursename=querycoursename(item);
-							teachername=queryteachername(item);
+						$.each(ids, function(index, item) {
+							coursename = querycoursename(item);
+							teachername = queryteachername(item);
 							res = res +
-							"<tr><td>" +
-							item +
-							"</td><td>" +
-							teachername +
-							"</td><td>" +
-							coursename +
-							'</td><td><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#content" onclick="questiondetails(this)">查看</button>' +
-							'</td><td><button type="button" class="btn btn-danger btn-xs" onclick="deletequestion(this)">删除</button></td></tr>';
-						}) 
+								"<tr><td>" +
+								item +
+								"</td><td>" +
+								teachername +
+								"</td><td>" +
+								coursename +
+								'</td><td><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#content" onclick="questiondetails(this)">查看</button>' +
+								'</td><td><button type="button" class="btn btn-danger btn-xs" onclick="deletequestion(this)">删除</button></td></tr>';
+						})
 						var app = $(res);
 						$("#firstquestion").after(app);
-						
+
 					},
-					error : function() {
+					error: function() {
 						alert("lost111");
 					}
 				})
-				
+
 			}
-			
-			function querycoursename(questionid){
-				var querycoursename = "/exam/admin/question/queryCourseName/"+questionid;
+
+			function querycoursename(questionid) {
+				var querycoursename = "/exam/admin/question/queryCourseName/" + questionid;
 				var cname;
 				$.ajax({
-					url : querycoursename,
+					url: querycoursename,
 					async: false,
-					type : "GET",
-					dataType : "text",
-					success : function(str) {
-						cname=str;
+					type: "GET",
+					dataType: "text",
+					success: function(str) {
+						cname = str;
 					},
-					error : function() {
+					error: function() {
 						alert("lost222");
 					}
 				})
 				return cname;
 			}
-			
-			function queryteachername(questionid){
-				var queryteachername = "/exam/admin/question/queryTeacherName/"+questionid;
+
+			function queryteachername(questionid) {
+				var queryteachername = "/exam/admin/question/queryTeacherName/" + questionid;
 				var tname;
 				$.ajax({
-					url : queryteachername,
+					url: queryteachername,
 					async: false,
-					type : "GET",
-					dataType : "text",
-					success : function(str) {
-						tname=str;
+					type: "GET",
+					dataType: "text",
+					success: function(str) {
+						tname = str;
 					},
-					error : function() {
+					error: function() {
 						alert("lost333");
 					}
 				})
 				return tname;
 			}
-			
-			window.onload=function(){
+
+			window.onload = function() {
 				queryquestions();
-			} 
+			}
 		</script>
 
 		<script type="text/javascript">
@@ -184,7 +184,7 @@
 
 			}
 		</script>
-		
+
 		<script type="text/javascript">
 			function questiondetails(obj) {
 				var td = $(obj).parent();
@@ -196,15 +196,29 @@
 					type: "GET",
 					dataType: "json",
 					success: function(str) {
-						$("#questiontype").html("题目类型：  "+str.question_type);
-						$("#questionrate").html("题目难度：  "+str.question_rate);
-						$("#questionmark").html("题目分值：  "+str.question_mark);
-						$("#questionbody").html("题目内容：  "+str.question_body);
-						$("#questionchoise_A").html("A:  "+str.question_a);
-						$("#questionchoise_B").html("B:  "+str.question_b);
-						$("#questionchoise_C").html("C:  "+str.question_c);
-						$("#questionchoise_D").html("D:  "+str.question_d);
-						$("#questionanswer").html("答案：  "+str.question_answer);
+						$("#questiontype").html("");
+						$("#questionrate").html("");
+						$("#questionmark").html("");
+						$("#questionbody").html("");
+						$("#questionchoise_A").html("");
+						$("#questionchoise_B").html("");
+						$("#questionchoise_C").html("");
+						$("#questionchoise_D").html("");
+						$("#questionanswer").html("");
+						
+						$("#questionrate").html("题目难度：  " + str.question_rate);
+						$("#questionmark").html("题目分值：  " + str.question_mark);
+						$("#questionbody").html("题目内容：  " + str.question_body);
+						if(str.question_type=="subj"){
+							$("#questiontype").html("题目类型：  主观题");
+						}else{
+							$("#questiontype").html("题目类型：  单选题");
+							$("#questionchoise_A").html("A:  " + str.question_a);
+							$("#questionchoise_B").html("B:  " + str.question_b);
+							$("#questionchoise_C").html("C:  " + str.question_c);
+							$("#questionchoise_D").html("D:  " + str.question_d);
+						}
+						$("#questionanswer").html("解析：  " + str.question_answer);
 					},
 					error: function() {
 						alert("获取参数失败！");

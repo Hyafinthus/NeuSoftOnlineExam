@@ -67,7 +67,6 @@
 								</div>
 							</th>
 							<th>
-								<button type="submit" class="btn btn-primary btn-xs">提交</button>
 							</th>
 						</tr>
 					</thead>
@@ -92,15 +91,26 @@
 					</thead>
 					<tbody>
 						<tr>
-							<th>
-								<input type="number" name="" id="" placeholder="输入简单题目的数量" />
-							</th>
-							<th>
-								<input type="number" name="" id="" placeholder="输入简单题目的数量" />
-							</th>
-							<th>
-								<input type="number" name="" id="" placeholder="输入简单题目的数量" />
-							</th>
+							<td>
+								<input type="number" name="" id="easy" placeholder="输入简单题目的数量" min="1" />
+							</td>
+							<td>
+								<input type="number" name="" id="medium" placeholder="输入简单题目的数量" min="1" />
+							</td>
+							<td>
+								<input type="number" name="" id="hard" placeholder="输入简单题目的数量" min="1" />
+							</td>
+						</tr>
+						<tr>
+							<td>开始时间
+								<input type="datetime-local" id="starttime" value="2019-01-01T00:00" />
+							</td>
+							<td>结束时间
+								<input type="datetime-local" id="endtime" value="2019-01-01T00:00" />
+							</td>
+							<td>
+								时长(分钟)<input id="length" type="number" id="length" min="1" />
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -110,7 +120,7 @@
 					<div class="col-lg-9">
 					</div>
 					<div class="col-lg-1">
-						<button type="submit" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
+						<button id="button" type="button" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
 					</div>
 				</div>
 			</div>
@@ -134,6 +144,40 @@
 		window.onload = function() {
 			greet();
 			select();
+		}
+
+		$("#button").click(function() {
+			var starttime = $("#starttime").val();
+			var endtime = $("#endtime").val();
+			var easy = $("#easy").val();
+			var midd = $("#medium").val();
+			var hard = $("#hard").val();
+			var length = $("#length").val();
+			var index = document.getElementById("selectcourse").selectedIndex;
+			var course_id = document.getElementById("selectcourse").options[index].value;
+			console.log(easy + midd + hard + length);
+			var param = '{"exam_time_start":"' + starttime + '","exam_time_end":"' + endtime + '","easy":"' + easy +
+				'","midd":"' + midd + '","hard":"' + hard + '","exam_length":"' + length + '","course_id":"' + course_id + '"}';
+			console.log(param);
+			if (starttime >= endtime) {
+				alert("开始时间应该在结束时间以后");
+			} else {
+				$.ajax({
+					url: "/exam/exam/add",
+					datatype: "json",
+					type: "post",
+					data: param,
+					contentType: "application/json;charset=UTF-8",
+					success: function(data) {
+						alert("添加成功");
+						jump();
+					},
+				});
+			}
+		});
+		
+		function jump(){
+			window.location.href = "exammanagement.html";
 		}
 	</script>
 </html>

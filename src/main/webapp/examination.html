@@ -26,10 +26,18 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th>考试科目：</th>
-								<th>时间：</th>
 								<th>
-									<button type="submit" class="btn btn-primary btn-xs">提交</button>
+									<div id="examcourse">
+
+									</div>
+								</th>
+								<th>
+									<div id="timer">
+
+									</div>
+								</th>
+								<th>
+									<button type="button" class="btn btn-primary btn-xs " onclick="mysubmit()">提交</button>
 								</th>
 							</tr>
 						</thead>
@@ -38,155 +46,140 @@
 			</div>
 
 			<div class="container">
+				<div id="question">
 
-				<table class="table table-hover table-responsive tableconfig">
-					<thead>
-						<tr>
-							<th>1.我是题干我是题干我是题干我是题干</th>
-						</tr>
-					</thead>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-								A.A选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-								B.B选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-								C.C选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-								D.D选项
-							</label>
-						</td>
-					</tr>
-				</table>
-				<br>
-				
-				<table class="table table-hover table-responsive tableconfig">
-					<thead>
-						<tr>
-							<th>1.我是题干我是题干我是题干我是题干</th>
-						</tr>
-					</thead>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-								A.A选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-								B.B选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-								C.C选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="1" type="radio">
-								D.D选项
-							</label>
-						</td>
-					</tr>
-				</table>
-				<br>
-
-				<table class="table table-hover tableconfig">
-					<thead>
-						<tr>
-							<th>2.我是题干我是题干我是题干我是题干</th>
-						</tr>
-					</thead>
-					<tr>
-						<td>
-							<label>
-								<input name="sex" type="radio">
-								A.A选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="sex" type="radio">
-								B.B选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="sex" type="radio">
-								C.C选项
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>
-								<input name="sex" type="radio">
-								D.D选项
-							</label>
-						</td>
-					</tr>
-				</table>
-				<br>
-
-				<table class="table table-hover tableconfig">
-					<thead>
-						<tr>
-							<th>3.我是题干我是题干我是题干我是题干</th>
-						</tr>
-					</thead>
-					<tr>
-						<td>
-							<textarea class="form-control" rows="5"></textarea>
-						</td>
-					</tr>
-				</table>
-				<br />
-
+				</div>
 				<div class="row">
 					<div class="col-lg-9">
 					</div>
 					<div class="col-lg-1">
-						<button type="submit" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
+						<button id="button" type="button" class="btn btn-primary btn-xs" onclick="mysubmit()" style="margin:0 auto">提交</button>
 					</div>
 				</div>
 			</div>
 		</form>
 	</body>
 	<script type="text/javascript">
+		var str = "2019/12/17 00:00:00";
+		timer = setInterval("TimeDown()", 1000);
 
+		function TimeDown() {
+			//结束时间
+			var endDate = new Date(str);
+			//当前时间
+			var nowDate = new Date();
+			//相差的总秒数
+			var totalSeconds = parseInt((endDate - nowDate) / 1000);
+			//天数
+			var days = Math.floor(totalSeconds / (60 * 60 * 24));
+			//取模（余数）
+			var modulo = totalSeconds % (60 * 60 * 24);
+			//小时数
+			var hours = Math.floor(modulo / (60 * 60));
+			modulo = modulo % (60 * 60);
+			//分钟
+			var minutes = Math.floor(modulo / 60);
+			//秒
+			var seconds = modulo % 60;
+			//输出到页面
+			document.getElementById("timer").innerHTML = "还剩:" + days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
+		}
+		var examid = "";
+		var questionarray = new Array();
+		window.onload = function() {
+
+			var url = window.location.href;
+			var n = url.indexOf("=");
+			examid = url.substr(n + 1);
+			exam();
+		}
+
+		function exam() {
+			$.ajax({
+				url: "/exam/exam/question",
+				datatype: "json",
+				type: "post",
+				data: {
+					exam_id: examid
+				},
+				contentType: "application/x-www-form-urlencoded;",
+				success: function(data) {
+					console.log(data);
+					questionarray = data;
+					$("#examcourse").html("考试科目：" + data[0].course_name);
+					$(data).each(function(index, e) {
+						sequence = index + 1;
+						if (e.question_type == "subj") {
+							var que = '<table class="table table-hover tableconfig">' +
+								'<thead>' +
+								'<tr>' +
+								'<th style="width: 20px">' + sequence + '</th><th>' + e.question_body + '</th>' +
+								'</tr>' +
+								'</thead>' +
+								'<tr></td><td>' +
+								'<td>' +
+								'<textarea class="form-control" rows="5"></textarea>' +
+								'</td>' +
+								'</tr>' +
+								'</table>' +
+								'<br/>';
+							$("#question").append(que);
+						} else {
+							var que = '<table class="table table-hover tableconfig">' +
+								'<thead>' +
+								'<tr>' +
+								'<th style="width: 20px">' + sequence + '</th><th> ' + e.question_body + '</th>' +
+								'</tr>' +
+								'</thead>' +
+								'<tr>' +
+								'<td>' +
+								'<label></td><td>' +
+								'<input name="' + sequence + '" value="A" type="radio">A.' +
+								e.question_a + '</label>' +
+								'</td>' +
+								'</tr>' +
+								'<tr>' +
+								'<td>' +
+								'<label></td><td>' +
+								'<input name="' + sequence + '" value="B" type="radio">B.' +
+								e.question_b + '</label>' +
+								'</td>' +
+								'</tr>' +
+								'<tr>' +
+								'<td>' +
+								'<label></td><td>' +
+								'<input name="' + sequence + '" value="C" type="radio">C.' +
+								e.question_c + '</label>' +
+								'</td>' +
+								'</tr>' +
+								'<tr>' +
+								'<td>' +
+								'<label></td><td>' +
+								'<input name="' + sequence + '" value="D" type="radio">D.' +
+								e.question_d + '</label>' +
+								'</td>' +
+								'</tr>' +
+								'</table> <br>';
+							$("#question").append(que);
+						}
+
+					});
+				},
+			});
+		}
+
+		function mysubmit() {
+			var item = "";
+			for (i = 0; i < questionarray.length; i++) {
+				var obj = document.getElementsByName(i + 1);
+				console.log(i + 1);
+				for (var i = 0; i < obj.length; i++) { //遍历Radio 
+					if (obj[i].checked) {
+						item = item + obj[i].value;
+					}
+				}
+			}
+			alert(item);
+		}
 	</script>
 </html>

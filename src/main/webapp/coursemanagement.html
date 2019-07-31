@@ -9,7 +9,7 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			var now = new Date();
-		
+
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -25,7 +25,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-		
+
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -35,10 +35,10 @@
 						$("#greeting").html(data[1] + "老师，" + greethour);
 						$("#tname").html(data[1]);
 						$("#tid").html(data[0]);
-						
+
 					},
 					error: function(status) {
-		
+
 					}
 				});
 			}
@@ -48,7 +48,7 @@
 		<div class="container-fluid" style="height: 90px;">
 			<h1 style="font-size: 45px;">
 				<div id="greeting">
-				
+
 				</div>
 			</h1>
 		</div>
@@ -60,6 +60,7 @@
 				<li role="presentation"><a href="questionsmanagement.html">题目管理</a></li>
 				<li role="presentation"><a href="exammanagement.html">考试安排</a></li>
 				<li role="presentation"><a href="#">学生信息</a></li>
+				<li role="presentation"><a href="getmessage.html">消息通知</a></li>
 			</ul>
 			<div class="container" style="width: 700px;float: left;">
 				<table id="coursetable" class="table table-hover">
@@ -68,16 +69,34 @@
 							<th>#</th>
 							<th>删除</th>
 							<th>课程名</th>
+							<th>消息</th>
 						</tr>
 					</thead>
 				</table>
+			</div>
+		</div>
+
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel"></h4>
+					</div>
+					<div id="modal-body" class="modal-body">
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>
 	<script type="text/javascript">
 		var dataarray = new Array();
 
-		function messages() {
+		function courses() {
 			$.ajax({
 				url: "/exam/menu/teacher_course",
 				datatype: "json",
@@ -91,7 +110,8 @@
 					$(data).each(function(index, e) {
 						res = res + "<tr><td>" + e.course_id + "</td><td>" +
 							'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
-							e.course_name.slice(0, 20) + "</td><td>";
+							e.course_name.slice(0, 20) + "</td><td>" +
+							'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="selectcourse(this)">发消息</button></td>';
 					});
 					$("#firstcourse").siblings().remove();
 					$("#firstcourse").after(res);
@@ -101,45 +121,53 @@
 
 		}
 
+		function selectcourse(obj) {
+			var td = $(obj).parent();
+			var courseid = td.prev().prev().prev().html().trim();
+		}
+
 		function getcontent(obj) {
 			var td = $(obj).parent();
 			var courseid = td.prev().html().trim();
 			console.log(courseid);
-			$.ajax({
-				url: "/exam/course/quit",
-				type: "post",
-				data: {
-					course_id: courseid
-				},
-				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-				success: function(data) {
-					alert("退课成功");
-					$.ajax({
-						url: "/exam/menu/teacher_course",
-						datatype: "json",
-						contentType: "application/json;charset=UTF-8",
-						success: function(data) {
-							console.log(data);
-							var res = "";
-							number = data.length;
-							dataarray = data;
-							console.log(data);
-							$(data).each(function(index, e) {
-								res = res + "<tr><td>" + e.course_id + "</td><td>" +
-									'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
-									e.course_name.slice(0, 20) + "</td><td>";
-							});
-							$("#firstcourse").siblings().remove();
-							$("#firstcourse").after(res);
-						},
-					});
-				},
-			});
+			if (window.confirm('你确定要退出课程吗？')) {
+				$.ajax({
+					url: "/exam/course/quit",
+					type: "post",
+					data: {
+						course_id: courseid
+					},
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+					success: function(data) {
+						alert("退课成功");
+						$.ajax({
+							url: "/exam/menu/teacher_course",
+							datatype: "json",
+							contentType: "application/json;charset=UTF-8",
+							success: function(data) {
+								console.log(data);
+								var res = "";
+								number = data.length;
+								dataarray = data;
+								console.log(data);
+								$(data).each(function(index, e) {
+									res = res + "<tr><td>" + e.course_id + "</td><td>" +
+										'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
+										e.course_name.slice(0, 20) + "</td><td>";
+								});
+								$("#firstcourse").siblings().remove();
+								$("#firstcourse").after(res);
+							},
+						});
+					},
+				});
+			}
+
 		}
 
 		window.onload = function() {
 			greet();
-			messages();
+			courses();
 		}
 	</script>
 </html>

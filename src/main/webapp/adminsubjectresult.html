@@ -30,14 +30,17 @@
 				</li>
 				<li role="presentation"><a href="adminsendmessage.html">消息通知</a></li>
 			</ul>
-			
+
 			<div class="container" style="width: 700px;float: left;clear: left;margin: 5px;">
 				<table class="table table-hover table-striped">
 					<thead>
-						<tr>
-							<th><button type="button" class="btn btn-default btn-sm" style="border: none;height: 40px;">
-									<h5><strong>课程名称</strong></h5>
-								</button></th>
+						<tr id="firstcourse">
+							<th>
+								<h5><strong>课程编号</strong></h5>
+							</th>
+							<th>
+								<h5><strong>课程名称</strong></h5>
+							</th>
 							<th>
 								<h5><strong>课程成绩查询</strong></h5>
 							</th>
@@ -45,15 +48,107 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>软件构造</td>
-							<td><button type="button" class="btn btn-primary btn-xs">查询</button></td>
-						</tr>
+						
 					</tbody>
 				</table>
 			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade bs-example-modal-lg" id="subjectresult" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><strong>课程成绩</strong></h4>
+						</div>
+						<div class="modal-body">
+							<table id="usertable" class="table table-hover table-striped">
+								<thead>
+									<tr id="firststudent">
+										<th>学生编号</th>
+										<th>学生姓名</th>
+										<th>考试成绩</th>
+									</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+
+						</div>
+						<div class="modal-footer" style="margin-top: 60px">
+
+							<button id="exportbtn" type="button" class="btn btn-success" onclick="">导出</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		
+	<script type="text/javascript">
+			function querysubjects() {
+				var queryurl = "/exam/admin/course/query";
+				$.ajax({
+					url: queryurl,
+					type: "GET",
+					dataType: "json",
+					success: function(str) {
+						$("#firstcourse").siblings().remove();
+						var res = "";
+						$(str).each(function(index, e) {
+							res = res +
+								"<tr><td>" +
+								e.course_id +
+								"</td><td>" +
+								e.course_name +
+								'</td><td><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#subjectresult" onclick="showresults(this)">查询</button></td></tr>';
+						})
+						var app = $(res);
+						$("#firstcourse").after(app);
+					},
+					error: function() {
+						alert("获取参数失败！");
+					}
+				})
+			}
+			window.onload = function() {
+				querysubjects();
+			}
+		</script>
+
+		<script type="text/javascript">
+			function showresults(obj) {
+				var td = $(obj).parent();
+				var courseid = td.prev().prev().html().trim();
+				var queryurl = "/exam/admin/result/course/"+courseid;
+				$.ajax({
+					url: queryurl,
+					type: "GET",
+					dataType: "json",
+					success: function(str) {
+						$("#firststudent").siblings().remove();
+						var res = "";
+						$(str).each(function(index, e) {
+							res = res +
+								"<tr><td>" +
+								e.studentId +
+								"</td><td>" +
+								e.studentName +
+								"</td><td>" +
+								e.studentScore +
+								"</td></tr>";
+						})
+						var app = $(res);
+						$("#firststudent").after(app);
+					},
+					error: function() {
+						alert("返回参数失败！");
+					}
+				})
+			}
+		</script>
 	</body>
 </html>

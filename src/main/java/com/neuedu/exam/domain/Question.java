@@ -25,6 +25,11 @@ public class Question {
 		super();
 	}
 
+	public Question(String question_id) {
+		super();
+		this.question_id = Integer.valueOf(question_id);
+	}
+
 	public Question(int question_id, String course_id, String course_name, String teacher_id, String teacher_name,
 			String question_rate, int question_mark, String question_type, String question_body, String question_a,
 			String question_b, String question_c, String question_d, String question_answer) {

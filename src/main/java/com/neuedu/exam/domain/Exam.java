@@ -1,31 +1,43 @@
 package com.neuedu.exam.domain;
 
-import java.util.List;
-
 public class Exam {
 	
 	private String exam_id;
 	private String course_id;
+	private String course_name;
+	private String teacher_id;
+	private String teacher_name;
 	
-	private List<String> classroom_id;
-	private List<String> teacher_id;
-	private List<List<String>> students;
+	private String rate;
+	private int num;
 	
-	private List<List<String>> answers;
-	private List<List<Integer>> scores;
+	private int easy;
+	private int midd;
+	private int hard;
 	
-	public Exam(String exam_id, String course_id, List<String> classroom_id, List<String> teacher_id,
-			List<List<String>> students, List<List<String>> answers, List<List<Integer>> scores) {
+	private String exam_classroom;
+	private String exam_time_start;
+	private String exam_time_end;
+	private String exam_length;
+
+	public Exam(String exam_id, String course_id, String course_name, String teacher_id, String teacher_name, int easy,
+			int midd, int hard, String exam_classroom, String exam_time_start, String exam_time_end,
+			String exam_length) {
 		super();
 		this.exam_id = exam_id;
 		this.course_id = course_id;
-		this.classroom_id = classroom_id;
+		this.course_name = course_name;
 		this.teacher_id = teacher_id;
-		this.students = students;
-		this.answers = answers;
-		this.scores = scores;
+		this.teacher_name = teacher_name;
+		this.easy = easy;
+		this.midd = midd;
+		this.hard = hard;
+		this.exam_classroom = exam_classroom;
+		this.exam_time_start = exam_time_start;
+		this.exam_time_end = exam_time_end;
+		this.exam_length = exam_length;
 	}
-	
+
 	public Exam() {
 		super();
 	}
@@ -46,51 +58,110 @@ public class Exam {
 		this.course_id = course_id;
 	}
 	
-	public List<String> getClassroom_id() {
-		return classroom_id;
+	public String getExam_classroom() {
+		return exam_classroom;
 	}
 	
-	public void setClassroom_id(List<String> classroom_id) {
-		this.classroom_id = classroom_id;
+	public void setExam_classroom(String exam_classroom) {
+		this.exam_classroom = exam_classroom;
 	}
 	
-	public List<String> getTeacher_id() {
+	public String getTeacher_id() {
 		return teacher_id;
 	}
 	
-	public void setTeacher_id(List<String> teacher_id) {
+	public void setTeacher_id(String teacher_id) {
 		this.teacher_id = teacher_id;
 	}
 	
-	public List<List<String>> getStudents() {
-		return students;
+	public String getExam_time_start() {
+		return exam_time_start;
 	}
 	
-	public void setStudents(List<List<String>> students) {
-		this.students = students;
+	public void setExam_time_start(String exam_time_start) {
+		this.exam_time_start = exam_time_start;
 	}
 	
-	public List<List<String>> getAnswers() {
-		return answers;
+	public String getExam_time_end() {
+		return exam_time_end;
 	}
 	
-	public void setAnswers(List<List<String>> answers) {
-		this.answers = answers;
+	public void setExam_time_end(String exam_time_end) {
+		this.exam_time_end = exam_time_end;
 	}
 	
-	public List<List<Integer>> getScores() {
-		return scores;
+	public String getExam_length() {
+		return exam_length;
 	}
 	
-	public void setScores(List<List<Integer>> scores) {
-		this.scores = scores;
+	public void setExam_length(String exam_length) {
+		this.exam_length = exam_length;
+	}
+
+	public String getCourse_name() {
+		return course_name;
+	}
+
+	public void setCourse_name(String course_name) {
+		this.course_name = course_name;
+	}
+
+	public String getTeacher_name() {
+		return teacher_name;
+	}
+
+	public void setTeacher_name(String teacher_name) {
+		this.teacher_name = teacher_name;
+	}
+
+	public int getEasy() {
+		return easy;
+	}
+
+	public void setEasy(int easy) {
+		this.easy = easy;
+	}
+
+	public int getMidd() {
+		return midd;
+	}
+
+	public void setMidd(int midd) {
+		this.midd = midd;
+	}
+
+	public int getHard() {
+		return hard;
+	}
+
+	public void setHard(int hard) {
+		this.hard = hard;
+	}
+
+	public String getRate() {
+		return rate;
+	}
+
+	public Exam setRate(String rate) {
+		this.rate = rate;
+		return this;
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public Exam setNum(int num) {
+		this.num = num;
+		return this;
 	}
 	
 	@Override
 	public String toString() {
-		return "Exam [exam_id=" + exam_id + ", course_id=" + course_id + ", classroom_id=" + classroom_id
-				+ ", teacher_id=" + teacher_id + ", students=" + students + ", answers=" + answers + ", scores="
-				+ scores + "]";
+		return "Exam [exam_id=" + exam_id + ", course_id=" + course_id + ", course_name=" + course_name
+				+ ", teacher_id=" + teacher_id + ", teacher_name=" + teacher_name + ", easy=" + easy + ", midd=" + midd
+				+ ", hard=" + hard + ", exam_classroom=" + exam_classroom + ", exam_time_start=" + exam_time_start
+				+ ", exam_time_end=" + exam_time_end + ", exam_length=" + exam_length + "]";
 	}
-
+	
 }

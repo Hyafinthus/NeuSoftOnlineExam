@@ -5,14 +5,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.neuedu.exam.dao.CourseMapper">
 
-	<insert id="joinCourse" parameterType="TeacherCourse">
+	<insert id="joinCourse" parameterType="Relation">
 		INSERT INTO course_teacher_table(course_id, teacher_id)
 		VALUES(#{course_id}, #{teacher_id})
 	</insert>
 	
-	<delete id="quitCourse" parameterType="TeacherCourse">
+	<delete id="quitCourse" parameterType="Relation">
 		DELETE FROM course_teacher_table
 		WHERE course_id = #{course_id} AND teacher_id = #{teacher_id}
+	</delete>
+	
+	<insert id="electiveCourse" parameterType="Relation">
+		INSERT INTO course_student_table(crs_tch_id, student_id)
+		SELECT pri_id, #{student_id} FROM course_teacher_table
+		WHERE course_id = #{course_id} AND teacher_id = #{teacher_id}
+	</insert>
+	
+	<delete id="withdrawCourse" parameterType="Relation">
+		DELETE FROM course_student_table
+		WHERE student_id = #{student_id} AND crs_tch_id =
+		(SELECT pri_id FROM course_teacher_table WHERE
+		course_id = #{course_id} AND teacher_id = #{teacher_id})
 	</delete>
 
 </mapper>

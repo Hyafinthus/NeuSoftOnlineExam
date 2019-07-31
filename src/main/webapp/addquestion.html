@@ -15,7 +15,7 @@
 		</style>
 		<script type="text/javascript">
 			var now = new Date();
-		
+
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -31,7 +31,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-		
+
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -41,10 +41,10 @@
 						$("#greeting").html(data[1] + "老师，" + greethour);
 						$("#tname").html(data[1]);
 						$("#tid").html(data[0]);
-						
+
 					},
 					error: function(status) {
-		
+
 					}
 				});
 			}
@@ -61,11 +61,13 @@
 
 								</select>
 							</th>
-							<th><div id="greeting">
-								
-							</div></th>
 							<th>
-								<button type="submit" class="btn btn-primary btn-xs">提交</button>
+								<div id="greeting">
+
+								</div>
+							</th>
+							<th>
+
 							</th>
 						</tr>
 					</thead>
@@ -77,49 +79,64 @@
 				<table class="table table-responsive tableconfig">
 					<thead>
 						<tr>
-							<th><textarea class="form-group" rows="3" cols="100" placeholder="输入题干"></textarea></th>
+							<th><textarea id="problem" class="form-group" rows="3" cols="100" placeholder="输入题干"></textarea></th>
 						</tr>
 					</thead>
 					<tr>
 						<td>
 							<label>
-								<input name="1" type="radio">
+								<input name="op" value="A" type="radio">
 							</label>
-							A.<input type="text" id="" placeholder="输入A选项" />
+							A.<input type=" text" id="op1" placeholder="输入A选项" />
 
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<label>
-								<input name="1" type="radio"></label>
-							B.<input type="text" id="" placeholder="输入B选项" />
+								<input name="op" value="B" type="radio">
+							</label>
+							B.<input type="text" id="op2" placeholder="输入B选项" />
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<label>
-								<input name="1" type="radio"></label>
-							C.<input type="text" id="" placeholder="输入C选项" />
+								<input name="op" value="C" type="radio">
+							</label>
+							C.<input type="text" id="op3" placeholder="输入C选项" />
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<label>
-								<input name="1" type="radio"></label>
-							D.<input type="text" id="" placeholder="输入D选项" />
+								<input name="op" value="D" type="radio">
+							</label>
+							D.<input type="text" id="op4" placeholder="输入D选项" />
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<label>
-								<input name="1" type="radio"></label>
+								<input name="op" value="E" type="radio" checked="true">
+							</label>
 							主观题
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<textarea class="form-control" rows="5" placeholder="输入题目答案解析"></textarea>
+							<textarea id="answer" class="form-control" rows="5" placeholder="输入题目答案解析"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<select id="rate" class="form-control" style="width: 150px;">
+								<option value="easy">简单</option>
+								<option value="midd">中等</option>
+								<option value="hard">困难</option>
+							</select>
+							<br>
+							<input id="mark" type="number" placeholder="请输入分值">
 						</td>
 					</tr>
 				</table>
@@ -129,7 +146,7 @@
 					<div class="col-lg-9">
 					</div>
 					<div class="col-lg-1">
-						<button type="submit" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
+						<button id="button" type="button" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
 					</div>
 				</div>
 			</div>
@@ -153,6 +170,126 @@
 		window.onload = function() {
 			greet();
 			select();
+			var op1 = document.getElementById("op1");
+			var op2 = document.getElementById("op2");
+			var op3 = document.getElementById("op3");
+			var op4 = document.getElementById("op4");
+			op1.disabled = true;
+			op2.disabled = true;
+			op3.disabled = true;
+			op4.disabled = true;
 		}
+		var type = "E";
+
+		$(document).ready(function() {
+			$('input[type=radio][name=op]').change(function() {
+				if (this.value == 'E') {
+					alert("主观题");
+					var op1 = document.getElementById("op1");
+					var op2 = document.getElementById("op2");
+					var op3 = document.getElementById("op3");
+					var op4 = document.getElementById("op4");
+					op1.disabled = true;
+					op2.disabled = true;
+					op3.disabled = true;
+					op4.disabled = true;
+					type = "E";
+				} else {
+					var op1 = document.getElementById("op1");
+					var op2 = document.getElementById("op2");
+					var op3 = document.getElementById("op3");
+					var op4 = document.getElementById("op4");
+					op1.disabled = false;
+					op2.disabled = false;
+					op3.disabled = false;
+					op4.disabled = false;
+					type = this.value;
+				}
+			});
+		});
+
+
+
+		$("#button").click(function() {
+			var problem = $("#problem").val();
+			var op1 = $("#op1").val();
+			var op2 = $("#op2").val();
+			var op3 = $("#op3").val();
+			var op4 = $("#op4").val();
+			var answer = $("#answer").val();
+			var rate = $("#rate").val();
+
+			var index = document.getElementById("selectcourse").selectedIndex;
+			var course_id = document.getElementById("selectcourse").options[index].value;
+
+
+			var mark = $("#mark").val();
+
+
+			if (type != "E") {
+				var param = '{"question_body":"' + problem + '","question_a":"' + op1 + '","question_b":"' + op2 + '","question_c":"' +
+					op3 +
+					'","question_d":"' + op4 + '","question_answer":"' + answer + '","question_type":"'+type+'","question_mark":"' +
+					mark + '","question_rate":"' +
+					rate + '","course_id":"' + course_id + '"}';
+				console.log(param);
+
+				if (problem == null || problem == '') {
+					alert("题干不能为空");
+				} else if (op1 == null || op1 == '') {
+					alert("A选项不能为空");
+				} else if (op2 == null || op2 == '') {
+					alert("B选项不能为空");
+				} else if (op3 == null || op3 == '') {
+					alert("C选项不能为空");
+				} else if (op4 == null || op4 == '') {
+					alert("D选项不能为空");
+				} else if (mark <= 0) {
+					alert("分数需要大于0");
+				} else if (answer == null || answer == '') {
+					alert("答案不能为空");
+				} else {
+					$.ajax({
+						url: "/exam/question/add",
+						datatype: "json",
+						type: "post",
+						data: param,
+						contentType: "application/json;charset=UTF-8",
+						success: function(data) {
+							alert("添加成功");
+							jump();
+						},
+					});
+				}
+			} else {
+				var param = '{"question_body":"' + problem + '","question_a":"' + null + '","question_b":"' + null + '","question_c":"' +
+					null +
+					'","question_d":"' + null + '","question_answer":"' + answer + '","question_type":"subj","question_mark":"' + mark + '","question_rate":"' +
+					rate + '","course_id":"' + course_id + '"}';
+				console.log(param);
+				if (problem == null || problem == '') {
+					alert("题干不能为空");
+				} else if (mark <= 0) {
+					alert("分数需要大于0");
+				} else if (answer == null || answer == '') {
+					alert("答案不能为空");
+				} else {
+					$.ajax({
+						url: "/exam/question/add",
+						datatype: "json",
+						type: "post",
+						data: param,
+						contentType: "application/json;charset=UTF-8",
+						success: function(data) {
+							alert("添加成功");
+							jump();
+						},
+					});
+				}
+			}
+			function jump(){
+				window.location.href = "questionsmanagement.html";
+			}
+		});
 	</script>
 </html>

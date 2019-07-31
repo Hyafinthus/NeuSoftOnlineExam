@@ -9,7 +9,7 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			var now = new Date();
-		
+
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -25,7 +25,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-		
+
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -37,13 +37,10 @@
 						$("#tid").html(data[0]);
 						console.log(data);
 					},
-					error:function(status){
-						
+					error: function(status) {
+
 					}
 				});
-			}
-			window.onload = function() {
-				greet();
 			}
 		</script>
 	</head>
@@ -51,7 +48,7 @@
 		<div class="container-fluid" style="height: 90px;">
 			<h1 style="font-size: 45px;">
 				<div id="greeting">
-				
+
 				</div>
 			</h1>
 		</div>
@@ -63,43 +60,50 @@
 				<li role="presentation"><a href="questionsmanagement.html">题目管理</a></li>
 				<li role="presentation" class="active"><a href="exammanagement.html">考试安排</a></li>
 				<li role="presentation"><a href="#">学生信息</a></li>
+				<li role="presentation"><a href="getmessage.html">消息通知</a></li>
 			</ul>
 			<div class="container" style="width: 700px;float: left;">
 				<table class="table table-hover">
 					<thead>
-						<tr>
+						<tr id="firstexam">
 							<th><a href="addexam.html">
 									<button type="button" class="btn btn-primary btn-xs">添加</button></a></th>
-							<th>删除</th>
-							<th>考试名</th>
 							<th>考试科目</th>
+							<th>开始时间</th>
+							<th>结束时间</th>
+							<th>时长</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-							<td>第一场考试A</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-							<td>第一场考试B</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-							<td>第一场考试C</td>
-						</tr>
-					</tbody>
+
 				</table>
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		window.onload = function() {
+			greet();
+			exams();
+		}
+
+		function exams() {
+			$.ajax({
+				url: "/exam/menu/teacher/exam",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					var res = "";
+					dataarray = data;
+					console.log(data);
+					$(data).each(function(index, e) {
+						res = res + "<tr><td>" + e.exam_id + "</td><td>" + e.course_name + "</td><td>" + e.exam_time_start +
+							"</td><td>" +
+							e.exam_time_end + "</td><td>" + e.exam_length + "</td><td>" +
+							'<button type="button" class="btn btn-primary btn-xs" onclick="null">阅卷</button></td>';
+					});
+					$("#firstexam").siblings().remove();
+					$("#firstexam").after(res);
+				},
+			});
+		}
+	</script>
 </html>

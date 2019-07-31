@@ -41,7 +41,7 @@
 								<label for="pwd2">确认密码</label>
 								<input type="password" class="form-control" id="pwd2" placeholder="请输入新密码">
 							</div>
-							<button id="btn" type="btn" class="btn btn-default">确认</button>
+							<button id="btn" type="button" class="btn btn-default">确认</button>
 						</form>
 
 					</div>
@@ -54,7 +54,6 @@
 			var oldpwd = $("#oldpwd").val();
 			var pwd1 = $("#pwd1").val();
 			var pwd2 = $("#pwd2").val();
-			var issuccess = "false";
 			// var param = '{"oldpwd":"'+uid+'","password":"'+pwd+'"}';
 			if (oldpwd == null || oldpwd == '') {
 				alert("原密码不能为空");
@@ -75,7 +74,7 @@
 					success: function(data) {
 						if(data == "success"){
 							alert("修改成功");
-							issuccess = "true";
+							jump();
 						} else if (data == "same"){
 							alert("新密码与原密码不能相同");
 						} else {
@@ -84,10 +83,11 @@
 					},
 				});
 			}
-			console.log(issuccess);
-			if(issuccess == "true"){
-				window.location.href = "/exam/teacherlogin.html"
+			function jump(){
+				window.location.href = "exam/index.html";
 			}
 		});
+		
+		
 	</script>
 </html>

@@ -9,7 +9,7 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			var now = new Date();
-		
+
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -25,7 +25,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-		
+
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -37,13 +37,10 @@
 						$("#tid").html(data[0]);
 						console.log(data);
 					},
-					error:function(status){
-						
+					error: function(status) {
+
 					}
 				});
-			}
-			window.onload = function() {
-				greet();
 			}
 		</script>
 	</head>
@@ -51,7 +48,7 @@
 		<div class="container-fluid" style="height: 90px;">
 			<h1 style="font-size: 45px;">
 				<div id="greeting">
-				
+
 				</div>
 			</h1>
 		</div>
@@ -63,52 +60,160 @@
 				<li role="presentation" class="active"><a href="questionsmanagement.html">题目管理</a></li>
 				<li role="presentation"><a href="exammanagement.html">考试安排</a></li>
 				<li role="presentation"><a href="#">学生信息</a></li>
+				<li role="presentation"><a href="getmessage.html">消息通知</a></li>
 			</ul>
 			<div class="container" style="width: 700px;float: left;">
 				<table class="table table-hover">
 					<thead>
-						<tr>
+						<tr id="firstquestion">
 							<th><a href="addquestion.html">
 									<button type="button" class="btn btn-primary btn-xs">添加</button></a></th>
 							<th>修改</th>
 							<th>删除</th>
 							<th>题目名</th>
+							<th><select id="selectcourse" onchange="changecourse()" class="form-control">
+									<option value="title" selected=true>科目</option>
+								</select>
+
+
+							</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>
-							</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">删除</button>
-							</td>
-							<td>第一个题目</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>
-							</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">删除</button>
-							</td>
-							<td>第二个题目</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>
-							</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">删除</button>
-							</td>
-							<td>第三个题目</td>
-						</tr>
-					</tbody>
 				</table>
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		function select() {
+			$.ajax({
+				url: "/exam/menu/teacher_course",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					console.log(data);
+					for (var i = 0; i < data.length; i++) {
+						$("#selectcourse").append("<option value='" + data[i].course_id + "'>" + data[i].course_name +
+							"</option>");
+					}
+				}
+			});
+		}
+
+		function changecourse() {
+			var course = document.getElementById("selectcourse");
+			var grade = course.options[course.selectedIndex].value;
+			if (grade != "title") {
+				$.ajax({
+					url: "/exam/question/by_course",
+					datatype: "json",
+					type: "post",
+					data: {
+						course_id: grade
+					},
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+					success: function(data) {
+						var res = "";
+						number = data.length;
+						dataarray = data;
+						console.log(data);
+						$(data).each(function(index, e) {
+							res = res + "<tr><td>" + e.question_id + "</td><td>" +
+								'<button type="button" class="btn btn-primary btn-xs" onclick="querycourse(this)">修改</button></td><td>' +
+								'<button type="button" class="btn btn-danger btn-xs" onclick="deletecourse(this)">删除</button></td><td>' +
+								e.question_body.slice(0, 20) + "</td><td>" + e.course_name + "</td><td>";
+						});
+						$("#firstquestion").siblings().remove();
+						$("#firstquestion").after(res);
+					}
+				});
+			} else {
+				questions();
+			}
+
+		}
+
+		$(document).ready(function() {
+			$('input[type=radio][name=op]').change(function() {
+				if (this.value == 'E') {
+					alert("主观题");
+					var op1 = document.getElementById("op1");
+					var op2 = document.getElementById("op2");
+					var op3 = document.getElementById("op3");
+					var op4 = document.getElementById("op4");
+					op1.disabled = true;
+					op2.disabled = true;
+					op3.disabled = true;
+					op4.disabled = true;
+					type = "E";
+				} else {
+					var op1 = document.getElementById("op1");
+					var op2 = document.getElementById("op2");
+					var op3 = document.getElementById("op3");
+					var op4 = document.getElementById("op4");
+					op1.disabled = false;
+					op2.disabled = false;
+					op3.disabled = false;
+					op4.disabled = false;
+					type = this.value;
+				}
+			});
+		});
+
+		function questions() {
+			$.ajax({
+				url: "/exam/menu/question",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					console.log(data);
+					var res = "";
+					number = data.length;
+					dataarray = data;
+					console.log(data);
+					$(data).each(function(index, e) {
+						res = res + "<tr><td>" + e.question_id + "</td><td>" +
+							'<button type="button" class="btn btn-primary btn-xs" onclick="querycourse(this)">修改</button></td><td>' +
+							'<button type="button" class="btn btn-danger btn-xs" onclick="deletecourse(this)">删除</button></td><td>' +
+							e.question_body.slice(0, 20) + "</td><td>" + e.course_name + "</td><td>";
+					});
+					$("#firstquestion").siblings().remove();
+					$("#firstquestion").after(res);
+				},
+			});
+		}
+
+		window.onload = function() {
+			greet();
+			questions();
+			select();
+		}
+
+		function deletecourse(obj) {
+			var td = $(obj).parent();
+			var questionid = td.prev().prev().html().trim();
+			console.log(questionid);
+			if (window.confirm('你确定要删除题目吗？')) {
+				$.ajax({
+					url: "/exam/question/del",
+					type: "post",
+					data: {
+						question_id: questionid
+					},
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+					success: function(data) {
+						alert("删除成功");
+						questions();
+					},
+				});
+			}
+
+		}
+
+		function querycourse(obj) {
+			var td = $(obj).parent();
+			var questionid = td.prev().html().trim();
+			window.location.href = "modifyquestion.html?question_id=" + questionid;
+
+		}
+	</script>
 </html>

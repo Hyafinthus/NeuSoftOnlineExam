@@ -47,15 +47,43 @@
 				<div class="form-group">
 					<label for="inputcontext" class="col-sm-2 control-label">内容</label>
 					<div class="col-sm-8">
-						<textarea class="form-control" id="inputcontext" style="height: 280px;" placeholder="请输入通知内容"></textarea>
+						<textarea class="form-control" id="content" style="height: 280px;" placeholder="请输入通知内容"></textarea>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-primary">发送</button>
+						<button type="button" class="btn btn-primary" onclick="sendmessage()">发送</button>
 					</div>
 				</div>
 			</form>
 		</div>
+		
+		<script type="text/javascript">
+			function sendmessage() {
+				var target = $('input:radio[name="inlineRadioOptions"]:checked').val();
+				var content = $("#content").val();
+				var param = '{"content":"' + content + '","addresserName":"admin","recipientName":"' + target + '"}';
+				             
+				var sendurl = "/exam/admin/sendMessage";
+				$.ajax({
+					url: sendurl,
+					type: "POST",
+					data: param,
+					contentType: "application/json;charset=UTF-8",
+					dataType: "text",
+					success: function(str) {
+						if (str == "success") {
+							alert("发送成功！");
+							location.reload();
+						} else {
+							alert("编号已存在！请检查修改后重试");
+						}
+					},
+					error: function() {
+						alert("获取参数失败！");
+					}
+				})
+			}
+		</script>
 	</body>
 </html>

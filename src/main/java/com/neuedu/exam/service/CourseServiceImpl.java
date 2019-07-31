@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neuedu.exam.dao.CourseMapper;
-import com.neuedu.exam.domain.TeacherCourse;
+import com.neuedu.exam.domain.Relation;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -13,13 +13,23 @@ public class CourseServiceImpl implements CourseService {
 	private CourseMapper courseMapper;
 
 	@Override
-	public void joinCourse(TeacherCourse tc) {
-		courseMapper.joinCourse(tc);
+	public void joinCourse(Relation relation) {
+		courseMapper.joinCourse(relation);
 	}
 
 	@Override
-	public void quitCourse(TeacherCourse tc) {
-		courseMapper.quitCourse(tc);
+	public void quitCourse(Relation relation) {
+		courseMapper.quitCourse(relation);
+	}
+
+	@Override
+	public void electiveCourse(Relation relation) {
+		courseMapper.electiveCourse(relation);
+	}
+
+	@Override
+	public void withdrawCourse(Relation relation) {
+		courseMapper.withdrawCourse(relation);
 	}
 
 }

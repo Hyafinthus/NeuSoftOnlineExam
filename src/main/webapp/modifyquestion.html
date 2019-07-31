@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>修改题目</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-3.2.1.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<style type="text/css">
+			.tableconfig {
+				width: 750px;
+				margin: 0 auto
+			}
+		</style>
+		<script type="text/javascript">
+			var now = new Date();
+
+			var hour = now.getHours();
+			var greethour = "";
+			if (hour < 8 && hour >= 5) {
+				greethour = "早上好"
+			} else if (hour < 11 && hour >= 8) {
+				greethour = "上午好"
+			} else if (hour < 13 && hour >= 11) {
+				greethour = "中午好"
+			} else if (hour < 18 && hour >= 13) {
+				greethour = "下午好"
+			} else if (hour < 21 && hour >= 18) {
+				greethour = "晚上好"
+			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
+				greethour = "夜深了"
+			}
+
+			function greet() {
+				$.ajax({
+					url: "/exam/menu/personal",
+					datatype: "json",
+					contentType: "application/json;charset=UTF-8",
+					success: function(data) {
+						$("#greeting").html(data[1] + "老师，" + greethour);
+						$("#tname").html(data[1]);
+						$("#tid").html(data[0]);
+
+					},
+					error: function(status) {
+
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<form action="" method="post">
+			<div class="container">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>考试科目：
+								<select id="selectcourse">
+
+								</select>
+							</th>
+							<th>
+								<div id="greeting">
+
+								</div>
+							</th>
+							<th>
+
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+
+			<div class="container">
+
+				<table class="table table-responsive tableconfig">
+					<thead>
+						<tr>
+							<th><textarea id="problem" class="form-group" rows="3" cols="100" placeholder="输入题干"></textarea></th>
+						</tr>
+					</thead>
+					<tr>
+						<td>
+							<label>
+								<input id="A" name="op" value="A" type="radio">
+							</label>
+							A.<input type=" text" id="op1" placeholder="输入A选项" />
+
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>
+								<input id="B" name="op" value="B" type="radio">
+							</label>
+							B.<input type="text" id="op2" placeholder="输入B选项" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>
+								<input id="C" name="op" value="C" type="radio">
+							</label>
+							C.<input type="text" id="op3" placeholder="输入C选项" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>
+								<input id="D" name="op" value="D" type="radio">
+							</label>
+							D.<input type="text" id="op4" placeholder="输入D选项" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>
+								<input name="op" value="E" type="radio" checked="true">
+							</label>
+							主观题
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<textarea id="answer" class="form-control" rows="5" placeholder="输入题目答案解析"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<select id="rate" class="form-control" style="width: 150px;">
+								<option id="easy" value="easy">简单</option>
+								<option id="midd" value="midd">中等</option>
+								<option id="hard" value="hard">困难</option>
+							</select>
+							<br>
+							<input id="mark" type="number" placeholder="请输入分值">
+						</td>
+					</tr>
+				</table>
+				<br>
+
+				<div class="row">
+					<div class="col-lg-9">
+					</div>
+					<div class="col-lg-1">
+						<button id="button" type="button" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</body>
+	<script type="text/javascript">
+		function select() {
+			$.ajax({
+				url: "/exam/menu/teacher_course",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					for (var i = 0; i < data.length; i++) {
+
+						$("#selectcourse").append("<option value='" + data[i].course_id + "'>" + data[i].course_name +
+							"</option>");
+					}
+				}
+			});
+		}
+		window.onload = function() {
+			greet();
+			select();
+			var op1 = document.getElementById("op1");
+			var op2 = document.getElementById("op2");
+			var op3 = document.getElementById("op3");
+			var op4 = document.getElementById("op4");
+			op1.disabled = true;
+			op2.disabled = true;
+			op3.disabled = true;
+			op4.disabled = true;
+			init();
+		}
+		var type = "E";
+		var question_id = 0;
+
+		$(document).ready(function() {
+			$('input[type=radio][name=op]').change(function() {
+				if (this.value == 'E') {
+					alert("主观题");
+					var op1 = document.getElementById("op1");
+					var op2 = document.getElementById("op2");
+					var op3 = document.getElementById("op3");
+					var op4 = document.getElementById("op4");
+					op1.disabled = true;
+					op2.disabled = true;
+					op3.disabled = true;
+					op4.disabled = true;
+					type = "E";
+				} else {
+					var op1 = document.getElementById("op1");
+					var op2 = document.getElementById("op2");
+					var op3 = document.getElementById("op3");
+					var op4 = document.getElementById("op4");
+					op1.disabled = false;
+					op2.disabled = false;
+					op3.disabled = false;
+					op4.disabled = false;
+					type = this.value;
+				}
+			});
+		});
+
+
+
+		$("#button").click(function() {
+			var problem = $("#problem").val();
+			var op1 = $("#op1").val();
+			var op2 = $("#op2").val();
+			var op3 = $("#op3").val();
+			var op4 = $("#op4").val();
+			var answer = $("#answer").val();
+			var rate = $("#rate").val();
+
+			var index = document.getElementById("selectcourse").selectedIndex;
+			var course_id = document.getElementById("selectcourse").options[index].value;
+
+
+			var mark = $("#mark").val();
+
+
+			if (type != "E") {
+				var param = '{"question_id":"' + question_id + '","question_body":"' + problem + '","question_a":"' + op1 + '","question_b":"' + op2 +
+					'","question_c":"' +
+					op3 +
+					'","question_d":"' + op4 + '","question_answer":"' + answer + '","question_type":"'+ type +'","question_mark":"' +
+					mark + '","question_rate":"' +
+					rate + '","course_id":"' + course_id + '"}';
+				console.log(param);
+
+				if (problem == null || problem == '') {
+					alert("题干不能为空");
+				} else if (op1 == null || op1 == '') {
+					alert("A选项不能为空");
+				} else if (op2 == null || op2 == '') {
+					alert("B选项不能为空");
+				} else if (op3 == null || op3 == '') {
+					alert("C选项不能为空");
+				} else if (op4 == null || op4 == '') {
+					alert("D选项不能为空");
+				} else if (mark <= 0) {
+					alert("分数需要大于0");
+				} else if (answer == null || answer == '') {
+					alert("答案不能为空");
+				} else {
+					$.ajax({
+						url: "/exam/question/modify",
+						datatype: "json",
+						type: "post",
+						data: param,
+						contentType: "application/json;charset=UTF-8",
+						success: function(data) {
+							alert("修改成功");
+							jump();
+						},
+					});
+				}
+			} else {
+				var param = '{"question_body":"' + problem + '","question_a":"' + null + '","question_b":"' + null +
+					'","question_c":"' +
+					null +
+					'","question_d":"' + null + '","question_answer":"' + answer + '","question_type":"subj","question_mark":"' +
+					mark + '","question_rate":"' +
+					rate + '","course_id":"' + course_id + '"}';
+				console.log(param);
+				if (problem == null || problem == '') {
+					alert("题干不能为空");
+				} else if (mark <= 0) {
+					alert("分数需要大于0");
+				} else if (answer == null || answer == '') {
+					alert("答案不能为空");
+				} else {
+					$.ajax({
+						url: "/exam/question/modify",
+						datatype: "json",
+						type: "post",
+						data: param,
+						contentType: "application/json;charset=UTF-8",
+						success: function(data) {
+							alert("修改成功");
+							jump();
+						},
+					});
+				}
+			}
+
+			function jump() {
+				window.location.href = "questionsmanagement.html";
+			}
+		});
+
+
+
+		function getUrlParam(url, name) {
+			var pattern = new RegExp("[?&]" + name + "\=([^&]+)", "g");
+			var matcher = pattern.exec(url);
+			var items = null;
+			if (matcher != null) {
+				try {
+					items = decodeURIComponent(decodeURIComponent(matcher[1]));
+				} catch (e) {
+					try {
+						items = decodeURIComponent(matcher[1]);
+					} catch (e) {
+						items = matcher[1];
+					}
+				}
+			}
+			return items;
+		}
+
+		function init() {
+			var url = window.location.href;
+			question_id = getUrlParam(url, "question_id");
+			$.ajax({
+				url: "/exam/question/query",
+				datatype: "json",
+				type: "post",
+				data: {
+					question_id: question_id
+				},
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function(data) {
+					$("#problem").val(data.question_body);
+					$("#answer").val(data.question_answer);
+					$("#mark").val(data.question_mark);
+
+					if (data.question_rate == "easy") {
+						var easy = document.getElementById('easy');
+						easy.selected = true;
+					} else if (data.question_rate == "midd") {
+						var midd = document.getElementById('midd');
+						midd.selected = true;
+					} else if (data.question_rate == "hard") {
+						var hard = document.getElementById('hard');
+						hard.selected = true;
+					}
+
+					if (data.question_type != "subj") {
+						var op1 = document.getElementById("op1");
+						var op2 = document.getElementById("op2");
+						var op3 = document.getElementById("op3");
+						var op4 = document.getElementById("op4");
+						op1.disabled = false;
+						op2.disabled = false;
+						op3.disabled = false;
+						op4.disabled = false;
+						op1.value = data.question_a;
+						op2.value = data.question_b;
+						op3.value = data.question_c;
+						op4.value = data.question_d;
+						if (data.question_type == "A") {
+							var option = document.getElementById('A');
+							option.checked = true;
+							type = "A";
+						} else if (data.question_type == "B") {
+							var option = document.getElementById('B');
+							option.checked = true;
+							type = "B";
+						} else if (data.question_type == "C") {
+							var option = document.getElementById('C');
+							option.checked = true;
+							type = "C";
+						} else if (data.question_type == "D") {
+							var option = document.getElementById('D');
+							option.checked = true;
+							type = "D";
+						}
+					}
+				}
+			});
+		}
+	</script>
+</html>

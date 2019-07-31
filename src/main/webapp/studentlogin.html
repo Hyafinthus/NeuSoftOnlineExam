@@ -38,7 +38,7 @@
 
 				<div class="col-lg-4 vertical-center">
 					<div class="jumbotron">
-						<form>
+						<form action="login/student" name="myform"  id="form" method="post">
 							<div class="form-group">
 								<label for="student_id">账号</label>
 								<input type="email" class="form-control" name="student_id" id="student_id" placeholder="请输入账号">
@@ -54,4 +54,24 @@
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		$("#btn").click(function() {
+			var uid = $("#student_id").val();
+			var pwd = $("#student_password").val();
+			// var param = '{"id":"'+uid+'","password":"'+pwd+'"}';
+			if(uid==null || uid==''){
+				//alert("邮箱不能为空");
+				alert("账号不能为空");
+			}
+			else if(pwd==null ||pwd==''){
+				//rt("密码不能为空");
+				alert("密码不能为空");
+			}
+			else{
+				//提交
+				var form = document.getElementById("form");
+				form.submit();
+			}
+		});
+	</script>
 </html>

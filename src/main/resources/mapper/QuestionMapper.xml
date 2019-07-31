@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neuedu.exam.dao.QuestionMapper">
+
+	<insert id="addQuestion" parameterType="Question">
+		INSERT INTO question_table(question_id, course_id, teacher_id,
+		question_rate, question_mark, question_type, question_body,
+		question_a, question_b, question_c, question_d, question_answer)
+		VALUES(#{question_id}, #{course_id}, #{teacher_id},
+		#{question_rate}, #{question_mark}, #{question_type}, #{question_body},
+		#{question_a}, #{question_b}, #{question_c}, #{question_d}, #{question_answer})
+	</insert>
+	
+	<delete id="delQuestion" parameterType="Relation">
+		DELETE FROM question_table
+		WHERE question_id = #{question_id} AND teacher_id = #{teacher_id}
+	</delete>
+	
+	<select id="byCourse" parameterType="Relation" resultMap="questionlist">
+		SELECT question_id, course_name, question_rate, question_mark, question_type, question_body
+		FROM question_table q, course_table c
+		WHERE teacher_id = #{teacher_id} AND q.course_id = #{course_id} AND q.course_id = c.course_id
+	</select>
+	
+	<resultMap type="Question" id="questionlist">
+		<id column="question_id" property="question_id"/>
+		<result column="course_name" property="course_name"/>
+		<result column="question_rate" property="question_rate"/>
+		<result column="question_mark" property="question_mark"/>
+		<result column="question_type" property="question_type"/>
+		<result column="question_body" property="question_body"/>
+	</resultMap>
+	
+	<select id="queryQuestion" parameterType="String" resultType="Question">
+		SELECT question_id, question_body, question_a, question_b, question_c, question_d,
+		question_answer, question_type, question_rate, question_mark
+		FROM question_table
+		WHERE question_id = #{question_id}
+	</select>
+	
+	<update id="modifyQuestion" parameterType="Question">
+		UPDATE question_table
+		SET question_body = #{question_body}, question_a = #{question_a}, question_b = #{question_b},
+		question_c = #{question_c}, question_d = #{question_d}, question_answer = #{question_answer},
+		question_type = #{question_type}, question_rate = #{question_rate}, question_mark = #{question_mark}
+		WHERE question_id = #{question_id}
+	</update>
+	
+</mapper>
