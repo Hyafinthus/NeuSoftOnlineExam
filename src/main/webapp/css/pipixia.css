@@ -1,0 +1,7 @@
+ 
+    #canvas{
+		 position: fixed;
+         background: #ccc;
+		 overflow: auto;
+		 z-index: -1;
+    }

@@ -29,6 +29,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE course_id = #{course_id} AND question_rate = #{rate} ORDER BY RAND() LIMIT #{num}
 	</insert>
 	
+	
+	
+	<select id="startTime" parameterType="Exam" resultType="Exam">
+		SELECT exam_time_start, exam_time_end, exam_length FROM exam_table
+		WHERE exam_id = #{exam_id}
+	</select>
+	
+	<select id="ifStartExam" parameterType="ExamPaper" resultType="ExamPaper">
+		SELECT start_time, end_time FROM exam_history_table
+		WHERE exam_id = #{exam_id} AND student_id = #{student_id}
+	</select>
+	
+	<insert id="startExam" parameterType="ExamPaper">
+		INSERT INTO exam_history_table(exam_id, student_id, start_time, end_time)
+		VALUES(#{exam_id}, #{student_id}, #{start_time}, #{end_time})
+	</insert>
+	
 	<select id="getExamQuestion" parameterType="String" resultMap="questionlist">
 		SELECT e.question_id, course_name, question_mark, question_type,
 		question_a, question_b, question_c, question_d, question_body
@@ -46,5 +63,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="question_d" property="question_d"/>
 		<result column="question_body" property="question_body"/>
 	</resultMap>
+	
+	<update id="storeHistory" parameterType="ExamPaper">
+		UPDATE exam_history_table
+		SET mult_answer = #{mult_answer}, subj_answer = #{subj_answer},
+		mult_result = #{mult_result}, mult_score = #{mult_score}
+		WHERE exam_id = #{exam_id} AND student_id = #{student_id}
+	</update>
+	
+	
+	
+	<select id="getExamPaper" parameterType="String" resultMap="exampaperlist">
+		SELECT h.student_id, u.user_name student_name, c.course_name, h.subj_answer
+		FROM exam_history_table h, user_table u, exam_table e, course_table c
+		WHERE h.exam_id = #{exam_id} AND h.student_id = u.user_id
+		AND h.exam_id = e.exam_id AND e.course_id = c.course_id AND h.is_reviewed IS NULL
+	</select>
+	
+	<resultMap type="ExamPaper" id="exampaperlist">
+		<id column="student_id" property="student_id"/>
+		<result column="student_name" property="student_name"/>
+		<result column="course_name" property="course_name"/>
+		<result column="subj_answer" property="subj_answer"/>
+	</resultMap>
+	
+	<update id="confirmHistory" parameterType="ExamPaper">
+		UPDATE exam_history_table
+		SET subj_result = #{subj_result}, subj_score = #{subj_score}, is_reviewed = 'true'
+		WHERE exam_id = #{exam_id} AND student_id = #{student_id}
+	</update>
 	
 </mapper>

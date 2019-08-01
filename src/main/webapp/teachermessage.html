@@ -2,14 +2,21 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>课程管理</title>
+		<title>消息通知</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+		<style type="text/css">
+			.tableconfig {
+				width: 750px;
+				margin: 0 auto;
+				float: inherit;
+			}
+		</style>
 		<script type="text/javascript">
 			var now = new Date();
-
+			
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -25,7 +32,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-
+			
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -35,10 +42,10 @@
 						$("#greeting").html(data[1] + "老师，" + greethour);
 						$("#tname").html(data[1]);
 						$("#tid").html(data[0]);
-
+						console.log(data);
 					},
-					error: function(status) {
-
+					error:function(status){
+						
 					}
 				});
 			}
@@ -46,36 +53,37 @@
 	</head>
 	<body>
 		<div class="container-fluid" style="height: 90px;">
-			<h1 style="font-size: 45px;">
-				<div id="greeting">
-
-				</div>
-			</h1>
+			<h1 style="font-size: 45px;"><div id="greeting">
+				
+			</div></h1>
 		</div>
-		<div class="container">
+		<div class="container" style="height: 100%;">
 			<ul class="nav nav-pills">
 				<li role="presentation"><a href="teachermenu.html">个人信息</a></li>
-				<li role="presentation" class="active"><a href="coursemanagement.html">科目管理</a></li>
+				<li role="presentation"><a href="coursemanagement.html">科目管理</a></li>
 				<li role="presentation"><a href="choosecourse.html">开课管理</a></li>
 				<li role="presentation"><a href="questionsmanagement.html">题目管理</a></li>
 				<li role="presentation"><a href="exammanagement.html">考试安排</a></li>
 				<li role="presentation"><a href="studentlist.html">学生信息</a></li>
-				<li role="presentation"><a href="teachermessage.html">消息通知</a></li>
+				<li role="presentation" class="active"><a href="teachermessage.html">消息通知</a></li>
 			</ul>
-			<div class="container" style="width: 700px;float: left;">
-				<table id="coursetable" class="table table-hover">
+			<div class="container" style="float: left">
+				<table id="messagetable" class="table tableconfig">
 					<thead>
-						<tr id="firstcourse">
+						<tr id="firstmessage">
 							<th>#</th>
-							<th>删除</th>
-							<th>课程名</th>
-							<th>消息</th>
+							<th>概要</th>
+							<th>发件人</th>
+							<th>日期</th>
+							
 						</tr>
 					</thead>
 				</table>
 			</div>
 		</div>
 
+
+		<!-- Modal -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -96,9 +104,14 @@
 	<script type="text/javascript">
 		var dataarray = new Array();
 
-		function courses() {
+		function messages() {
+			var start = 100;
+			var number = 0;
+
+			var button = document.createElement("button");
+
 			$.ajax({
-				url: "/exam/menu/teacher_course",
+				url: "/exam/login/getmessage",
 				datatype: "json",
 				contentType: "application/json;charset=UTF-8",
 				success: function(data) {
@@ -108,66 +121,43 @@
 					dataarray = data;
 					console.log(data);
 					$(data).each(function(index, e) {
-						res = res + "<tr><td>" + e.course_id + "</td><td>" +
-							'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
-							e.course_name.slice(0, 20) + "</td><td>" +
-							'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="selectcourse(this)">发消息</button></td>';
+						sequence = index + 1;
+						if (e.content.length < 20) {
+							res = res + "<tr><td>" +
+								'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="getcontent(this)">进入</button></td><td>' +
+								e.content.slice(0, 20) + "</td><td>" + e.addresser + "</td><td>" + e.messagedate + "</td><td>" + sequence +
+								"</td></tr>";
+						} else {
+							res = res + "<tr><td>" +
+								'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="getcontent(this)">进入</button></td><td>' +
+								e.content.slice(0, 18) + "..." + "</td><td>" + e.addresser + "</td><td>" + e.messagedate + "</td><td>" +
+								sequence + "</td></tr>";
+						}
+
 					});
-					$("#firstcourse").siblings().remove();
-					$("#firstcourse").after(res);
+					$("#firstmessage").after(res);
+					$("#student").html("学生：" + data[0].recipient);
 				},
 			});
 
 
 		}
 
-		function selectcourse(obj) {
-			var td = $(obj).parent();
-			var courseid = td.prev().prev().prev().html().trim();
-		}
-
 		function getcontent(obj) {
 			var td = $(obj).parent();
-			var courseid = td.prev().html().trim();
-			console.log(courseid);
-			if (window.confirm('你确定要退出课程吗？')) {
-				$.ajax({
-					url: "/exam/course/quit",
-					type: "post",
-					data: {
-						course_id: courseid
-					},
-					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-					success: function(data) {
-						alert("退课成功");
-						$.ajax({
-							url: "/exam/menu/teacher_course",
-							datatype: "json",
-							contentType: "application/json;charset=UTF-8",
-							success: function(data) {
-								console.log(data);
-								var res = "";
-								number = data.length;
-								dataarray = data;
-								console.log(data);
-								$(data).each(function(index, e) {
-									res = res + "<tr><td>" + e.course_id + "</td><td>" +
-										'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
-										e.course_name.slice(0, 20) + "</td><td>";
-								});
-								$("#firstcourse").siblings().remove();
-								$("#firstcourse").after(res);
-							},
-						});
-					},
-				});
-			}
+			var userid = td.next().next().next().next().html().trim();
+			console.log(userid);
+			$("#myModalLabel").html(dataarray[userid - 1].addresser);
+			$("#modal-body").html(dataarray[userid - 1].content);
 
 		}
+
+
 
 		window.onload = function() {
 			greet();
-			courses();
+			// messages();
 		}
+
 	</script>
 </html>

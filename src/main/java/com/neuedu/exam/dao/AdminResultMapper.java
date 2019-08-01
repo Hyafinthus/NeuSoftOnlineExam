@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.neuedu.exam.domain.StudentResult;
+import com.neuedu.exam.domain.ExamPaper;
 
 @Mapper
 public interface AdminResultMapper {
 
-	List<StudentResult> queryStudentResultsByStudentId(String studentId);
+	List<ExamPaper> queryStudentResultsByStudentId(String studentId);
 
-	List<StudentResult> queryStudentResultsByCourseId(Integer courseId);
+	List<ExamPaper> queryStudentResultsByCourseId(String courseId);
 
 }

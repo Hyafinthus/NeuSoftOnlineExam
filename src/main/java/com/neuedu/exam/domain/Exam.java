@@ -18,11 +18,11 @@ public class Exam {
 	private String exam_classroom;
 	private String exam_time_start;
 	private String exam_time_end;
-	private String exam_length;
+	private int exam_length;
 
 	public Exam(String exam_id, String course_id, String course_name, String teacher_id, String teacher_name, int easy,
 			int midd, int hard, String exam_classroom, String exam_time_start, String exam_time_end,
-			String exam_length) {
+			int exam_length) {
 		super();
 		this.exam_id = exam_id;
 		this.course_id = course_id;
@@ -36,6 +36,11 @@ public class Exam {
 		this.exam_time_start = exam_time_start;
 		this.exam_time_end = exam_time_end;
 		this.exam_length = exam_length;
+	}
+
+	public Exam(String exam_id) {
+		super();
+		this.exam_id = exam_id;
 	}
 
 	public Exam() {
@@ -90,11 +95,11 @@ public class Exam {
 		this.exam_time_end = exam_time_end;
 	}
 	
-	public String getExam_length() {
+	public int getExam_length() {
 		return exam_length;
 	}
 	
-	public void setExam_length(String exam_length) {
+	public void setExam_length(int exam_length) {
 		this.exam_length = exam_length;
 	}
 

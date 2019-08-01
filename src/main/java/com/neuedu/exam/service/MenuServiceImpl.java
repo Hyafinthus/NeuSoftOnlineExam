@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.neuedu.exam.dao.MenuMapper;
 import com.neuedu.exam.domain.Course;
 import com.neuedu.exam.domain.Exam;
+import com.neuedu.exam.domain.ExamPaper;
 import com.neuedu.exam.domain.Question;
 import com.neuedu.exam.domain.Relation;
 import com.neuedu.exam.domain.User;
@@ -51,6 +52,11 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public List<Exam> getStudentExam(User user) {
 		return menuMapper.getStudentExam(user);
+	}
+
+	@Override
+	public List<ExamPaper> getStudentScore(User user) {
+		return menuMapper.getStudentScore(user);
 	}
 
 }

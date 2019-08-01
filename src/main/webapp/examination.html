@@ -37,7 +37,7 @@
 									</div>
 								</th>
 								<th>
-									<button type="button" class="btn btn-primary btn-xs " onclick="mysubmit()">提交</button>
+									<button type="button" class="btn btn-primary btn-xs " onclick='mysubmit("false")'>提交</button>
 								</th>
 							</tr>
 						</thead>
@@ -53,37 +53,13 @@
 					<div class="col-lg-9">
 					</div>
 					<div class="col-lg-1">
-						<button id="button" type="button" class="btn btn-primary btn-xs" onclick="mysubmit()" style="margin:0 auto">提交</button>
+						<button id="button" type="button" class="btn btn-primary btn-xs" onclick='mysubmit("false")' style="margin:0 auto">提交</button>
 					</div>
 				</div>
 			</div>
 		</form>
 	</body>
 	<script type="text/javascript">
-		var str = "2019/12/17 00:00:00";
-		timer = setInterval("TimeDown()", 1000);
-
-		function TimeDown() {
-			//结束时间
-			var endDate = new Date(str);
-			//当前时间
-			var nowDate = new Date();
-			//相差的总秒数
-			var totalSeconds = parseInt((endDate - nowDate) / 1000);
-			//天数
-			var days = Math.floor(totalSeconds / (60 * 60 * 24));
-			//取模（余数）
-			var modulo = totalSeconds % (60 * 60 * 24);
-			//小时数
-			var hours = Math.floor(modulo / (60 * 60));
-			modulo = modulo % (60 * 60);
-			//分钟
-			var minutes = Math.floor(modulo / 60);
-			//秒
-			var seconds = modulo % 60;
-			//输出到页面
-			document.getElementById("timer").innerHTML = "还剩:" + days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
-		}
 		var examid = "";
 		var questionarray = new Array();
 		window.onload = function() {
@@ -91,6 +67,7 @@
 			var url = window.location.href;
 			var n = url.indexOf("=");
 			examid = url.substr(n + 1);
+			countdown();
 			exam();
 		}
 
@@ -113,12 +90,13 @@
 							var que = '<table class="table table-hover tableconfig">' +
 								'<thead>' +
 								'<tr>' +
-								'<th style="width: 20px">' + sequence + '</th><th>' + e.question_body + '</th>' +
+								'<th style="width: 20px">' + sequence + '.</th><th>' + e.question_body + '(' + e.question_mark + '分)' +
+								'</th>' +
 								'</tr>' +
 								'</thead>' +
 								'<tr></td><td>' +
 								'<td>' +
-								'<textarea class="form-control" rows="5"></textarea>' +
+								'<textarea name="' + sequence + '" class="form-control" rows="5"></textarea>' +
 								'</td>' +
 								'</tr>' +
 								'</table>' +
@@ -128,7 +106,8 @@
 							var que = '<table class="table table-hover tableconfig">' +
 								'<thead>' +
 								'<tr>' +
-								'<th style="width: 20px">' + sequence + '</th><th> ' + e.question_body + '</th>' +
+								'<th style="width: 20px">' + sequence + '.</th><th> ' + e.question_body + '(' + e.question_mark + '分)' +
+								'</th>' +
 								'</tr>' +
 								'</thead>' +
 								'<tr>' +
@@ -168,18 +147,113 @@
 			});
 		}
 
-		function mysubmit() {
+		function mysubmit(last) {
+			var answerarray = [];
+			var exam = {};
+			exam.question_id = 0;
+			exam.question_type = "";
+			exam.student_answer = examid;
+			answerarray.push(exam);
 			var item = "";
-			for (i = 0; i < questionarray.length; i++) {
+			for (var i = 0; i < questionarray.length; i++) {
 				var obj = document.getElementsByName(i + 1);
-				console.log(i + 1);
-				for (var i = 0; i < obj.length; i++) { //遍历Radio 
-					if (obj[i].checked) {
-						item = item + obj[i].value;
+				if (questionarray[i].question_type == "mult") {
+					var ischecked = "false";
+					for (var j = 0; j < obj.length; j++) { //遍历Radio 
+						if (obj[j].checked) {
+							ischecked = "true";
+							var answer = {};
+							answer.question_id = questionarray[i].question_id;
+							answer.question_type = "mult";
+							answer.student_answer = obj[j].value;
+							answerarray.push(answer);
+						}
 					}
+					if (ischecked == "false" && last == "false") {
+						alert("第" + (i + 1) + "题未作答");
+						return;
+					}
+				} else {
+					var answer = {};
+					answer.question_id = questionarray[i].question_id;
+					answer.question_type = "subj";
+					answer.student_answer = obj[0].value;
+					answerarray.push(answer);
+					if (last == "false") {
+						if (obj[0].value == null || obj[0].value == "") {
+							alert("第" + (i + 1) + "题未作答");
+							return;
+						}
+					}
+
 				}
+
 			}
-			alert(item);
+			console.log(answerarray);
+			var str = "";
+			str = answerarray;
+
+			$.ajax({
+				url: "/exam/exam/submit",
+				datatype: "json",
+				type: "post",
+				data: JSON.stringify(answerarray),
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					alert("已成功提交");
+					jump();
+				},
+			});
+
+		}
+
+		function jump() {
+			window.location.href = "examtobedone.html"
+		}
+
+		var str = "";
+
+		function countdown() {
+			$.ajax({
+				url: "/exam/exam/end",
+				type: "post",
+				data: {
+					exam_id: examid
+				},
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function(data) {
+					str = data;
+				},
+			});
+		}
+
+
+		timer = setInterval("TimeDown()", 1000);
+
+		function TimeDown() {
+			//结束时间
+			var endDate = new Date(str);
+			//当前时间
+			var nowDate = new Date();
+			//相差的总秒数
+			var totalSeconds = parseInt((endDate - nowDate) / 1000);
+			//天数
+			var days = Math.floor(totalSeconds / (60 * 60 * 24));
+			//取模（余数）
+			var modulo = totalSeconds % (60 * 60 * 24);
+			//小时数
+			var hours = Math.floor(modulo / (60 * 60));
+			modulo = modulo % (60 * 60);
+			//分钟
+			var minutes = Math.floor(modulo / 60);
+			//秒
+			var seconds = modulo % 60;
+			//输出到页面
+			document.getElementById("timer").innerHTML = "还剩:" + hours + "小时" + minutes + "分钟" + seconds + "秒";
+			if (totalSeconds < 0) {
+				mysubmit("true");
+				window.location.href = "examtobedone.html";
+			}
 		}
 	</script>
 </html>

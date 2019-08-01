@@ -1,6 +1,9 @@
 package com.neuedu.exam.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.neuedu.exam.domain.Course;
 import com.neuedu.exam.domain.Exam;
+import com.neuedu.exam.domain.ExamPaper;
 import com.neuedu.exam.domain.Question;
 import com.neuedu.exam.domain.Relation;
 import com.neuedu.exam.domain.User;
@@ -25,6 +29,8 @@ public class MenuController {
 	
 	@Autowired
 	private MenuService menuService;
+	
+	DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	
 	// 个人信息
 	@RequestMapping(value="/personal")
@@ -122,8 +128,34 @@ public class MenuController {
 		String id = (String) session.getAttribute("id");
 		User user = new User(id);
 		
+		LocalDateTime today = LocalDateTime.now();
+		
 		List<Exam> list = menuService.getStudentExam(user);
+		Iterator<Exam> iterator = list.iterator();
+		while(iterator.hasNext()) {
+			Exam exam = iterator.next();
+			LocalDateTime end_time = LocalDateTime.parse(exam.getExam_time_end(), timeFmt);
+			if(today.isAfter(end_time)) {
+				iterator.remove();
+			}
+		}
+		
 		System.out.println(list);
 		return list;
 	}
+	
+	
+	// 学生考试成绩
+	@RequestMapping("/student/score")
+	@ResponseBody
+	public List<ExamPaper> getStudentScore(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("id");
+		User user = new User(id);
+		
+		List<ExamPaper> list = menuService.getStudentScore(user);
+		System.out.println(list);
+		return list;
+	}
+	
 }

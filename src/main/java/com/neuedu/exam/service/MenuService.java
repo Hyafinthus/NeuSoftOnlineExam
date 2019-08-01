@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.neuedu.exam.domain.Course;
 import com.neuedu.exam.domain.Exam;
+import com.neuedu.exam.domain.ExamPaper;
 import com.neuedu.exam.domain.Question;
 import com.neuedu.exam.domain.Relation;
 import com.neuedu.exam.domain.User;
@@ -23,5 +24,7 @@ public interface MenuService {
 	public List<Relation> getStudentCandidate(User user);
 	
 	public List<Exam> getStudentExam(User user);
+	
+	public List<ExamPaper> getStudentScore(User user);
 	
 }

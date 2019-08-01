@@ -54,9 +54,11 @@ CREATE TABLE `course_student_table` (
   `crs_tch_id` int(8) NOT NULL,
   `student_id` varchar(20) NOT NULL,
   PRIMARY KEY (`pri_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `course_student_table` */
+
+insert  into `course_student_table`(`pri_id`,`crs_tch_id`,`student_id`) values (6,9,'S0001'),(7,7,'S0002');
 
 /*Table structure for table `course_table` */
 
@@ -82,11 +84,11 @@ CREATE TABLE `course_teacher_table` (
   `course_id` varchar(20) NOT NULL,
   `teacher_id` varchar(20) NOT NULL,
   PRIMARY KEY (`pri_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `course_teacher_table` */
 
-insert  into `course_teacher_table`(`pri_id`,`course_id`,`teacher_id`) values (7,'1','T0001'),(8,'2','T0001');
+insert  into `course_teacher_table`(`pri_id`,`course_id`,`teacher_id`) values (7,'1','T0001'),(8,'2','T0001'),(9,'1','T0003');
 
 /*Table structure for table `error_question_table` */
 
@@ -110,12 +112,21 @@ CREATE TABLE `exam_history_table` (
   `pri_id` int(8) NOT NULL AUTO_INCREMENT,
   `exam_id` varchar(20) NOT NULL,
   `student_id` varchar(20) NOT NULL,
-  `student_answer` varchar(200) NOT NULL,
-  `student_score` int(8) NOT NULL,
+  `mult_answer` varchar(2000) DEFAULT NULL,
+  `subj_answer` varchar(2000) DEFAULT NULL,
+  `mult_result` varchar(2000) DEFAULT NULL,
+  `subj_result` varchar(2000) DEFAULT NULL,
+  `mult_score` int(8) DEFAULT NULL,
+  `subj_score` int(8) unsigned zerofill DEFAULT NULL,
+  `is_reviewed` varchar(20) DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
   PRIMARY KEY (`pri_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_history_table` */
+
+insert  into `exam_history_table`(`pri_id`,`exam_id`,`student_id`,`mult_answer`,`subj_answer`,`mult_result`,`subj_result`,`mult_score`,`subj_score`,`is_reviewed`,`start_time`,`end_time`) values (1,'2019-07-31-20-30-1','S0001','[{\"question_id\":1,\"question_type\":\"mult\",\"student_answer\":\"A\"},{\"question_id\":6,\"question_type\":\"mult\",\"student_answer\":\"B\"},{\"question_id\":7,\"question_type\":\"mult\",\"student_answer\":\"C\"},{\"question_id\":5,\"question_type\":\"mult\",\"student_answer\":\"B\"}]','[{\"question_id\":3,\"question_type\":\"subj\",\"student_answer\":\"qwert\"},{\"question_id\":2,\"question_type\":\"subj\",\"student_answer\":\"sdfghj\"},{\"question_id\":9,\"question_type\":\"subj\",\"student_answer\":\"xcv11111555556661111111111118684456156165168461615116546284551255211111111111bnm\"},{\"question_id\":10,\"question_type\":\"subj\",\"student_answer\":\"tgyhujik\"}]','[{\"1\":0,\"5\":4,\"6\":0,\"7\":0}]',NULL,4,NULL,NULL,'2019-07-31 20:30:31','2019-07-31 20:33:31'),(2,'2019-07-31-20-30-1','S0002','[{\"question_id\":1,\"question_type\":\"mult\",\"student_answer\":\"A\"},{\"question_id\":6,\"question_type\":\"mult\",\"student_answer\":\"B\"},{\"question_id\":7,\"question_type\":\"mult\",\"student_answer\":\"C\"},{\"question_id\":5,\"question_type\":\"mult\",\"student_answer\":\"C\"}]','[{\"question_id\":3,\"question_type\":\"subj\",\"student_answer\":\"qwertyui\"},{\"question_id\":2,\"question_type\":\"subj\",\"student_answer\":\"SDFGHJKL\"},{\"question_id\":9,\"question_type\":\"subj\",\"student_answer\":\"XCVBNM,.\"},{\"question_id\":10,\"question_type\":\"subj\",\"student_answer\":\"DFGHJKL;\"}]','[{\"1\":0,\"5\":0,\"6\":0,\"7\":0}]',NULL,0,NULL,NULL,'2019-07-31 21:06:14','2019-07-31 21:09:14');
 
 /*Table structure for table `exam_question_table` */
 
@@ -127,16 +138,18 @@ CREATE TABLE `exam_question_table` (
   `course_id` varchar(20) NOT NULL,
   `question_id` int(8) NOT NULL,
   PRIMARY KEY (`pri_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_question_table` */
+
+insert  into `exam_question_table`(`pri_id`,`exam_id`,`course_id`,`question_id`) values (59,'2019-07-30-1','1',3),(60,'2019-07-30-1','1',5),(61,'2019-07-30-1','1',10),(62,'2019-07-31-16-33-1','1',4),(63,'2019-07-31-16-33-1','1',8),(65,'2019-07-31-16-33-1','1',6),(66,'2019-07-31-16-33-1','1',9),(67,'2019-07-31-16-41-1','1',8),(68,'2019-07-31-16-41-1','1',7),(69,'2019-07-31-16-41-1','1',10),(70,'2019-07-31-20-30-1','1',3),(71,'2019-07-31-20-30-1','1',2),(72,'2019-07-31-20-30-1','1',1),(73,'2019-07-31-20-30-1','1',6),(74,'2019-07-31-20-30-1','1',7),(75,'2019-07-31-20-30-1','1',5),(76,'2019-07-31-20-30-1','1',9),(77,'2019-07-31-20-30-1','1',10);
 
 /*Table structure for table `exam_table` */
 
 DROP TABLE IF EXISTS `exam_table`;
 
 CREATE TABLE `exam_table` (
-  `exam_id` int(8) NOT NULL AUTO_INCREMENT,
+  `exam_id` varchar(20) NOT NULL,
   `course_id` varchar(20) NOT NULL,
   `exam_classroom` varchar(20) NOT NULL,
   `teacher_id` varchar(20) NOT NULL,
@@ -145,11 +158,13 @@ CREATE TABLE `exam_table` (
   `hard` int(8) unsigned zerofill NOT NULL,
   `exam_time_start` datetime NOT NULL,
   `exam_time_end` datetime NOT NULL,
-  `exam_length` time NOT NULL,
+  `exam_length` int(8) NOT NULL,
   PRIMARY KEY (`exam_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_table` */
+
+insert  into `exam_table`(`exam_id`,`course_id`,`exam_classroom`,`teacher_id`,`easy`,`midd`,`hard`,`exam_time_start`,`exam_time_end`,`exam_length`) values ('2019-07-31-16-41-1','1','B205','T0001',00000001,00000001,00000001,'2019-08-01 00:00:00','2019-08-02 00:00:00',10),('2019-07-31-20-30-1','1','B205','T0001',00000003,00000003,00000003,'2019-01-01 00:00:00','2020-01-01 00:00:00',3);
 
 /*Table structure for table `notice_table` */
 
@@ -203,7 +218,7 @@ CREATE TABLE `user_table` (
 
 /*Data for the table `user_table` */
 
-insert  into `user_table`(`user_id`,`user_name`,`user_password`,`user_group`) values ('A0001','于乃夫','yunaifu','admin'),('A0002','汪清瀛','wangqingying','admin'),('S0001','何一夫','heyifu','student'),('S0002','万一鸣','wanyiming','student'),('S0003','高祖琛','gaozuchen','student'),('S0004','任永鹏','renyongpeng','student'),('S0005','曾钰城','zengyucheng','student'),('S0006','黄项宇轩','huangxiangyuxuan','student'),('S0007','张锦航','zhangjinhang','student'),('S0008','杜子健','duzijian','student'),('S0009','王腾','wangteng','student'),('T0001','刘伟','234','teacher'),('T0002','王忠杰','wangzhongjie','teacher'),('T0003','徐汉川','xuhanchuan','teacher'),('T0004','吴锐','wurui','teacher'),('T0005','刘宏伟','liuhongwei','teacher'),('T0006','史先俊','shixianjun','teacher');
+insert  into `user_table`(`user_id`,`user_name`,`user_password`,`user_group`) values ('A0001','于乃夫','yunaifu','admin'),('A0002','汪清瀛','wangqingying','admin'),('S0001','何一夫','234','student'),('S0002','万一鸣','234','student'),('S0003','高祖琛','gaozuchen','student'),('S0004','任永鹏','renyongpeng','student'),('S0005','曾钰城','zengyucheng','student'),('S0006','黄项宇轩','huangxiangyuxuan','student'),('S0007','张锦航','zhangjinhang','student'),('S0008','杜子健','duzijian','student'),('S0009','王腾','wangteng','student'),('T0001','刘伟','123','teacher'),('T0002','王忠杰','wangzhongjie','teacher'),('T0003','徐汉川','xuhanchuan','teacher'),('T0004','吴锐','wurui','teacher'),('T0005','刘宏伟','liuhongwei','teacher'),('T0006','史先俊','shixianjun','teacher');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

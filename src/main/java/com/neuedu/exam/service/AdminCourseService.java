@@ -16,4 +16,6 @@ public interface AdminCourseService {
 
 	public void addCourse(Course course);
 
+	public Course queryCourseById(String courseId);
+
 }

@@ -2,7 +2,9 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>题目管理</title>
+		<title>
+			教师主页
+		</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -37,10 +39,13 @@
 						$("#tid").html(data[0]);
 						console.log(data);
 					},
-					error: function(status) {
-
+					error:function(status){
+						
 					}
 				});
+			}
+			window.onload = function() {
+				greet();
 			}
 		</script>
 	</head>
@@ -58,58 +63,37 @@
 				<li role="presentation"><a href="coursemanagement.html">科目管理</a></li>
 				<li role="presentation"><a href="choosecourse.html">开课管理</a></li>
 				<li role="presentation"><a href="questionsmanagement.html">题目管理</a></li>
-				<li role="presentation" class="active"><a href="exammanagement.html">考试安排</a></li>
-				<li role="presentation"><a href="studentlist.html">学生信息</a></li>
+				<li role="presentation"><a href="exammanagement.html">考试安排</a></li>
+				<li role="presentation" class="active"><a href="studentlist.html">学生信息</a></li>
 				<li role="presentation"><a href="teachermessage.html">消息通知</a></li>
 			</ul>
+
 			<div class="container" style="width: 700px;float: left;">
 				<table class="table table-hover">
 					<thead>
-						<tr id="firstexam">
-							<th><a href="addexam.html">
-									<button type="button" class="btn btn-primary btn-xs">添加</button></a></th>
-							<th>考试科目</th>
-							<th>开始时间</th>
-							<th>结束时间</th>
-							<th>时长</th>
+						<tr>
+							<th>#</th>
+							<th>学号</th>
+							<th>姓名</th>
 						</tr>
 					</thead>
+					<tbody>
+						<tr>
+							<td>#</td>
+							<td>
+								<div id="tid">
 
+								</div>
+							</td>
+							<td>
+								<div id="tname">
+
+								</div>
+							</td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript">
-		window.onload = function() {
-			greet();
-			exams();
-		}
-
-		function exams() {
-			$.ajax({
-				url: "/exam/menu/teacher/exam",
-				datatype: "json",
-				contentType: "application/json;charset=UTF-8",
-				success: function(data) {
-					var res = "";
-					dataarray = data;
-					console.log(data);
-					$(data).each(function(index, e) {
-						res = res + "<tr><td>" + e.exam_id + "</td><td>" + e.course_name + "</td><td>" + e.exam_time_start +
-							"</td><td>" +
-							e.exam_time_end + "</td><td>" + e.exam_length + "分钟</td><td>" +
-							'<button type="button" class="btn btn-primary btn-xs" onclick="paperinspection(this)">阅卷</button></td>';
-					});
-					$("#firstexam").siblings().remove();
-					$("#firstexam").after(res);
-				},
-			});
-		}
-		
-		function paperinspection(obj){
-			var td = $(obj).parent();
-			var examid = td.prev().prev().prev().prev().prev().html().trim();
-			window.location.href = "paperinspection.html?examid=" + examid;
-		}
-	</script>
 </html>

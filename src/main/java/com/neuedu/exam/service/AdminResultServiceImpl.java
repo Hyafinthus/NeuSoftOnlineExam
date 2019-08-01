@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neuedu.exam.dao.AdminResultMapper;
-import com.neuedu.exam.domain.StudentResult;
+import com.neuedu.exam.domain.ExamPaper;
 
 @Service
 public class AdminResultServiceImpl implements AdminResultService {
@@ -15,14 +15,12 @@ public class AdminResultServiceImpl implements AdminResultService {
 	private AdminResultMapper adminResultMapper;
 
 	@Override
-	public List<StudentResult> queryStudentResultsByStudentId(String studentId) {
-		List<StudentResult> temp= adminResultMapper.queryStudentResultsByStudentId(studentId);
-		System.out.println(temp.get(0));
-		return temp;
+	public List<ExamPaper> queryStudentResultsByStudentId(String studentId) {
+		return adminResultMapper.queryStudentResultsByStudentId(studentId);
 	}
 
 	@Override
-	public List<StudentResult> queryStudentResultsByCourseId(Integer courseId) {
+	public List<ExamPaper> queryStudentResultsByCourseId(String courseId) {
 		return adminResultMapper.queryStudentResultsByCourseId(courseId);
 	}
 }

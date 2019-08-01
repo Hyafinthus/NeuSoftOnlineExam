@@ -59,8 +59,8 @@
 				<li role="presentation" class="active"><a href="choosecourse.html">开课管理</a></li>
 				<li role="presentation"><a href="questionsmanagement.html">题目管理</a></li>
 				<li role="presentation"><a href="exammanagement.html">考试安排</a></li>
-				<li role="presentation"><a href="#">学生信息</a></li>
-				<li role="presentation"><a href="getmessage.html">消息通知</a></li>
+				<li role="presentation"><a href="studentlist.html">学生信息</a></li>
+				<li role="presentation"><a href="teachermessage.html">消息通知</a></li>
 			</ul>
 			<div class="container" style="width: 700px;float: left;">
 				<table id="coursetable" class="table table-hover">
@@ -115,25 +115,7 @@
 				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 				success: function(data) {
 					alert("加入成功");
-					$.ajax({
-						url: "/exam/menu/courses",
-						datatype: "json",
-						contentType: "application/json;charset=UTF-8",
-						success: function(data) {
-							console.log(data);
-							var res = "";
-							number = data.length;
-							dataarray = data;
-							console.log(data);
-							$(data).each(function(index, e) {
-								res = res + "<tr><td>" + e.course_id + "</td><td>" +
-									'<button type="button" class="btn btn-primary btn-xs" onclick="getcontent(this)">加入</button></td><td>' +
-									e.course_name.slice(0, 20) + "</td><td>";
-							});
-							$("#firstcourse").siblings().remove();
-							$("#firstcourse").after(res);
-						},
-					});
+					courses();
 				},
 			});
 		}

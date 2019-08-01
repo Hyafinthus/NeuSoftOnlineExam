@@ -39,4 +39,9 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 		adminCourseMapper.addCourse(course);
 	}
 
+	@Override
+	public Course queryCourseById(String courseId) {
+		return adminCourseMapper.queryCourseById(courseId);
+	}
+
 }

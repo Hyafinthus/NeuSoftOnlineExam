@@ -50,6 +50,23 @@ public class Question {
 		this.question_answer = question_answer;
 	}
 
+	public Question(Question question) {
+		this.question_id = question.question_id;
+		this.course_id = question.course_id;
+		this.course_name = question.course_name;
+		this.teacher_id = question.teacher_id;
+		this.teacher_name = question.teacher_name;
+		this.question_rate = question.question_rate;
+		this.question_mark = question.question_mark;
+		this.question_type = question.question_type;
+		this.question_body = question.question_body;
+		this.question_a = question.question_a;
+		this.question_b = question.question_b;
+		this.question_c = question.question_c;
+		this.question_d = question.question_d;
+		this.question_answer = question.question_answer;
+	}
+
 	public int getQuestion_id() {
 		return question_id;
 	}

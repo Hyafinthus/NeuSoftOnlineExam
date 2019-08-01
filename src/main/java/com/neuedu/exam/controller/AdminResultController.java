@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.neuedu.exam.domain.StudentResult;
+import com.neuedu.exam.domain.ExamPaper;
 import com.neuedu.exam.service.AdminResultService;
 
 @Controller
@@ -21,13 +21,16 @@ public class AdminResultController {
 	
 	@RequestMapping(value="/student/{studentid}", method=RequestMethod.GET)
 	@ResponseBody
-	public List<StudentResult> showStudentResults(@PathVariable String studentid){
-		return adminResultService.queryStudentResultsByStudentId(studentid);
+	public List<ExamPaper> showStudentResults(@PathVariable String studentid){
+		 List<ExamPaper> temp= adminResultService.queryStudentResultsByStudentId(studentid);
+		 for(ExamPaper s:temp)
+			 System.out.println(s);
+		 return temp;
 	}
 	
 	@RequestMapping(value="/course/{courseid}", method=RequestMethod.GET)
 	@ResponseBody
-	public List<StudentResult> showSubjectResults(@PathVariable String courseid){
-		return adminResultService.queryStudentResultsByCourseId(Integer.parseInt(courseid));
+	public List<ExamPaper> showSubjectResults(@PathVariable String courseid){
+		return adminResultService.queryStudentResultsByCourseId(courseid);
 	}
 }

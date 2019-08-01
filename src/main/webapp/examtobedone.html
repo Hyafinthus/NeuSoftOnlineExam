@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>题目管理</title>
+		<title>考试</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -56,7 +56,7 @@
 			<ul class="nav nav-pills">
 				<li role="presentation"><a href="studentmenu.html">个人信息</a></li>
 				<li role="presentation" class="active"><a href="examtobedone.html">在线考试</a></li>
-				<li role="presentation"><a href="#">成绩管理</a></li>
+				<li role="presentation"><a href="examhistory.html">成绩管理</a></li>
 				<li role="presentation"><a href="stuquitcourse.html">退选</a></li>
 				<li role="presentation"><a href="elective.html">学生选课</a></li>
 				<li role="presentation"><a href="getmessage.html">消息通知</a></li>
@@ -95,9 +95,12 @@
 					$(data).each(function(index, e) {
 						res = res + "<tr><td>" + e.exam_id + "</td><td>" + e.course_name + "</td><td>" + e.exam_time_start +
 							"</td><td>" +
-							e.exam_time_end + "</td><td>" + e.exam_length + "</td><td>" +
+							e.exam_time_end + "</td><td>" + e.exam_length + "分钟</td><td>" +
 							'<button type="button" class="btn btn-primary btn-xs" onclick="examstart(this)">开始答题</button></td>';
 					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>目前无可用考试" + "</td><td>" + "</td><td>" + "</td><td>" + "</td><tr>"
+					}
 					$("#firstexam").siblings().remove();
 					$("#firstexam").after(res);
 				},
@@ -107,6 +110,25 @@
 		function examstart(obj) {
 			var td = $(obj).parent();
 			var examid = td.prev().prev().prev().prev().prev().html().trim();
+			$.ajax({
+				url: "/exam/exam/start",
+				datatype: "json",
+				type: "post",
+				data: {
+					exam_id: examid
+				},
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function(data) {
+					if (data == "success") {
+						enterexam(examid);
+					} else {
+						alert("考试时间未到");
+					}
+				},
+			});
+		}
+
+		function enterexam(examid) {
 			window.location.href = "examination.html?examid=" + examid;
 		}
 	</script>

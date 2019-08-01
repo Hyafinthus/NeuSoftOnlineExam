@@ -12,6 +12,11 @@
 				width: 750px;
 				margin: 0 auto
 			}
+
+			td {
+				word-break: break-all;
+				word-wrap: break-word;
+			}
 		</style>
 	</head>
 	<body>
@@ -20,94 +25,154 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>考试科目：</th>
-							<th>学生：</th>
-							<th>时间：</th>
 							<th>
-								<button type="submit" class="btn btn-primary btn-xs">提交</button>
+								<div id="coursename">
+
+								</div>
+							</th>
+							<th>
+								<div id="stuname">
+
+								</div>
+							</th>
+							<th>
+								<div id="leftnum">
+
+								</div>
+							</th>
+							<th>
+								<button type="button" onclick="nextone()" class="btn btn-primary btn-xs">提交</button>
 							</th>
 						</tr>
 					</thead>
 				</table>
 			</div>
-			<div class="container">
 
-				<table class="table tableconfig">
+			<br />
+			<div class="container" style="width: 800px;">
+				<table class="table" style="width: 800px;">
 					<thead>
-						<tr>
-							<th>1.我是题干我是题干我是题干我是题干</th>
-
+						<tr id="firstquestion">
+							<th>题目编号</th>
+							<th>答案</th>
+							<th>分数</th>
 						</tr>
 					</thead>
-					<tr>
-						<td>
-							<p>我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生
-								答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案</p>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="row">
-								<div class="col-lg-10">
-								</div>
-								<div class="col-lg-2">
-									<select class="form-control">
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-									</select>
-								</div>
-							</div>
-						</td>
-					</tr>
+
 				</table>
-
-
+				<br />
 			</div>
 
-			<br />
-
-			<table class="table tableconfig">
-				<thead>
-					<tr>
-						<th>1.我是题干我是题干我是题干我是题干</th>
-					</tr>
-				</thead>
-				<tr>
-					<td>
-						<p>我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生
-							答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案我是学生答案</p>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="row">
-							<div class="col-lg-10">
-							</div>
-							<div class="col-lg-2">
-								<select class="form-control">
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
-									<option>4</option>
-									<option>5</option>
-								</select>
-							</div>
-						</div>
-					</td>
-				</tr>
-			</table>
-			<br />
 
 			<div class="row">
 				<div class="col-lg-9">
 				</div>
 				<div class="col-lg-1">
-					<button type="submit" class="btn btn-primary btn-xs" style="margin:0 auto">提交</button>
+					<button type="button" class="btn btn-primary btn-xs" onclick="nextone()" style="margin:0 auto">提交</button>
 				</div>
 			</div>
 		</form>
 	</body>
+	<script type="text/javascript">
+		var dataarray = new Array();
+		var examid;
+		var studentid;
+
+		function paperins() {
+			$.ajax({
+				url: "/exam/exam/review",
+				datatype: "json",
+				type: "post",
+				data: {
+					exam_id: examid
+				},
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function(data) {
+					// dataarray = data;
+					console.log(data);
+					if(data.length == 0){
+						
+						jump();
+					}
+					var thisstu = data[0];
+					studentid = thisstu.student_id;
+					$("#coursename").html("科目：" + thisstu.course_name);
+					$("#stuname").html("学生：" + thisstu.student_name);
+					$("#leftnum").html("还剩：" + data.length + "张试卷");
+					var exambody = thisstu.subj_answer;
+					var obj = JSON.parse(exambody);
+					dataarray = obj;
+					console.log(obj);
+					var res = "";
+					$(obj).each(function(index, e) {
+						sequence = index + 1;
+						res = res + '<tr><td style="width: 100px;">' + e.question_id + '</td><td  style="width: 600px;">' + e.student_answer +
+							'<td  style="width: 100px;">' +
+							'<select id="' + sequence + '" class="form-control">' +
+							'<option>0</option>' +
+							'<option>1</option>' +
+							'<option>2</option>' +
+							'<option>3</option>' +
+							'<option>4</option>' +
+							'<option>5</option>' +
+							'<option>6</option>' +
+							'<option>7</option>' +
+							'<option>8</option>' +
+							'<option>9</option>' +
+							'<option>10</option>' +
+							'</select>' +
+							"</td></tr>";
+					});
+					$("#firstquestion").siblings().remove();
+					$("#firstquestion").after(res);
+				},
+			});
+		}
+
+		function jump(){
+			window.location.href = "exammanagement.html";
+		}
+
+		window.onload = function() {
+			var url = window.location.href;
+			var n = url.indexOf("=");
+			examid = url.substr(n + 1);
+			paperins();
+		}
+
+		function nextone() {
+			var answersheet = [];
+			var exam = {};
+			var options = $("#" + 1 + " option:selected");
+			exam.question_id = "";
+			exam.question_type = examid;
+			exam.student_answer = studentid;
+			exam.student_mark = "";
+			answersheet.push(exam);
+			for (var i = 0; i < dataarray.length; i++) {
+				var answer = {};
+				var options = $("#" + (i + 1) + " option:selected");
+				answer.question_id = dataarray[i].question_id;
+				answer.question_type = "";
+				answer.student_answer = "";
+				var num = 1;
+				num = parseInt(options.text());
+				answer.student_mark = num;
+				answersheet.push(answer);
+			}
+			console.log(answersheet);
+
+			$.ajax({
+				url: "/exam/exam/confirm",
+				datatype: "json",
+				type: "post",
+				data: JSON.stringify(answersheet),
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					alert("提交成功");
+					paperins();
+				},
+			});
+		}
+	</script>
 </html>

@@ -4,24 +4,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.neuedu.exam.dao.AdminResultMapper">
-	<select id="queryStudentResultsByStudentId" parameterType="String" resultMap="studentresult">
-		SELECT eh.student_id, eh.exam_id, eh.student_score, et.course_id, ct.course_name, ut.user_name
+	<select id="queryStudentResultsByStudentId" parameterType="String" resultType="ExamPaper">
+		SELECT eh.student_id, eh.exam_id, eh.mult_score, eh.subj_score, et.course_id, ct.course_name, ut.user_name
 		FROM exam_history_table eh, exam_table et, course_table ct, user_table ut
 		WHERE eh.student_id= '${studentId}' AND eh.exam_id= et.exam_id AND et.course_id= ct.course_id AND eh.student_id= ut.user_id
 	</select>
 	
-	<select id="queryStudentResultsByCourseId" parameterType="String" resultMap="studentresult">
-		SELECT eh.student_id, eh.exam_id, eh.student_score, et.course_id, ct.course_name, ut.user_name
+	<select id="queryStudentResultsByCourseId" parameterType="String" resultType="ExamPaper">
+		SELECT eh.student_id, eh.exam_id, eh.mult_score, eh.subj_score, et.course_id, ct.course_name, ut.user_name
 		FROM exam_history_table eh, exam_table et, course_table ct, user_table ut
 		WHERE et.course_id= ${courseId} AND eh.exam_id= et.exam_id AND et.course_id= ct.course_id AND eh.student_id= ut.user_id
 	</select>
 	
-	<resultMap type="StudentResult" id="studentresult">
-		<result column="student_id" property="studentId"/>
-		<result column="user_name" property="studentName"/>
-		<result column="course_id" property="courseId"/>
-		<result column="course_name" property="courseName"/>
-		<result column="exam_id" property="examId"/>
-		<result column="student_score" property="studentScore"/>
-	</resultMap>
 </mapper>

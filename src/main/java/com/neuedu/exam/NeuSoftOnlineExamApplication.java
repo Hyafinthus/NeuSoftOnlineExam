@@ -9,5 +9,4 @@ public class NeuSoftOnlineExamApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NeuSoftOnlineExamApplication.class, args);
 	}
-
 }

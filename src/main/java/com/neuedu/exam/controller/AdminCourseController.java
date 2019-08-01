@@ -43,9 +43,9 @@ public class AdminCourseController {
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	@ResponseBody
 	public String addCourse(@RequestBody Course course){
-		Course isExits=adminCourseService.queryCourseByName(course.getCourse_name());
-		System.out.println(isExits);
-		if(isExits==null){
+		Course isExits1=adminCourseService.queryCourseByName(course.getCourse_name());
+		Course isExits2=adminCourseService.queryCourseById(course.getCourse_id());
+		if(isExits1==null && isExits2==null){
 			adminCourseService.addCourse(course);
 			return "success";
 		}else

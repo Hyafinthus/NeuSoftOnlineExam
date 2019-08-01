@@ -2,12 +2,12 @@ package com.neuedu.exam.service;
 
 import java.util.List;
 
-import com.neuedu.exam.domain.StudentResult;
+import com.neuedu.exam.domain.ExamPaper;
 
 public interface AdminResultService {
 
-	List<StudentResult> queryStudentResultsByStudentId(String studentId);
+	List<ExamPaper> queryStudentResultsByStudentId(String studentId);
 
-	List<StudentResult> queryStudentResultsByCourseId(Integer courseid);
+	List<ExamPaper> queryStudentResultsByCourseId(String courseid);
 
 }

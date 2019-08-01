@@ -19,4 +19,6 @@ public interface AdminCourseMapper {
 
 	public void addCourse(Course course);
 
+	public Course queryCourseById(String courseId);
+
 }

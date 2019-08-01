@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.neuedu.exam.dao.ExamMapper;
 import com.neuedu.exam.domain.Exam;
+import com.neuedu.exam.domain.ExamPaper;
 import com.neuedu.exam.domain.Question;
 
 @Service
@@ -36,10 +37,44 @@ public class ExamServiceImpl implements ExamService {
 		examMapper.addQuestion(exam.setRate("midd").setNum(exam.getMidd()));
 		examMapper.addQuestion(exam.setRate("hard").setNum(exam.getHard()));
 	}
+
+	
+	
+	@Override
+	public Exam startTime(Exam exam) {
+		return examMapper.startTime(exam);
+	}
+	
+	@Override
+	public ExamPaper ifStartExam(ExamPaper examPaper) {
+		return examMapper.ifStartExam(examPaper);
+	}
+	
+	@Override
+	public void startExam(ExamPaper examPaper) {
+		examMapper.startExam(examPaper);
+	}
 	
 	@Override
 	public List<Question> getExamQuestion(String exam_id) {
 		return examMapper.getExamQuestion(exam_id);
+	}
+
+	@Override
+	public void storeHistory(ExamPaper examPaper) {
+		examMapper.storeHistory(examPaper);
+	}
+
+	
+	
+	@Override
+	public List<ExamPaper> getExamPaper(String exam_id) {
+		return examMapper.getExamPaper(exam_id);
+	}
+
+	@Override
+	public void confirmHistory(ExamPaper examPaper) {
+		examMapper.confirmHistory(examPaper);
 	}
 	
 }
