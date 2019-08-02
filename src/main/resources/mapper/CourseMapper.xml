@@ -27,5 +27,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		(SELECT pri_id FROM course_teacher_table WHERE
 		course_id = #{course_id} AND teacher_id = #{teacher_id})
 	</delete>
+	
+	<select id="byCourse" parameterType="Relation" resultMap="relationlist">
+		SELECT c.course_name, s.student_id, u.user_name student_name
+		FROM course_teacher_table t, course_table c, course_student_table s, user_table u
+		WHERE t.teacher_id = #{teacher_id} AND t.course_id = #{course_id}
+		AND t.pri_id = s.crs_tch_id AND t.course_id = c.course_id AND s.student_id = u.user_id
+	</select>
+	
+	<resultMap type="Relation" id="relationlist">
+		<id column="course_name" property="course_name"/>
+		<result column="student_id" property="student_id"/>
+		<result column="student_name" property="student_name"/>
+	</resultMap>
+	
+	<insert id="sendNotice" parameterType="Notice">
+		INSERT INTO notice_table(user_id, course_id, notice_body, notice_type, notice_time)
+		VALUES(#{user_id}, #{course_id}, #{notice_body}, #{notice_type}, #{notice_time})
+	</insert>
 
 </mapper>

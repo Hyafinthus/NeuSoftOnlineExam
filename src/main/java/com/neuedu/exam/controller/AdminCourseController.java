@@ -30,13 +30,13 @@ public class AdminCourseController {
 	@ResponseBody
 	public String getCourseIntro(@PathVariable String courseid){
 		System.out.println(courseid);
-		return adminCourseService.getCourseIntro(Integer.parseInt(courseid));
+		return adminCourseService.getCourseIntro(courseid);
 	}
 	
 	@RequestMapping(value="/delete/{courseid}",method=RequestMethod.DELETE)
 	@ResponseBody
 	public String deleteCourse(@PathVariable String courseid){
-		adminCourseService.deleteCourse(Integer.parseInt(courseid));
+		adminCourseService.deleteCourse(courseid);
 		return "success";
 	}
 	

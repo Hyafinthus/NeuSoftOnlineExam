@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>题目管理</title>
+		<link href="img/logo.ico" rel="icon" type="image/x-ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -62,7 +63,7 @@
 				<li role="presentation"><a href="studentlist.html">学生信息</a></li>
 				<li role="presentation"><a href="teachermessage.html">消息通知</a></li>
 			</ul>
-			<div class="container" style="width: 700px;float: left;">
+			<div class="container" style="width: 800px;float: left;">
 				<table class="table table-hover">
 					<thead>
 						<tr id="firstquestion">
@@ -71,6 +72,7 @@
 							<th>修改</th>
 							<th>删除</th>
 							<th>题目名</th>
+							<th>题型</th>
 							<th><select id="selectcourse" onchange="changecourse()" class="form-control">
 									<option value="title" selected=true>科目</option>
 								</select>
@@ -117,11 +119,22 @@
 						dataarray = data;
 						console.log(data);
 						$(data).each(function(index, e) {
-							res = res + "<tr><td>" + e.question_id + "</td><td>" +
-								'<button type="button" class="btn btn-primary btn-xs" onclick="querycourse(this)">修改</button></td><td>' +
-								'<button type="button" class="btn btn-danger btn-xs" onclick="deletecourse(this)">删除</button></td><td>' +
-								e.question_body.slice(0, 20) + "</td><td>" + e.course_name + "</td><td>";
+							if (e.question_type == "subj") {
+								res = res + "<tr><td>" + e.question_id + "</td><td>" +
+									'<button type="button" class="btn btn-primary btn-xs" onclick="querycourse(this)">修改</button></td><td>' +
+									'<button type="button" class="btn btn-danger btn-xs" onclick="deletecourse(this)">删除</button></td><td>' +
+									e.question_body.slice(0, 20) + "</td><td>主观题</td><td>" + e.course_name + "</td></tr>";
+							} else {
+								res = res + "<tr><td>" + e.question_id + "</td><td>" +
+									'<button type="button" class="btn btn-primary btn-xs" onclick="querycourse(this)">修改</button></td><td>' +
+									'<button type="button" class="btn btn-danger btn-xs" onclick="deletecourse(this)">删除</button></td><td>' +
+									e.question_body.slice(0, 20) + "</td><td>客观题</td><td>" + e.course_name + "</td></tr>";
+							}
+
 						});
+						if (data.length == 0) {
+							res = res + "<tr><td>" + "</td><td>无可用题目" + "</td><tr>"
+						}
 						$("#firstquestion").siblings().remove();
 						$("#firstquestion").after(res);
 					}
@@ -131,33 +144,6 @@
 			}
 
 		}
-
-		$(document).ready(function() {
-			$('input[type=radio][name=op]').change(function() {
-				if (this.value == 'E') {
-					alert("主观题");
-					var op1 = document.getElementById("op1");
-					var op2 = document.getElementById("op2");
-					var op3 = document.getElementById("op3");
-					var op4 = document.getElementById("op4");
-					op1.disabled = true;
-					op2.disabled = true;
-					op3.disabled = true;
-					op4.disabled = true;
-					type = "E";
-				} else {
-					var op1 = document.getElementById("op1");
-					var op2 = document.getElementById("op2");
-					var op3 = document.getElementById("op3");
-					var op4 = document.getElementById("op4");
-					op1.disabled = false;
-					op2.disabled = false;
-					op3.disabled = false;
-					op4.disabled = false;
-					type = this.value;
-				}
-			});
-		});
 
 		function questions() {
 			$.ajax({
@@ -171,11 +157,21 @@
 					dataarray = data;
 					console.log(data);
 					$(data).each(function(index, e) {
-						res = res + "<tr><td>" + e.question_id + "</td><td>" +
-							'<button type="button" class="btn btn-primary btn-xs" onclick="querycourse(this)">修改</button></td><td>' +
-							'<button type="button" class="btn btn-danger btn-xs" onclick="deletecourse(this)">删除</button></td><td>' +
-							e.question_body.slice(0, 20) + "</td><td>" + e.course_name + "</td><td>";
+						if (e.question_type == "subj") {
+							res = res + "<tr><td>" + e.question_id + "</td><td>" +
+								'<button type="button" class="btn btn-primary btn-xs" onclick="querycourse(this)">修改</button></td><td>' +
+								'<button type="button" class="btn btn-danger btn-xs" onclick="deletecourse(this)">删除</button></td><td>' +
+								e.question_body.slice(0, 20) + "</td><td>主观题</td><td>" + e.course_name + "</td></tr>";
+						} else {
+							res = res + "<tr><td>" + e.question_id + "</td><td>" +
+								'<button type="button" class="btn btn-primary btn-xs" onclick="querycourse(this)">修改</button></td><td>' +
+								'<button type="button" class="btn btn-danger btn-xs" onclick="deletecourse(this)">删除</button></td><td>' +
+								e.question_body.slice(0, 20) + "</td><td>客观题</td><td>" + e.course_name + "</td></tr>";
+						}
 					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>无可用题目" + "</td><tr>"
+					}
 					$("#firstquestion").siblings().remove();
 					$("#firstquestion").after(res);
 				},

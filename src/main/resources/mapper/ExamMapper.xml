@@ -6,21 +6,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.neuedu.exam.dao.ExamMapper">
 
 	<insert id="addExam" parameterType="Exam">
-		INSERT INTO exam_table(exam_id, course_id, teacher_id, exam_classroom,
+		INSERT INTO exam_table(exam_id, course_id, teacher_id,
 		easy, midd, hard, exam_time_start, exam_time_end, exam_length)
-		VALUES(#{exam_id}, #{course_id}, #{teacher_id}, #{exam_classroom},
+		VALUES(#{exam_id}, #{course_id}, #{teacher_id},
 		#{easy}, #{midd}, #{hard}, #{exam_time_start}, #{exam_time_end}, #{exam_length})
 	</insert>
 	
 	<select id="countStudent" parameterType="String" resultType="Integer">
 		SELECT COUNT(*) FROM course_student_table s, course_teacher_table t
 		WHERE s.crs_tch_id = t.pri_id AND t.course_id = #{course_id}
-	</select>
-	
-	<select id="chooseClassroom" parameterType="Integer" resultType="String">
-		SELECT exam_classroom FROM classroom_table
-		WHERE is_used IS NULL AND classroom_size >= #{count}
-		ORDER BY classroom_size ASC LIMIT 1
 	</select>
 	
 	<insert id="addQuestion" parameterType="Exam">
@@ -92,5 +86,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SET subj_result = #{subj_result}, subj_score = #{subj_score}, is_reviewed = 'true'
 		WHERE exam_id = #{exam_id} AND student_id = #{student_id}
 	</update>
+	
+	<select id="getCorrect" parameterType="String" resultMap="correctMap">
+		SELECT q.question_id, question_type, question_mark, question_body,
+		question_a, question_b, question_c, question_d, question_answer
+		FROM question_table q, exam_question_table e
+		WHERE e.exam_id = #{exam_id} AND e.question_id = q.question_id
+	</select>
+	
+	<resultMap type="Question" id="correctMap">
+		<id column="question_id" property="question_id"/>
+		<result column="question_type" property="question_type"/>
+		<result column="question_mark" property="question_mark"/>
+		<result column="question_body" property="question_body"/>
+		<result column="question_a" property="question_a"/>
+		<result column="question_b" property="question_b"/>
+		<result column="question_c" property="question_c"/>
+		<result column="question_d" property="question_d"/>
+		<result column="question_answer" property="question_answer"/>
+	</resultMap>
+	
+	<select id="getDetail" parameterType="ExamPaper" resultType="ExamPaper">
+		SELECT h.exam_id, u.user_name student_name, c.course_name, h.mult_answer, h.mult_result, h.subj_answer, h.subj_result
+		FROM exam_history_table h, user_table u, exam_table e, course_table c
+		WHERE h.exam_id = #{exam_id} AND h.student_id = #{student_id}
+		AND h.student_id = u.user_id AND h.exam_id = e.exam_id AND e.course_id = c.course_id
+	</select>
 	
 </mapper>

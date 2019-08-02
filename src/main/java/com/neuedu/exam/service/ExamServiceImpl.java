@@ -27,11 +27,6 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
-	public String chooseClassroom(Integer count) {
-		return examMapper.chooseClassroom(count);
-	}
-
-	@Override
 	public void addQuestion(Exam exam) {
 		examMapper.addQuestion(exam.setRate("easy").setNum(exam.getEasy()));
 		examMapper.addQuestion(exam.setRate("midd").setNum(exam.getMidd()));
@@ -75,6 +70,16 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public void confirmHistory(ExamPaper examPaper) {
 		examMapper.confirmHistory(examPaper);
+	}
+
+	@Override
+	public List<Question> getCorrect(String exam_id) {
+		return examMapper.getCorrect(exam_id);
+	}
+	
+	@Override
+	public ExamPaper getDetail(ExamPaper examPaper) {
+		return examMapper.getDetail(examPaper);
 	}
 	
 }

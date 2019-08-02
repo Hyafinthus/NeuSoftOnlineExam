@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>消息通知</title>
+		<link href="img/logo.ico" rel="icon" type="image/x-ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -16,7 +17,7 @@
 		</style>
 		<script type="text/javascript">
 			var now = new Date();
-			
+
 			var hour = now.getHours();
 			var greethour = "";
 			if (hour < 8 && hour >= 5) {
@@ -32,7 +33,7 @@
 			} else if (hour < 24 && hour >= 21 || hour < 5 && hour >= 0) {
 				greethour = "夜深了"
 			}
-			
+
 			function greet() {
 				$.ajax({
 					url: "/exam/menu/personal",
@@ -44,8 +45,8 @@
 						$("#tid").html(data[0]);
 						console.log(data);
 					},
-					error:function(status){
-						
+					error: function(status) {
+
 					}
 				});
 			}
@@ -53,9 +54,11 @@
 	</head>
 	<body>
 		<div class="container-fluid" style="height: 90px;">
-			<h1 style="font-size: 45px;"><div id="greeting">
-				
-			</div></h1>
+			<h1 style="font-size: 45px;">
+				<div id="greeting">
+
+				</div>
+			</h1>
 		</div>
 		<div class="container" style="height: 100%;">
 			<ul class="nav nav-pills">
@@ -75,7 +78,7 @@
 							<th>概要</th>
 							<th>发件人</th>
 							<th>日期</th>
-							
+
 						</tr>
 					</thead>
 				</table>
@@ -111,32 +114,33 @@
 			var button = document.createElement("button");
 
 			$.ajax({
-				url: "/exam/login/getmessage",
+				url: "/exam/menu/notice",
 				datatype: "json",
 				contentType: "application/json;charset=UTF-8",
 				success: function(data) {
-					console.log(data);
 					var res = "";
-					number = data.length;
 					dataarray = data;
 					console.log(data);
 					$(data).each(function(index, e) {
 						sequence = index + 1;
-						if (e.content.length < 20) {
+						if (e.notice_body.length < 20) {
 							res = res + "<tr><td>" +
 								'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="getcontent(this)">进入</button></td><td>' +
-								e.content.slice(0, 20) + "</td><td>" + e.addresser + "</td><td>" + e.messagedate + "</td><td>" + sequence +
+								e.notice_body.slice(0, 20) + "</td><td>" + e.user_name + "</td><td>" + e.notice_time + "</td><td>" +
+								sequence +
 								"</td></tr>";
 						} else {
 							res = res + "<tr><td>" +
 								'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="getcontent(this)">进入</button></td><td>' +
-								e.content.slice(0, 18) + "..." + "</td><td>" + e.addresser + "</td><td>" + e.messagedate + "</td><td>" +
+								e.notice_body.slice(0, 18) + "..." + "</td><td>" + e.user_name + "</td><td>" + e.notice_time + "</td><td>" +
 								sequence + "</td></tr>";
 						}
 
 					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>无信息" + "</td><tr>"
+					}
 					$("#firstmessage").after(res);
-					$("#student").html("学生：" + data[0].recipient);
 				},
 			});
 
@@ -147,8 +151,8 @@
 			var td = $(obj).parent();
 			var userid = td.next().next().next().next().html().trim();
 			console.log(userid);
-			$("#myModalLabel").html(dataarray[userid - 1].addresser);
-			$("#modal-body").html(dataarray[userid - 1].content);
+			$("#myModalLabel").html(dataarray[userid - 1].user_name);
+			$("#modal-body").html(dataarray[userid - 1].notice_body);
 
 		}
 
@@ -156,8 +160,7 @@
 
 		window.onload = function() {
 			greet();
-			// messages();
+			messages();
 		}
-
 	</script>
 </html>

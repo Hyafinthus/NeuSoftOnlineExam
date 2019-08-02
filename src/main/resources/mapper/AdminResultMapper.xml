@@ -7,13 +7,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryStudentResultsByStudentId" parameterType="String" resultType="ExamPaper">
 		SELECT eh.student_id, eh.exam_id, eh.mult_score, eh.subj_score, et.course_id, ct.course_name, ut.user_name
 		FROM exam_history_table eh, exam_table et, course_table ct, user_table ut
-		WHERE eh.student_id= '${studentId}' AND eh.exam_id= et.exam_id AND et.course_id= ct.course_id AND eh.student_id= ut.user_id
+		WHERE eh.student_id= #{studentId} AND eh.exam_id= et.exam_id AND et.course_id= ct.course_id AND eh.student_id= ut.user_id
 	</select>
 	
-	<select id="queryStudentResultsByCourseId" parameterType="String" resultType="ExamPaper">
+	<select id="queryStudentResultsByCourseId" parameterType="String" resultMap="mypaper">
 		SELECT eh.student_id, eh.exam_id, eh.mult_score, eh.subj_score, et.course_id, ct.course_name, ut.user_name
 		FROM exam_history_table eh, exam_table et, course_table ct, user_table ut
-		WHERE et.course_id= ${courseId} AND eh.exam_id= et.exam_id AND et.course_id= ct.course_id AND eh.student_id= ut.user_id
+		WHERE et.course_id= #{courseId} AND eh.exam_id= et.exam_id AND et.course_id= ct.course_id AND eh.student_id= ut.user_id
 	</select>
+	
+	<resultMap type="ExamPaper" id="mypaper">
+		<result column="user_name" property="student_name"/>
+	</resultMap>
 	
 </mapper>

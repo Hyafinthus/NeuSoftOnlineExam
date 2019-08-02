@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>课程管理</title>
+		<link href="img/logo.ico" rel="icon" type="image/x-ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -79,21 +80,26 @@
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div id="header" class="modal-header">
+						<div id="courseheader">
+
+						</div>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="myModalLabel"></h4>
 					</div>
 					<div id="modal-body" class="modal-body">
-
+						<textarea class="form-control" rows="5" cols="75" id="messagebody" placeholder="请输入消息"></textarea>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" onclick="sendmessage()">发送</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</body>
 	<script type="text/javascript">
+		var messagecourseid;
 		var dataarray = new Array();
 
 		function courses() {
@@ -113,6 +119,9 @@
 							e.course_name.slice(0, 20) + "</td><td>" +
 							'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="selectcourse(this)">发消息</button></td>';
 					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>目前无可用课程" + "</td><tr>"
+					}
 					$("#firstcourse").siblings().remove();
 					$("#firstcourse").after(res);
 				},
@@ -124,6 +133,8 @@
 		function selectcourse(obj) {
 			var td = $(obj).parent();
 			var courseid = td.prev().prev().prev().html().trim();
+			messagecourseid = courseid;
+			$("#courseheader").html("发送班级编号：" + courseid);
 		}
 
 		function getcontent(obj) {
@@ -155,6 +166,9 @@
 										'<button type="button" class="btn btn-danger btn-xs" onclick="getcontent(this)">删除</button></td><td>' +
 										e.course_name.slice(0, 20) + "</td><td>";
 								});
+								if (data.length == 0) {
+									res = res + "<tr><td>" + "</td><td>目前无可用课程" + "</td><tr>"
+								}
 								$("#firstcourse").siblings().remove();
 								$("#firstcourse").after(res);
 							},
@@ -162,7 +176,25 @@
 					},
 				});
 			}
+		}
 
+		function sendmessage() {
+			var notice = {};
+			notice.course_id = messagecourseid;
+			notice.notice_body = $("#messagebody").val();
+			console.log(notice);
+			$.ajax({
+				url: "/exam/course/notice",
+				type: "post",
+				data: {
+					course_id: messagecourseid,
+					notice_body: $("#messagebody").val()
+				},
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function(data) {
+					$("#myModal").modal('hide');
+				},
+			});
 		}
 
 		window.onload = function() {

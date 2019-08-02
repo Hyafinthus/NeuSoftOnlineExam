@@ -40,15 +40,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="getExam" parameterType="User" resultMap="examlist">
 		SELECT e.exam_id, c.course_name, e.exam_time_start, e.exam_time_end, e.exam_length
-		FROM exam_table e, course_table c, course_teacher_table t, user_table u
-		WHERE t.teacher_id = #{id} AND e.course_id = t.course_id = c.course_id AND t.teacher_id = u.user_id
+		FROM exam_table e, course_table c, user_table u
+		WHERE e.teacher_id = #{id} AND e.course_id = c.course_id AND e.teacher_id = u.user_id
 	</select>
 	
 	<resultMap type="Exam" id="examlist">
 		<id column="exam_id" property="exam_id"/>
 		<result column="course_name" property="course_name"/>
 		<result column="teacher_name" property="teacher_name"/>
-		<result column="exam_classroom" property="exam_classroom"/>
 		<result column="exam_time_start" property="exam_time_start"/>
 		<result column="exam_time_end" property="exam_time_end"/>
 		<result column="exam_length" property="exam_length"/>
@@ -81,11 +80,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getStudentExam" parameterType="User" resultMap="examlist">
 		SELECT e.exam_id, c.course_name, e.exam_length, h.start_time AS exam_time_start, h.end_time AS exam_time_end
 		FROM course_student_table s, course_teacher_table t, exam_table e, course_table c, exam_history_table h
-		WHERE s.student_id = #{id} AND h.student_id = #{id} AND s.crs_tch_id = t.pri_id AND t.course_id = e.course_id = c.course_id AND h.exam_id = e.exam_id
-		UNION
-		SELECT e.exam_id, c.course_name, e.exam_length, e.exam_time_start AS exam_time_start, e.exam_time_end AS exam_time_end
+		WHERE s.student_id = #{id} AND h.student_id = #{id} AND s.crs_tch_id = t.pri_id
+		AND t.course_id = e.course_id AND t.course_id = c.course_id AND h.exam_id = e.exam_id
+		UNION SELECT e.exam_id, c.course_name, e.exam_length, e.exam_time_start AS exam_time_start, e.exam_time_end AS exam_time_end
 		FROM course_student_table s, course_teacher_table t, exam_table e, course_table c
-		WHERE s.student_id = #{id} AND s.crs_tch_id = t.pri_id AND t.course_id = e.course_id = c.course_id
+		WHERE s.student_id = #{id} AND s.crs_tch_id = t.pri_id AND t.course_id = e.course_id AND t.course_id = c.course_id
 		AND e.exam_id NOT IN (SELECT exam_id FROM exam_history_table WHERE student_id = #{id})
 	</select>
 	
@@ -100,6 +99,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="course_name" property="course_name"/>
 		<result column="mult_score" property="mult_score"/>
 		<result column="subj_score" property="subj_score"/>
+	</resultMap>
+	
+	<select id="getStudent" parameterType="User" resultMap="studentlist">
+		SELECT c.course_name, s.student_id, u.user_name student_name
+		FROM course_teacher_table t, course_table c, course_student_table s, user_table u
+		WHERE t.teacher_id = #{id} AND t.pri_id = s.crs_tch_id AND t.course_id = c.course_id
+		AND s.student_id = u.user_id
+	</select>
+	
+	<resultMap type="Relation" id="studentlist">
+		<id column="course_name" property="course_name"/>
+		<result column="student_id" property="student_id"/>
+		<result column="student_name" property="student_name"/>
+	</resultMap>
+	
+	<select id="getNotice" parameterType="User" resultMap="noticelist">
+		SELECT n.notice_id, u.user_name, n.notice_body, n.notice_time, NULL course_name
+		FROM notice_table n, user_table u
+		WHERE (n.notice_type = 'all' OR n.notice_type = #{type} OR n.notice_type = #{id})
+		AND n.user_id = u.user_id AND n.course_id IS NULL
+		UNION SELECT n.notice_id, u.user_name, n.notice_body, n.notice_time, c.course_name
+		FROM notice_table n, user_table u, course_table c
+		WHERE (n.notice_type = #{type} OR n.notice_type = #{id})
+		AND n.user_id IN (SELECT t.teacher_id FROM course_student_table s, course_teacher_table t
+		WHERE s.crs_tch_id = t.pri_id AND s.student_id = #{id})
+		AND n.course_id IN (SELECT t.course_id FROM course_student_table s, course_teacher_table t
+		WHERE s.crs_tch_id = t.pri_id AND s.student_id = #{id})
+		AND n.course_id = c.course_id AND n.user_id = u.user_id
+		ORDER BY notice_time DESC
+	</select>
+	
+	<resultMap type="Notice" id="noticelist">
+		<id column="course_name" property="course_name"/>
+		<result column="student_id" property="student_id"/>
+		<result column="student_name" property="student_name"/>
 	</resultMap>
 	
 </mapper>

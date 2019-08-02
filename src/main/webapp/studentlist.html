@@ -5,6 +5,7 @@
 		<title>
 			教师主页
 		</title>
+		<link href="img/logo.ico" rel="icon" type="image/x-ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -39,13 +40,10 @@
 						$("#tid").html(data[0]);
 						console.log(data);
 					},
-					error:function(status){
-						
+					error: function(status) {
+
 					}
 				});
-			}
-			window.onload = function() {
-				greet();
 			}
 		</script>
 	</head>
@@ -71,29 +69,93 @@
 			<div class="container" style="width: 700px;float: left;">
 				<table class="table table-hover">
 					<thead>
-						<tr>
+						<tr id="firststudent">
 							<th>#</th>
 							<th>学号</th>
 							<th>姓名</th>
+							<th><select id="selectcourse" onchange="changecourse()" class="form-control" style="width: 100px;">
+									<option value="title" selected=true>科目</option>
+								</select></th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>#</td>
-							<td>
-								<div id="tid">
 
-								</div>
-							</td>
-							<td>
-								<div id="tname">
-
-								</div>
-							</td>
-						</tr>
-					</tbody>
 				</table>
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		function select() {
+			$.ajax({
+				url: "/exam/menu/teacher_course",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					console.log(data);
+					for (var i = 0; i < data.length; i++) {
+						$("#selectcourse").append("<option value='" + data[i].course_id + "'>" + data[i].course_name +
+							"</option>");
+					}
+				}
+			});
+		}
+
+		function changecourse() {
+			var course = document.getElementById("selectcourse");
+			var course_id = course.options[course.selectedIndex].value;
+			if (course_id != "title") {
+				$.ajax({
+					url: "/exam/course/by_course",
+					datatype: "json",
+					type: "post",
+					data: {
+						course_id: course_id
+					},
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+					success: function(data) {
+						var res = "";
+						console.log(data);
+						$(data).each(function(index, e) {
+							res = res + "<tr><td>" + (index + 1) + "</td><td>" +
+								e.student_id + "</td><td>" + e.student_name + "</td><td>" + e.course_name + "</td><tr>";
+						});
+						if (data.length == 0) {
+							res = res + "<tr><td>" + "</td><td>无可用学生列表" + "</td><tr>"
+						}
+						$("#firststudent").siblings().remove();
+						$("#firststudent").after(res);
+					}
+				});
+			} else {
+				students();
+			}
+
+		}
+
+		function students() {
+			$.ajax({
+				url: "/exam/menu/student",
+				datatype: "json",
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					var res = "";
+					console.log(data);
+					$(data).each(function(index, e) {
+						res = res + "<tr><td>" + (index + 1) + "</td><td>" +
+							e.student_id + "</td><td>" + e.student_name + "</td><td>" + e.course_name + "</td><tr>";
+					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>无可用学生列表" + "</td><tr>"
+					}
+					$("#firststudent").siblings().remove();
+					$("#firststudent").after(res);
+				},
+			});
+		}
+
+		window.onload = function() {
+			greet();
+			students();
+			select();
+		}
+	</script>
 </html>

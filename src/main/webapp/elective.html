@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>个人选课</title>
+		<link href="img/logo.ico" rel="icon" type="image/x-ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -118,10 +119,14 @@
 						// sequence = index + 1;
 						res = res + "<tr><td>" + e.course_id + "</td><td>" +
 							'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" onclick="selectcourse(this)">选课</button></td><td>' +
-							e.course_name + "</td><td>" + e.teacher_name + "</td><td>"+ e.teacher_id + "</td><td>" + e.course_intro.slice(0, 8) + "</td><td>" +
+							e.course_name + "</td><td>" + e.teacher_name + "</td><td>" + e.teacher_id + "</td><td>" + e.course_intro.slice(
+								0, 8) + "...</td><td>" +
 							'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="getcontent(this)">详情</button></td><td>';
 
 					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>无可用课程" + "</td><tr>"
+					}
 					$("#firstcourse").siblings().remove();
 					$("#firstcourse").after(res);
 				},
@@ -130,7 +135,14 @@
 
 		function getcontent(obj) {
 			var td = $(obj).parent();
-			var courseintro = td.prev().html().trim();
+			var courseid = td.prev().prev().prev().prev().prev().prev().html().trim();
+			var courseintro = "";
+			for (var i = 0; i < dataarray.length; i++) {
+				if(dataarray[i].course_id == courseid){
+					courseintro = dataarray[i].course_intro;
+					break;
+				}
+			}
 			var teachername = td.prev().prev().html().trim();
 			console.log(courseintro);
 			$("#myModalLabel").html(teachername);
@@ -142,7 +154,7 @@
 			var td = $(obj).parent();
 			var courseid = td.prev().html().trim();
 			var teacherid = td.next().next().next().html().trim();
-			console.log(courseid+teacherid);
+			console.log(courseid + teacherid);
 			$.ajax({
 				url: "/exam/course/elective",
 				type: "post",

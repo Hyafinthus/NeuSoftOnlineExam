@@ -12,8 +12,8 @@ import com.neuedu.exam.interceptor.SessionInterceptor;
 @Configuration
 public class SessionInterceptorConfig implements WebMvcConfigurer {
 
-	List<String> include = Arrays.asList("/**");
-	List<String> exclude = Arrays.asList("/js/**", "/css/**", "/fonts/**", "/img/**",
+	private static List<String> include = Arrays.asList("/**");
+	private static List<String> exclude = Arrays.asList("/js/**", "/css/**", "/fonts/**", "/img/**",
 										"/index.html", "/*login.html", "/login/**", "/admin/login");
 	
 	@Override

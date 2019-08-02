@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>消息通知</title>
+		<link href="img/logo.ico" rel="icon" type="image/x-ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -49,7 +50,6 @@
 					}
 				});
 			}
-
 		</script>
 	</head>
 	<body>
@@ -113,32 +113,33 @@
 			var button = document.createElement("button");
 
 			$.ajax({
-				url: "/exam/login/getmessage",
+				url: "/exam/menu/notice",
 				datatype: "json",
 				contentType: "application/json;charset=UTF-8",
 				success: function(data) {
-					console.log(data);
 					var res = "";
-					number = data.length;
 					dataarray = data;
 					console.log(data);
 					$(data).each(function(index, e) {
 						sequence = index + 1;
-						if (e.content.length < 20) {
+						if (e.notice_body.length < 20) {
 							res = res + "<tr><td>" +
 								'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="getcontent(this)">进入</button></td><td>' +
-								e.content.slice(0, 20) + "</td><td>" + e.addresser + "</td><td>" + e.messagedate + "</td><td>" + sequence +
+								e.notice_body.slice(0, 20) + "</td><td>" + e.user_name + "</td><td>" + e.notice_time + "</td><td>" +
+								sequence +
 								"</td></tr>";
 						} else {
 							res = res + "<tr><td>" +
 								'<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="getcontent(this)">进入</button></td><td>' +
-								e.content.slice(0, 18) + "..." + "</td><td>" + e.addresser + "</td><td>" + e.messagedate + "</td><td>" +
+								e.notice_body.slice(0, 18) + "..." + "</td><td>" + e.user_name + "</td><td>" + e.notice_time + "</td><td>" +
 								sequence + "</td></tr>";
 						}
 
 					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>无消息" + "</td><tr>"
+					}
 					$("#firstmessage").after(res);
-					$("#student").html("学生：" + data[0].recipient);
 				},
 			});
 
@@ -149,16 +150,14 @@
 			var td = $(obj).parent();
 			var userid = td.next().next().next().next().html().trim();
 			console.log(userid);
-			$("#myModalLabel").html(dataarray[userid - 1].addresser);
-			$("#modal-body").html(dataarray[userid - 1].content);
+			$("#myModalLabel").html(dataarray[userid - 1].user_name);
+			$("#modal-body").html(dataarray[userid - 1].notice_body);
 
 		}
 
-
-
 		window.onload = function() {
 			greet();
-			// messages();
+			messages();
 		}
 	</script>
 </html>

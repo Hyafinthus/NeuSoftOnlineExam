@@ -2,6 +2,7 @@ package com.neuedu.exam.service;
 
 import java.util.List;
 
+import com.neuedu.exam.domain.Notice;
 import com.neuedu.exam.domain.User;
 
 public interface AdminService {
@@ -23,6 +24,5 @@ public interface AdminService {
 
 	public List<User> getRecipients(String identity);
 
-	public void addMessage(String addresserName, String addresserId, List<User> recipients, String content,
-			String messagedate);
+	public void addMessage(Notice notice);
 }

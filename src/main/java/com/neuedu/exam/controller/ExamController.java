@@ -50,12 +50,7 @@ public class ExamController {
 		String teacher_id = (String) request.getSession().getAttribute("id");
 		exam.setTeacher_id(teacher_id);
 		
-		// addClassroom
-		int count = examService.countStudent(exam.getCourse_id());
-		String classroom = examService.chooseClassroom(count);
-		exam.setExam_classroom(classroom);
-		
-		System.out.println(exam);
+		System.out.println("老师发布考试: " + exam);
 		
 		examService.addExam(exam);
 		examService.addQuestion(exam);
@@ -66,8 +61,6 @@ public class ExamController {
 	@RequestMapping(value="/start", method=RequestMethod.POST)
 	@ResponseBody
 	public String startExam(String exam_id, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(exam_id);
-		
 		String student_id = (String) request.getSession().getAttribute("id");
 		LocalDateTime today = LocalDateTime.now();
 		
@@ -90,29 +83,31 @@ public class ExamController {
 				if(exam_time_end.isBefore(end_time)) {
 					end_time = exam_time_end;
 				}
-				
+
 				ExamPaper startExam = new ExamPaper(exam_id, student_id, today.format(timeFmt), end_time.format(timeFmt));
+				System.out.println("学生开始考试: " + startExam);
+				
 				examService.startExam(startExam);
 			}
 		}
 		return "success";
 	}
 	
-	// 获取结束时间
+	// 学生考试获取结束时间
 	@RequestMapping(value="/end", method=RequestMethod.POST)
 	@ResponseBody
 	public String getEndTime(String exam_id, HttpServletRequest request, HttpServletResponse response) {
 		String student_id = (String) request.getSession().getAttribute("id");	
 		ExamPaper examPaper = examService.ifStartExam(new ExamPaper(exam_id, student_id));
+		System.out.println("学生考试获取结束时间: " + examPaper);
+		
 		return examPaper.getEnd_time();
 	}
 	
-	// 加载考试题目
+	// 学生考试加载考试题目
 	@RequestMapping(value="/question", method=RequestMethod.POST)
 	@ResponseBody
 	public List<Question> getExamQuestion(String exam_id, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(exam_id);
-		
 		// 选择题正确答案
 		Map<Integer, Question> multAnswers = new HashMap<>();
 		// 主观题总分
@@ -132,7 +127,6 @@ public class ExamController {
 			} else {
 				// 存储正确答案
 				multAnswers.put(question.getQuestion_id(), new Question(question));
-				System.out.println("multAnswers: " + multAnswers);
 				
 				question.setQuestion_type("mult");
 				mult.add(question);
@@ -143,7 +137,6 @@ public class ExamController {
 		if(!Cache.getCache().examMultAnswers.containsKey(exam_id)) {
 			Cache.getCache().examMultAnswers.put(exam_id, multAnswers);
 		}
-		System.out.println("examMultAnswers: " + Cache.getCache().examMultAnswers);
 		if(!Cache.getCache().examSubjScores.containsKey(exam_id)) {
 			Cache.getCache().examSubjScores.put(exam_id, subjScores);
 		}
@@ -152,7 +145,8 @@ public class ExamController {
 		list.clear();
 		list.addAll(mult);
 		list.addAll(subj);
-		System.out.println(list);
+		System.out.println("学生考试加载考试题目: " + list);
+		
 		return list;
 	}
 	
@@ -160,8 +154,6 @@ public class ExamController {
 	@RequestMapping(value="/submit", method=RequestMethod.POST)
 	@ResponseBody
 	public String submitAnswer(@RequestBody List<JSONObject> list, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(list);
-		
 		String exam_id = (String) list.get(0).get("student_answer");
 		String student_id = (String) request.getSession().getAttribute("id");
 		
@@ -186,30 +178,29 @@ public class ExamController {
 		String subjAnswerJson = JSONArray.fromObject(subjAnswers).toString();
 		
 		// 选择题自动阅卷
-		Map<Integer, Integer> multResult = this.multScore(exam_id, multAnswers);
+		List<Answer> multResult = this.multScore(exam_id, multAnswers);
 		int multScore = 0;
-		for(Integer score : multResult.values()) {
-			multScore += score;
+		for(Answer answer : multResult) {
+			multScore += answer.getStudent_mark();
 		}
 		
 		String multResultJson = JSONArray.fromObject(multResult).toString();
-		System.out.println(multResultJson);
 		
 		// 写入数据库 ExamPaper
 		ExamPaper examPaper = new ExamPaper(exam_id, student_id, multAnswerJson, subjAnswerJson, multResultJson, multScore);
+		System.out.println("学生提交试卷: " + examPaper);
 		examService.storeHistory(examPaper);
-		System.out.println(examPaper);
 		
 		return "success";
 	}
 	
 	// 选择题自动阅卷
-	private Map<Integer, Integer> multScore(String exam_id, List<Answer> multAnswers) {
+	private List<Answer> multScore(String exam_id, List<Answer> multAnswers) {
 		// 获取本考试答案
 		Map<Integer, Question> correctAnswers = Cache.getCache().examMultAnswers.get(exam_id);
 		
 		// 分数列表
-		Map<Integer, Integer> multResult = new HashMap<>();
+		List<Answer> multResult = new ArrayList<>();
 		
 		for(Answer answer : multAnswers) {
 			int question_id = answer.getQuestion_id();
@@ -217,9 +208,9 @@ public class ExamController {
 			
 			// 判分
 			if(answer.getStudent_answer().equals(question.getQuestion_type())) {
-				multResult.put(question_id, question.getQuestion_mark());
+				multResult.add(new Answer(question_id, question.getQuestion_mark()));
 			} else {
-				multResult.put(question_id, 0);
+				multResult.add(new Answer(question_id, 0));
 			}
 		}
 		
@@ -227,22 +218,19 @@ public class ExamController {
 	}
 	
 	// 老师获取学生答题
-	@RequestMapping("/review")
+	@RequestMapping(value="/review", method=RequestMethod.POST)
 	@ResponseBody
 	public List<ExamPaper> getExamPaper(String exam_id, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(exam_id);
-		
 		List<ExamPaper> list = examService.getExamPaper(exam_id);
-		System.out.println(list);
+		System.out.println("老师获取学生答题: " + list);
+		
 		return list;
 	}
 	
 	// 老师提交批改结果
-	@RequestMapping("/confirm")
+	@RequestMapping(value="/confirm", method=RequestMethod.POST)
 	@ResponseBody
 	public String confirmReview(@RequestBody List<JSONObject> list, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(list);
-		
 		// exam_id & student_id
 		String exam_id = (String) list.get(0).get("question_type");
 		String student_id = (String) list.get(0).get("student_answer");
@@ -258,31 +246,59 @@ public class ExamController {
 		
 		// 从所有考试主观题总分中取出本场考试
 		Map<Integer, Integer> correctScores = Cache.getCache().examSubjScores.get(exam_id);
-		System.out.println(correctScores);
 		
 		// list中取出转为map
-		HashMap<Integer, Integer> subjResult = new HashMap<>();
+		List<Answer> subjResult = new ArrayList<>();
 		for(Answer answer : subjScores) {
 			int question_id = answer.getQuestion_id();
 			int student_mark_rate = answer.getStudent_mark();
 			
 			// 从主观题总分中获取改题总分
 			int student_mark = (int) ((double) correctScores.get(question_id) * (double) student_mark_rate / (double) 10);
-			subjResult.put(question_id, student_mark);
+			subjResult.add(new Answer(question_id, student_mark));
 		}
 		
 		String subjResultJson = JSONArray.fromObject(subjResult).toString();
 		
 		int subjScore = 0;
-		for(Integer score : subjResult.values()) {
-			subjScore += score;
+		for(Answer answer : subjResult) {
+			subjScore += answer.getStudent_mark();
 		}
 		
 		// 写入数据库 ExamPaper
 		ExamPaper examPaper = new ExamPaper(exam_id, student_id, subjResultJson, subjScore);
+		System.out.println("老师提交批改结果: " + examPaper);
 		examService.confirmHistory(examPaper);
-		System.out.println(examPaper);
 		
 		return "success";
+	}
+	
+	// 学生查看历史试卷
+	@RequestMapping(value="/detail", method=RequestMethod.POST)
+	@ResponseBody
+	public ExamPaper getDetail(String exam_id, HttpServletRequest request, HttpServletResponse response) {
+		String student_id = (String) request.getSession().getAttribute("id");
+		
+		List<Question> correct = examService.getCorrect(exam_id);
+		List<Question> multCorrect = new ArrayList<>();
+		List<Question> subjCorrect = new ArrayList<>();
+		
+		for(Question question : correct) {
+			if(question.getQuestion_type().equals("subj")) {
+				subjCorrect.add(question);
+			} else {
+				multCorrect.add(question);
+			}
+		}
+		
+		String multAnswerJson = JSONArray.fromObject(multCorrect).toString();
+		String subjAnswerJson = JSONArray.fromObject(subjCorrect).toString();
+		
+		ExamPaper examPaper = examService.getDetail(new ExamPaper(exam_id, student_id));
+		examPaper.setMult_correct(multAnswerJson);
+		examPaper.setSubj_correct(subjAnswerJson);	
+		System.out.println("学生查看历史试卷:" + examPaper);
+		
+		return examPaper;
 	}
 }

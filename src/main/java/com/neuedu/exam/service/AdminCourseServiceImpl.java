@@ -20,12 +20,12 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 	}
 
 	@Override
-	public String getCourseIntro(Integer courseId) {
+	public String getCourseIntro(String courseId) {
 		return adminCourseMapper.getCourseIntro(courseId);
 	}
 
 	@Override
-	public void deleteCourse(int courseId) {
+	public void deleteCourse(String courseId) {
 		adminCourseMapper.deleteCourse(courseId);
 	}
 

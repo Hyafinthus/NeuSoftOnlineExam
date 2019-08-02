@@ -9,13 +9,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT course_id,course_name,course_intro FROM course_table
 	</select>
 	
-	<select id="getCourseIntro" parameterType="Integer" resultType="String">
+	<select id="getCourseIntro" parameterType="String" resultType="String">
 		SELECT course_intro 
 		FROM course_table
 		WHERE course_id=#{courseId}
 	</select>
 	
-	<delete id="deleteCourse" parameterType="Integer">
+	<delete id="deleteCourse" parameterType="String">
 		DELETE FROM course_table
 		WHERE course_id=#{courseId}
 	</delete>

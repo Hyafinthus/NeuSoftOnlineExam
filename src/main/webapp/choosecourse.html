@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>加入课程</title>
+		<link href="img/logo.ico" rel="icon" type="image/x-ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -94,6 +95,9 @@
 							'<button type="button" class="btn btn-primary btn-xs" onclick="getcontent(this)">加入</button></td><td>' +
 							e.course_name.slice(0, 20) + "</td><td>";
 					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>目前无可用课程选项" + "</td><tr>"
+					}
 					$("#firstcourse").siblings().remove();
 					$("#firstcourse").after(res);
 				},

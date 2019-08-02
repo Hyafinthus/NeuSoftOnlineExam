@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neuedu.exam.dao.AdminMapper;
-import com.neuedu.exam.domain.Message;
+import com.neuedu.exam.domain.Notice;
 import com.neuedu.exam.domain.User;
 
 @Service
@@ -66,11 +66,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public void addMessage(String addresserName, String addresserId, List<User> recipients, String content,
-			String messagedate) {
-		for(User r:recipients){
-			adminMapper.addMessage(new Message(addresserName,r.getName(),addresserId,r.getId(),content,messagedate));
-		}
+	public void addMessage(Notice notice) {
+		System.out.println(notice);
+		adminMapper.addMessage(notice);
 		
 	}
 

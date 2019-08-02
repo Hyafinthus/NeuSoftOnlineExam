@@ -61,15 +61,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<insert id="addMessage" parameterMap="mymessage">
-			INSERT INTO notice_table(addresser_id, recipient_id, notice_body, notice_time)
+			INSERT INTO notice_table(user_id, notice_type, notice_body, notice_time)
 			VALUES(?,?,?,?)
 	</insert>
 	
-	<parameterMap type="Message" id="mymessage">
-		<parameter property="addresserId"/>
-		<parameter property="recipientId"/>
-		<parameter property="content"/>
-		<parameter property="messagedate"/>
+	<parameterMap type="Notice" id="mymessage">
+		<parameter property="user_id"/>
+		<parameter property="notice_type"/>
+		<parameter property="notice_body"/>
+		<parameter property="notice_time"/>
 	</parameterMap>
 	
 	<resultMap type="User" id="myuser">

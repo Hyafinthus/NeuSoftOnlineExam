@@ -13,6 +13,12 @@ public class Answer {
 	
 	private int student_mark;
 
+	public Answer(int question_id, int student_mark) {
+		super();
+		this.question_id = question_id;
+		this.student_mark = student_mark;
+	}
+
 	public Answer() {
 		super();
 	}

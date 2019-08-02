@@ -20,11 +20,10 @@ public class PersonalController {
 	@Autowired
 	private PersonalService personalService;
 
+	// 修改密码
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	@ResponseBody
 	public String modifyPassword(String oldpwd, String newpwd, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(oldpwd + newpwd);
-		
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		String password = (String) session.getAttribute("password");
@@ -36,7 +35,7 @@ public class PersonalController {
 			}
 			User newUser = new User(id, newpwd, type);
 			
-			System.out.println(newUser);
+			System.out.println("NewUser: " + newUser);
 			
 			personalService.modifyPassword(newUser);
 			session.invalidate();

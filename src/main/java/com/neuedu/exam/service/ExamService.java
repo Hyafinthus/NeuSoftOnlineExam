@@ -12,8 +12,6 @@ public interface ExamService {
 	
 	public Integer countStudent(String course_id);
 	
-	public String chooseClassroom(Integer count);
-	
 	public void addQuestion(Exam exam);
 	
 	
@@ -33,5 +31,9 @@ public interface ExamService {
 	public List<ExamPaper> getExamPaper(String exam_id);
 	
 	public void confirmHistory(ExamPaper examPaper);
+	
+	public List<Question> getCorrect(String exam_id);
+	
+	public ExamPaper getDetail(ExamPaper examPaper);
 	
 }

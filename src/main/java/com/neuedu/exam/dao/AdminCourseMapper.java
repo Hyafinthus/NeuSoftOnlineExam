@@ -11,9 +11,9 @@ public interface AdminCourseMapper {
 
 	public List<Course> queryCourses();
 
-	public String getCourseIntro(Integer courseId);
+	public String getCourseIntro(String courseId);
 
-	public void deleteCourse(int courseId);
+	public void deleteCourse(String courseId);
 
 	public Course queryCourseByName(String courseName);
 

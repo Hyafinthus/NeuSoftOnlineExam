@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>考试成绩</title>
+		<link href="img/logo.ico" rel="icon" type="image/x-ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="js/jquery-3.2.1.js"></script>
@@ -101,21 +102,26 @@
 					dataarray = data;
 					console.log(data);
 					$(data).each(function(index, e) {
-						res = res + '<tr><td>'+
-							'<button type="button" class="btn btn-primary btn-xs" onclick="examstart(this)">查看</button></td><td>' +
-							e.exam_id +	"</td><td>" + e.course_name + "</td><td>" + (e.mult_score + e.subj_score) +
+						res = res + '<tr><td>' +
+							'<button type="button" class="btn btn-primary btn-xs" onclick="examenter(this)">查看</button></td><td>' +
+							e.exam_id + "</td><td>" + e.course_name + "</td><td>" + (e.mult_score + e.subj_score) +
 							"</td></tr>";
 					});
+					if (data.length == 0) {
+						res = res + "<tr><td>" + "</td><td>无可用成绩" + "</td><tr>"
+					}
 					$("#firstcourse").siblings().remove();
 					$("#firstcourse").after(res);
 				},
 			});
 		}
 
-		function examstart(obj) {
+		function examenter(obj) {
 			var td = $(obj).parent();
-			var examid = td.prev().prev().prev().prev().prev().html().trim();
-			window.location.href = "examination.html?examid=" + examid;
+			console.log(td);
+			var examid = td.next().html().trim();
+			
+			window.location.href = "examresult.html?examid=" + examid;
 		}
 	</script>
 </html>

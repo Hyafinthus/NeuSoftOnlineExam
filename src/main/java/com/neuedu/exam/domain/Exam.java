@@ -15,28 +15,9 @@ public class Exam {
 	private int midd;
 	private int hard;
 	
-	private String exam_classroom;
 	private String exam_time_start;
 	private String exam_time_end;
 	private int exam_length;
-
-	public Exam(String exam_id, String course_id, String course_name, String teacher_id, String teacher_name, int easy,
-			int midd, int hard, String exam_classroom, String exam_time_start, String exam_time_end,
-			int exam_length) {
-		super();
-		this.exam_id = exam_id;
-		this.course_id = course_id;
-		this.course_name = course_name;
-		this.teacher_id = teacher_id;
-		this.teacher_name = teacher_name;
-		this.easy = easy;
-		this.midd = midd;
-		this.hard = hard;
-		this.exam_classroom = exam_classroom;
-		this.exam_time_start = exam_time_start;
-		this.exam_time_end = exam_time_end;
-		this.exam_length = exam_length;
-	}
 
 	public Exam(String exam_id) {
 		super();
@@ -61,14 +42,6 @@ public class Exam {
 	
 	public void setCourse_id(String course_id) {
 		this.course_id = course_id;
-	}
-	
-	public String getExam_classroom() {
-		return exam_classroom;
-	}
-	
-	public void setExam_classroom(String exam_classroom) {
-		this.exam_classroom = exam_classroom;
 	}
 	
 	public String getTeacher_id() {
@@ -160,12 +133,12 @@ public class Exam {
 		this.num = num;
 		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Exam [exam_id=" + exam_id + ", course_id=" + course_id + ", course_name=" + course_name
-				+ ", teacher_id=" + teacher_id + ", teacher_name=" + teacher_name + ", easy=" + easy + ", midd=" + midd
-				+ ", hard=" + hard + ", exam_classroom=" + exam_classroom + ", exam_time_start=" + exam_time_start
+				+ ", teacher_id=" + teacher_id + ", teacher_name=" + teacher_name + ", rate=" + rate + ", num=" + num
+				+ ", easy=" + easy + ", midd=" + midd + ", hard=" + hard + ", exam_time_start=" + exam_time_start
 				+ ", exam_time_end=" + exam_time_end + ", exam_length=" + exam_length + "]";
 	}
 	

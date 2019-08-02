@@ -16,6 +16,9 @@ public class ExamPaper {
 	private String start_time;
 	private String end_time;
 
+	private String mult_correct;
+	private String subj_correct;
+	
 	private String mult_answer;
 	private String subj_answer;
 	private String mult_result;
@@ -121,6 +124,22 @@ public class ExamPaper {
 		this.end_time = end_time;
 	}
 
+	public String getMult_correct() {
+		return mult_correct;
+	}
+
+	public void setMult_correct(String mult_correct) {
+		this.mult_correct = mult_correct;
+	}
+
+	public String getSubj_correct() {
+		return subj_correct;
+	}
+
+	public void setSubj_correct(String subj_correct) {
+		this.subj_correct = subj_correct;
+	}
+
 	public String getMult_answer() {
 		return mult_answer;
 	}
@@ -173,9 +192,9 @@ public class ExamPaper {
 	public String toString() {
 		return "ExamPaper [exam_id=" + exam_id + ", student_id=" + student_id + ", student_name=" + student_name
 				+ ", course_id=" + course_id + ", course_name=" + course_name + ", start_time=" + start_time
-				+ ", end_time=" + end_time + ", mult_answer=" + mult_answer + ", subj_answer=" + subj_answer
-				+ ", mult_result=" + mult_result + ", subj_result=" + subj_result + ", mult_score=" + mult_score
-				+ ", subj_score=" + subj_score + "]";
+				+ ", end_time=" + end_time + ", mult_correct=" + mult_correct + ", subj_correct=" + subj_correct
+				+ ", mult_answer=" + mult_answer + ", subj_answer=" + subj_answer + ", mult_result=" + mult_result
+				+ ", subj_result=" + subj_result + ", mult_score=" + mult_score + ", subj_score=" + subj_score + "]";
 	}
 
 }

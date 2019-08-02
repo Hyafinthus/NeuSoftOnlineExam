@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.neuedu.exam.domain.Course;
 import com.neuedu.exam.domain.Exam;
 import com.neuedu.exam.domain.ExamPaper;
+import com.neuedu.exam.domain.Notice;
 import com.neuedu.exam.domain.Question;
 import com.neuedu.exam.domain.Relation;
 import com.neuedu.exam.domain.User;
@@ -29,5 +30,9 @@ public interface MenuMapper {
 	public List<Exam> getStudentExam(User user);
 	
 	public List<ExamPaper> getStudentScore(User user);
+	
+	public List<Relation> getStudent(User user);
+	
+	public List<Notice> getNotice(User user);
 	
 }

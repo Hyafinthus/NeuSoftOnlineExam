@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.neuedu.exam.domain.Message;
+import com.neuedu.exam.domain.Notice;
 import com.neuedu.exam.domain.User;
 import com.neuedu.exam.service.AdminService;
 
@@ -93,19 +93,15 @@ public class AdminMenuController {
 	
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
 	@ResponseBody
-	public String sendMessage(@RequestBody Message message, HttpServletRequest request){
+	public String sendMessage(@RequestBody Notice notice, HttpServletRequest request){
 		HttpSession session = request.getSession();
-		String identity = message.getRecipientName();
-		String addresserName = (String)session.getAttribute("name");
 		String addresserId = (String)session.getAttribute("id");
-		List<User> recipients = adminService.getRecipients(identity);
-		String content = message.getContent();
+		notice.setUser_id(addresserId);
 		Date now=new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		adminService.addMessage(addresserName,addresserId,recipients,content,sdf.format(now));
-		if(recipients!=null)
-			return "success";
-		return "false";
+		notice.setNotice_time(sdf.format(now));
+		adminService.addMessage(notice);
+		return "success";
 		
 	}
 }
